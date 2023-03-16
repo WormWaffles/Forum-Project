@@ -1,0 +1,44 @@
+nav {
+    background-color: #333;
+    overflow: hidden;
+}
+nav ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+nav li {
+    float: left;
+}
+nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+nav li a:hover {
+    background-color: #111;
+}
+div.nav {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    margin-top: 7px;
+    background-color: #f1f1f1;
+    height: 300px;
+}
+div.feed {
+    float: left;
+    width: 77%;
+    padding: 10px;
+    margin-top: 7px;
+    background-color: #f1f1f1;
+    height: 300px;
+}
+/* center all text in div with class feed */
+div.feed {
+    text-align: center;
+}
