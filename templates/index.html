@@ -20,11 +20,21 @@
     <div class="feed">
         <h1>This is your feed</h1>
         <ul>
-            <li><p>post1</p></li>
-            <li><p>post2</p></li>
+            {% for post in posts %}
+            <li>
+                <h1>{{ post.title }}</h1>
+                <p>{{ post.content }}</p>
+            </li>
+            {% endfor %}
         </ul>
     </div>
 
+    <!-- button to make post -->
+    <form action="/create" method="get">
+        <div class="get_create">
+            <button type="submit">Make Post</button>
+        </div>
+    </form>
 </body>
 <footer>
     <p>footer</p>
