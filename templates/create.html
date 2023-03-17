@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Make Post</title>
-    <link rel="stylesheet" href="/static/styles/make_post.css">
-</head>
-<body>
+{% extends '_layout.html' %}
+{% block body %}
+    <link rel="stylesheet" href="/static/styles/create.css">
     <!-- form  -->
     <form action="/add_post" method="post" enctype="multipart/form-data">
         <!-- input for title of post -->
@@ -27,5 +23,4 @@
             <button type="submit">Post</button>
         </div>
     </form>
-</body>
-</html>
+{% endblock %}
