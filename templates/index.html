@@ -7,14 +7,27 @@
     </div>
     <div class="feed">
         <h1>This is your feed</h1>
+        {% if not posts %}
+            <p>There are no posts</p>
+        {% else %}
         <ul>
-            {% for post in posts %}
+            {% for index in posts %}
             <li>
-                <h1>{{ post.title }}</h1>
-                <p>{{ post.content }}</p>
+                <h1>{{ posts[index].title }}</h1>
+                <p>{{ posts[index].content }}</p>
+                <!-- <p>{{ posts[index].file }}</p> -->
+                <form action="/like_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/like_post" method="post">{{ posts[index].likes }} Likes</button>
+                </form>
+                <form action="/dislike_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes }} Dislikes</button>
+                </form>
             </li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
     <!-- button to make post -->
     <form action="/create" method="get">
