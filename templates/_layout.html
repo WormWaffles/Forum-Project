@@ -1,0 +1,23 @@
+<!-- Layout for all pages as to not rewrite code -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blue Theme Nav Bar and Footer</title>
+	<link rel="stylesheet" href="/static/styles/_layout.css">
+</head>
+<body>
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/feed">Feed</a></li>
+			<li><a href="/account">Account</a></li>
+		</ul>
+	</nav>
+    <div class="container pt-4">
+        {% block body %}{% endblock %}
+    </div>
+	<footer>
+		<p>© 2023 This is a company. All Rights Reserved.</p>
+	</footer>
+</body>
+</html>

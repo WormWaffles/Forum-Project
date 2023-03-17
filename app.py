@@ -9,6 +9,14 @@ posts: dict[int, dict] = { 200 : {'title': 'Post Title', 'content': 'I really li
 def index():
     return render_template('index.html', posts=posts)
 
+@app.route('/feed')
+def feed():
+    return render_template('feed.html', posts=posts)
+
+@app.route('/account')
+def account():
+    return render_template('account.html')
+
 # go to create post page
 @app.get('/create')
 def create():

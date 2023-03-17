@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
+{% extends '_layout.html' %}
+{% block body %}
     <link rel="stylesheet" href="/static/styles/index.css">
-</head>
-<body>
-    <!-- nav bar -->
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">Feed</a></li>
-            <li><a href="/contact">Account</a></li>
-        </ul>
-    </nav>
     <!-- feed -->
     <div class="nav">
         <h1>Location Information</h1>
@@ -41,15 +29,10 @@
         </ul>
         {% endif %}
     </div>
-
     <!-- button to make post -->
     <form action="/create" method="get">
         <div class="get_create">
             <button type="submit">Make Post</button>
         </div>
     </form>
-</body>
-<footer>
-    <p>footer</p>
-</footer>
-</html>
+{% endblock %}
