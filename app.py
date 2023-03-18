@@ -22,6 +22,10 @@ def account():
 def create():
     return render_template('create.html')
 
+@app.get('/login')
+def login():
+    return render_template('login.html')
+
 # create post
 @app.post('/add_post')
 def add_post():
