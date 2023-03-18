@@ -7,6 +7,9 @@ app = Flask(__name__)
 my_feed = get_feed()
 logged_in = True
 
+# sample post
+my_feed.create_post(1, 'Title', 'Content', 'File', 0, 0, [])
+
 @app.route('/')
 def index():
     return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
@@ -43,12 +46,28 @@ def add_post():
 @app.post('/like_post')
 def like_post():
     post_id = int(request.form.get('post_id'))
-    my_feed[post_id]['likes'] += 1
+    my_feed.like_post(post_id)
     return redirect('/')
 
 # dislike post
 @app.post('/dislike_post')
 def dislike_post():
     post_id = int(request.form.get('post_id'))
-    my_feed[post_id]['dislikes'] += 1
+    my_feed.dislike_post(post_id)
+    return redirect('/')
+
+# edit post passthrough
+@app.post('/edit')
+def edit():
+    post_id = int(request.form.get('post_id'))
+    return render_template('edit.html', posts=my_feed.get_all_posts() ,post_id=post_id)
+
+# edit post
+@app.post('/edit_post')
+def edit_post():
+    post_id = int(request.form.get('post_id'))
+    title = request.form.get('title')
+    content = request.form.get('content')
+    file = request.files['file']
+    my_feed.update_post(post_id, title, content, file)
     return redirect('/')

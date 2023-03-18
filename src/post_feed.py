@@ -20,13 +20,29 @@ def get_feed():
             post = Post(post_id, title, content, file, likes, dislikes, comments)
             self.posts[post.post_id] = post
 
+        def like_post(self, post_id) -> Post:
+            '''Like existing post'''
+            post = self.posts[post_id]
+            if not post:
+                raise ValueError(f'movie with id {post_id} not found')
+            post.likes += 1
+            return post
+        
+        def dislike_post(self, post_id) -> Post:
+            '''Dislike existing post'''
+            post = self.posts[post_id]
+            if not post:
+                raise ValueError(f'movie with id {post_id} not found')
+            post.dislikes += 1
+            return post
+
         def update_post(self, post_id, title, content, file) -> Post:
             '''Update existing post'''
-            post = self._db.get(post_id)
+            post = self.posts[post_id]
             if not post:
                 raise ValueError(f'movie with id {post_id} not found')
             # update post
-            self.posts[post.id] = post
+            self.posts[post_id] = post
             post.title = title
             post.content = content
             post.file = file
@@ -34,10 +50,10 @@ def get_feed():
         
         def delete_post(self, post_id) -> Post:
             '''Delete existing post'''
-            post = self._db.get(post_id)
+            post = self.posts[post_id]
             if not post:
                 raise ValueError(f'movie with id {post_id} not found')
-            del self.posts[post.id]
+            del self.posts[post_id]
 
         def clear(self) -> None:
             '''Clear all posts'''
