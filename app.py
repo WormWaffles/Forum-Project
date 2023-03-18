@@ -5,14 +5,15 @@ from src.post_feed import get_feed
 app = Flask(__name__)
 
 my_feed = get_feed()
+logged_in = True
 
 @app.route('/')
 def index():
-    return render_template('index.html', posts=my_feed.get_all_posts())
+    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=my_feed.get_all_posts())
+    return render_template('feed.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
 
 @app.route('/account')
 def account():
