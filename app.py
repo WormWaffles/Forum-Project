@@ -42,6 +42,13 @@ def add_post():
     my_feed.create_post(post_id, title, content, file, 0, 0, [])
     return redirect('/')
 
+# delete post
+@app.post('/delete_post')
+def delete_post():
+    post_id = int(request.form.get('post_id'))
+    my_feed.delete_post(post_id)
+    return redirect('/')
+
 # like post
 @app.post('/like_post')
 def like_post():
