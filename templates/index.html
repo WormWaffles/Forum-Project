@@ -24,10 +24,16 @@
                     <input type="hidden" name="post_id" value="{{ index }}">
                     <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes }} Dislikes</button>
                 </form>
+                <!-- for these there should be a jinja if statment to check if post id matchs user id -->
                 <form action="/edit" method="post">
                     <input type="hidden" name="post_id" value="{{ index }}">
                     <button type="submit" action="/edit_post" method="get">Edit Post</button>
                 </form>
+                <form action="/delete_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/delete_post" method="get">Delete Post</button>
+                </form>
+                <!-- end here -->
             </li>
             {% endfor %}
         </ul>
