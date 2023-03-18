@@ -43,7 +43,7 @@ def add_post():
     file = request.files['file']
     # get random id
     post_id = random.randint(1, 100000)
-    my_feed.create_post(post_id, title, content, file, [], [], [])
+    my_feed.create_post(post_id, user_id, title, content, file, [], [], [])
     return redirect('/')
 
 # delete post
