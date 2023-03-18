@@ -15,25 +15,31 @@ def get_feed():
         def get_all_posts(self):
             return self.posts
         
-        def create_post(self, post_id, title, content, file, likes, dislikes, comments) -> Post:
+        def create_post(self, post_id, user_id, title, content, file, likes, dislikes, comments) -> Post:
             '''Create new post and add to posts dict'''
-            post = Post(post_id, title, content, file, likes, dislikes, comments)
+            post = Post(post_id, user_id, title, content, file, likes, dislikes, comments)
             self.posts[post.post_id] = post
 
-        def like_post(self, post_id) -> Post:
+        def like_post(self, post_id, user_id) -> Post:
             '''Like existing post'''
             post = self.posts[post_id]
             if not post:
                 raise ValueError(f'movie with id {post_id} not found')
-            post.likes += 1
+            if user_id in post.dislikes:
+                post.dislikes.remove(user_id)
+            if user_id not in post.likes:
+                post.likes.append(user_id)
             return post
         
-        def dislike_post(self, post_id) -> Post:
+        def dislike_post(self, post_id, user_id) -> Post:
             '''Dislike existing post'''
             post = self.posts[post_id]
             if not post:
                 raise ValueError(f'movie with id {post_id} not found')
-            post.dislikes += 1
+            if user_id in post.likes:
+                post.likes.remove(user_id)
+            if user_id not in post.dislikes:
+                post.dislikes.append(user_id)
             return post
 
         def update_post(self, post_id, title, content, file) -> Post:

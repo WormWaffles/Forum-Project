@@ -5,14 +5,18 @@ from src.post_feed import get_feed
 app = Flask(__name__)
 
 my_feed = get_feed()
+
+# sample vars
 logged_in = True
+user_id = 191
+#************
 
 # sample post
-my_feed.create_post(1, 'Title', 'Content', 'File', 0, 0, [])
+my_feed.create_post(1, 191, 'Title', 'Content', 'File', [], [], [])
 
 @app.route('/')
 def index():
-    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
+    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id)
 
 @app.route('/feed')
 def feed():
@@ -23,11 +27,11 @@ def account():
     return render_template('account.html')
 
 # go to create post page
-@app.get('/create')
+@app.route('/create')
 def create():
     return render_template('create.html')
 
-@app.get('/login')
+@app.route('/login')
 def login():
     return render_template('login.html')
 
@@ -39,7 +43,7 @@ def add_post():
     file = request.files['file']
     # get random id
     post_id = random.randint(1, 100000)
-    my_feed.create_post(post_id, title, content, file, 0, 0, [])
+    my_feed.create_post(post_id, title, content, file, [], [], [])
     return redirect('/')
 
 # delete post
@@ -53,14 +57,14 @@ def delete_post():
 @app.post('/like_post')
 def like_post():
     post_id = int(request.form.get('post_id'))
-    my_feed.like_post(post_id)
+    my_feed.like_post(post_id, user_id)
     return redirect('/')
 
 # dislike post
 @app.post('/dislike_post')
 def dislike_post():
     post_id = int(request.form.get('post_id'))
-    my_feed.dislike_post(post_id)
+    my_feed.dislike_post(post_id, user_id)
     return redirect('/')
 
 # edit post passthrough
