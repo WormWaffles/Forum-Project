@@ -1,9 +1,29 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request,session,g,url_for
 import random
 
 app = Flask(__name__)
+app.secret_key='somesecretkeythatonlyiknow'
+
+# User Class
+class User:
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+users=[]
+users.append(User(id=1, username='Admin', password='Admin'))
+users.append(User(id=2, username='Becca', password='secret'))
 
 posts: dict[int, dict] = { 200 : {'title': 'Post Title', 'content': 'I really like my dog!', 'file': "", 'likes': 0, 'dislikes': 0, 'comments': {} } }
+
+@app.before_request
+def before_request():
+    g.user = None
+
+    if 'user_id' in session:
+        user = [x for x in users if x.id == session ['user_id']][0]
+        g.user = user
 
 @app.route('/')
 def index():
@@ -13,18 +33,35 @@ def index():
 def feed():
     return render_template('feed.html', posts=posts)
 
-@app.route('/account')
-def account():
-    return render_template('account.html')
 
 # go to create post page
 @app.get('/create')
 def create():
     return render_template('create.html')
 
-@app.get('/login')
+@app.route('/login', methods=['GET','POST'])
 def login():
+    if request.method=='POST':
+        session.pop('user_id',None)
+
+        username = request.form['username']
+        password = request.form['password']
+
+        user = [x for x in users if x.username == username][0]
+        if user and user.password ==password:
+            session['user_id'] = user.id
+            return redirect(url_for('account'))
+        
+        return redirect(url_for('login'))
+    
     return render_template('login.html')
+
+@app.route('/account')
+def account():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('account.html')
 
 # create post
 @app.post('/add_post')
