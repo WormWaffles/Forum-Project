@@ -1,8 +1,20 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request,session,g,url_for
 import random
 from src.post_feed import get_feed
 
 app = Flask(__name__)
+app.secret_key='somesecretkeythatonlyiknow'
+
+# User Class
+class User:
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+users=[]
+users.append(User(id=1, username='Admin', password='Admin'))
+users.append(User(id=2, username='Becca', password='secret'))
 
 my_feed = get_feed()
 
@@ -14,6 +26,14 @@ user_id = 191
 # sample post
 my_feed.create_post(1, 191, 'Title', 'Content', 'File', [], [], [])
 
+@app.before_request
+def before_request():
+    g.user = None
+
+    if 'user_id' in session:
+        user = [x for x in users if x.id == session ['user_id']][0]
+        g.user = user
+
 @app.route('/')
 def index():
     return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id)
@@ -22,18 +42,36 @@ def index():
 def feed():
     return render_template('feed.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
 
-@app.route('/account')
-def account():
-    return render_template('account.html')
 
 # go to create post page
 @app.route('/create')
 def create():
     return render_template('create.html')
 
-@app.route('/login')
+
+@app.route('/login', methods=['GET','POST'])
 def login():
+    if request.method=='POST':
+        session.pop('user_id',None)
+
+        username = request.form['username']
+        password = request.form['password']
+
+        user = [x for x in users if x.username == username][0]
+        if user and user.password ==password:
+            session['user_id'] = user.id
+            return redirect(url_for('account'))
+        
+        return redirect(url_for('login'))
+    
     return render_template('login.html')
+
+@app.route('/account')
+def account():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('account.html')
 
 # create post
 @app.post('/add_post')
