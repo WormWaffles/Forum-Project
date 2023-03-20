@@ -18,12 +18,24 @@
                 <!-- <p>{{ posts[index].file }}</p> -->
                 <form action="/like_post" method="post">
                     <input type="hidden" name="post_id" value="{{ index }}">
-                    <button type="submit" action="/like_post" method="post">{{ posts[index].likes }} Likes</button>
+                    <button type="submit" action="/like_post" method="post">{{ posts[index].likes|length }} Likes</button>
                 </form>
                 <form action="/dislike_post" method="post">
                     <input type="hidden" name="post_id" value="{{ index }}">
-                    <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes }} Dislikes</button>
+                    <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes|length }} Dislikes</button>
                 </form>
+                <!-- for these there should be a jinja if statment to check if post id matchs user id -->
+                {% if (posts[index].user_id == user_id) %}
+                <form action="/edit" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/edit_post" method="get">Edit Post</button>
+                </form>
+                <form action="/delete_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/delete_post" method="get">Delete Post</button>
+                </form>
+                <!-- end here -->
+                {% endif %}
             </li>
             {% endfor %}
         </ul>
