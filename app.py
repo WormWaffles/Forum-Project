@@ -48,9 +48,13 @@ def login():
         password = request.form['password']
 
         user = [x for x in users if x.username == username][0]
-        if user and user.password ==password:
+        if user and user.password == password:
             session['user_id'] = user.id
             return redirect(url_for('account'))
+        else:
+            message = "Username or password is incorrect, or please register!"
+            return render_template('login.html', message=message)
+        
         
         return redirect(url_for('login'))
     
