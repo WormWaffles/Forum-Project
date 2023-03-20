@@ -15,6 +15,8 @@ class User:
 users=[]
 users.append(User(id=1, username='Admin', password='Admin'))
 users.append(User(id=2, username='Becca', password='secret'))
+users.append(User(id=2, username='Harry', password='secret1'))
+users.append(User(id=2, username='Jimmy', password='secret2'))
 
 my_feed = get_feed()
 
@@ -31,8 +33,10 @@ def before_request():
     g.user = None
 
     if 'user_id' in session:
-        user = [x for x in users if x.id == session ['user_id']][0]
+        user = [x for x in users if x.id == session ['user_id']]
         g.user = user
+        if len(user) >0:
+            g.user =user[0]
 
 @app.route('/')
 def index():
@@ -57,12 +61,12 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        user = [x for x in users if x.username == username][0]
-        if user and user.password == password:
-            session['user_id'] = user.id
+        user = [x for x in users if x.username == username]
+        if user and user[0].password == password:
+            session['user_id'] = user[0].id
             return redirect(url_for('account'))
         else:
-            message = "Username or password is incorrect, or please register!"
+            message = f"Username or password incorrect. Click here to "
             return render_template('login.html', message=message)
         
         
@@ -76,6 +80,31 @@ def account():
         return redirect(url_for('login'))
     
     return render_template('account.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        
+        if password != confirm_password:
+            message = 'Passwords do not match.'
+            return render_template('register.html', message=message)
+        
+        existing_user = [x for x in users if x.username == username]
+        if existing_user:
+            message = 'Username already exists. Please choose a different username.'
+            return render_template('register.html', message=message)
+        
+        new_user = User(id=random.randint(1000, 9999), username=username, password=password)
+        users.append(new_user)
+        session['user_id'] = new_user.id
+
+        return redirect(url_for('account'))
+    
+    return render_template('register.html')
+
 
 # create post
 @app.post('/add_post')
