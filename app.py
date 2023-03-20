@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request,session,g,url_for
 import random
+from src.post_feed import get_feed
 
 app = Flask(__name__)
 app.secret_key='somesecretkeythatonlyiknow'
@@ -15,7 +16,15 @@ users=[]
 users.append(User(id=1, username='Admin', password='Admin'))
 users.append(User(id=2, username='Becca', password='secret'))
 
-posts: dict[int, dict] = { 200 : {'title': 'Post Title', 'content': 'I really like my dog!', 'file': "", 'likes': 0, 'dislikes': 0, 'comments': {} } }
+my_feed = get_feed()
+
+# sample vars
+logged_in = True
+user_id = 191
+#************
+
+# sample post
+my_feed.create_post(1, 191, 'Title', 'Content', 'File', [], [], [])
 
 @app.before_request
 def before_request():
@@ -27,17 +36,18 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id)
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=posts)
+    return render_template('feed.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
 
 
 # go to create post page
-@app.get('/create')
+@app.route('/create')
 def create():
     return render_template('create.html')
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -73,23 +83,44 @@ def add_post():
     title = request.form.get('title')
     content = request.form.get('content')
     file = request.files['file']
-    # ill do something with the file later **
     # get random id
     post_id = random.randint(1, 100000)
-    posts[post_id] = {'title': title, 'content': content, 'file': "", 'likes': 0, 'dislikes': 0, 'comments': {}}
-    print(posts)
+    my_feed.create_post(post_id, user_id, title, content, file, [], [], [])
+    return redirect('/')
+
+# delete post
+@app.post('/delete_post')
+def delete_post():
+    post_id = int(request.form.get('post_id'))
+    my_feed.delete_post(post_id)
     return redirect('/')
 
 # like post
 @app.post('/like_post')
 def like_post():
     post_id = int(request.form.get('post_id'))
-    posts[post_id]['likes'] += 1
+    my_feed.like_post(post_id, user_id)
     return redirect('/')
 
 # dislike post
 @app.post('/dislike_post')
 def dislike_post():
     post_id = int(request.form.get('post_id'))
-    posts[post_id]['dislikes'] += 1
+    my_feed.dislike_post(post_id, user_id)
+    return redirect('/')
+
+# edit post passthrough
+@app.post('/edit')
+def edit():
+    post_id = int(request.form.get('post_id'))
+    return render_template('edit.html', posts=my_feed.get_all_posts() ,post_id=post_id)
+
+# edit post
+@app.post('/edit_post')
+def edit_post():
+    post_id = int(request.form.get('post_id'))
+    title = request.form.get('title')
+    content = request.form.get('content')
+    file = request.files['file']
+    my_feed.update_post(post_id, title, content, file)
     return redirect('/')
