@@ -1,0 +1,26 @@
+<!-- Layout for all pages as to not rewrite code -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BarHive</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	<link rel="stylesheet" href="/static/styles/_layout.css">
+</head>
+<body>
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/feed">Feed</a></li>
+			<li><a href="/account">Account</a></li>
+			<li><a href="/login">Login</a></li>
+			<li><a href="/register">Register</a></li>
+		</ul>
+	</nav>
+    <div class="container pt-4">
+        {% block body %}{% endblock %}
+    </div>
+	<footer>
+		<p>© 2023 BarHive. All Rights Reserved.</p>
+	</footer>
+</body>
+</html>

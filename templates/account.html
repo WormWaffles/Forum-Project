@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-</head>
-<body>
-    <!-- nav bar -->
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">Feed</a></li>
-            <li><a href="/contact">Account</a></li>
-        </ul>
-    </nav>
+{% extends '_layout.html' %}
+{% block body %}
+    <link rel="stylesheet" href="/static/styles/account.css">
     <!-- content -->
+    <body>
+        <section class="hero is-success is-fullheight">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                {{g.user.username}}'s Profile
+              </h1>
+              <h2 class="subtitle">
+                You are user number #{{g.user.id}}
+              </h2>
+            </div>
+          </div>
+        </section>
+      </body>
 
-</body>
-</html>
+
+{% endblock %}

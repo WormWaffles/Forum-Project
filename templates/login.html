@@ -1,0 +1,48 @@
+{% extends '_layout.html' %}
+{% block body %}
+    <link rel="stylesheet" href="/static/styles/login.css">
+    <!-- login page -->
+    {% if message %}
+    <p>{{ message }} <a href="register"> register!</p>
+    {% endif %}
+    <body>
+        <section class="hero is-info is-fullheight">
+          <div class="hero-body">
+            <div class="container">
+              <div class="columns is-centered">
+                <div class="column is-half">
+                  <form method="POST">
+                    <div class="field">
+                      <label class="label">Username</label>
+                      <div class="control has-icons-left has-icons-right">
+                        <input class="input" type="text" name="username" placeholder="Username">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-user"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Password</label>
+                      <p class="control has-icons-left">
+                        <input class="input" type="password" name="password" placeholder="Password">
+                        <span class="icon is-small is-left">
+                          <i class="fas fa-lock"></i>
+                        </span>
+                      </p>
+                    </div>
+                    <div class="field">
+                      <p class="control">
+                        <button type="submit" class="button is-success">
+                          Login
+                        </button>
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </body>
+
+{% endblock %}

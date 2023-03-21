@@ -1,32 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
+{% extends '_layout.html' %}
+{% block body %}
     <link rel="stylesheet" href="/static/styles/index.css">
-</head>
-<body>
-    <!-- nav bar -->
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">Feed</a></li>
-            <li><a href="/contact">Account</a></li>
-        </ul>
-    </nav>
     <!-- feed -->
     <div class="nav">
         <h1>Location Information</h1>
     </div>
     <div class="feed">
         <h1>This is your feed</h1>
+        {% if not posts %}
+            <p>There are no posts</p>
+        {% else %}
         <ul>
-            <li><p>post1</p></li>
-            <li><p>post2</p></li>
+            {% for index in posts %}
+            <li>
+                <h1>{{ posts[index].title }}</h1>
+                <p>{{ posts[index].content }}</p>
+                <!-- <p>{{ posts[index].file }}</p> -->
+                <form action="/like_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/like_post" method="post">{{ posts[index].likes|length }} Likes</button>
+                </form>
+                <form action="/dislike_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes|length }} Dislikes</button>
+                </form>
+                <!-- for these there should be a jinja if statment to check if post id matchs user id -->
+                {% if (posts[index].user_id == user_id) %}
+                <form action="/edit" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/edit_post" method="get">Edit Post</button>
+                </form>
+                <form action="/delete_post" method="post">
+                    <input type="hidden" name="post_id" value="{{ index }}">
+                    <button type="submit" action="/delete_post" method="get">Delete Post</button>
+                </form>
+                <!-- end here -->
+                {% endif %}
+            </li>
+            {% endfor %}
         </ul>
+        {% endif %}
     </div>
-
-</body>
-<footer>
-    <p>footer</p>
-</footer>
-</html>
+    <!-- button to make post -->
+    {% if logged_in %}
+    <form action="/create" method="get">
+        <div class="get_create">
+            <button type="submit">Make Post</button>
+        </div>
+    </form>
+    {% else %}
+    <form action="/login" method="get">
+        <div class="get_create">
+            <button type="submit">Make Post</button>
+        </div>
+    </form>
+    {% endif %}
+{% endblock %}

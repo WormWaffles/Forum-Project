@@ -1,0 +1,42 @@
+/* Style for Navigation Bar */
+nav {
+    background-color: #2196F3; /* Blue Background Color */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav li {
+    margin-left: 20px;
+}
+
+nav a {
+    color: #FFFFFF; /* White Text Color */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #1976D2; /* Darker Blue Background Color on Hover */
+}
+
+/* Style for Footer */
+footer {
+    background-color: #2196F3; /* Blue Background Color */
+    padding: 10px;
+    color: #FFFFFF; /* White Text Color */
+    text-align: center;
+    font-size: 14px;
+}
