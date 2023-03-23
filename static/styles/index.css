@@ -1,1 +1,15 @@
 /* need styling for index info */
+.post-card
+{
+    width: 600px;
+    height: 400px;
+    background-color: red;
+    
+}
+.post-card-container
+{
+    position: end;
+   background-color: blue; 
+   
+   
+}
