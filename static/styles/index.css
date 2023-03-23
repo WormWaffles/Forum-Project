@@ -1,11 +1,28 @@
 /* need styling for index info */
+body
+{
+    font-family: sans-serif;
+    
+}
+#title
+{
+    font-size: large;
+}
+#content
+{
+   font-size: medium; 
+}
 .post-card
 {
-    width: 400px;
+    /*work with width*/
+    width: auto;
     height: auto;
+    word-wrap: break-word;
+    padding: 5px;
     background-color: rgb(211, 211, 211);
     border: black solid 1px;
     margin:auto;
+    margin-bottom: 1rem;
     
 }
 .post-card-container
@@ -14,5 +31,5 @@
     background-color: rgb(50, 50, 51); 
     display: flex;
     justify-content: space-around;
-    padding: 4px;
+    padding:5px;
 }
