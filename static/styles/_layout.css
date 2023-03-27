@@ -34,7 +34,7 @@ nav a:hover {
 }
 
 /* Style for Body  */
-#landing-msg {
+.landing-msg {
     background-color: white;
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
