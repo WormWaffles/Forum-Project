@@ -1,64 +1,49 @@
 {% extends '_layout.html' %}
+
+{% block nav %} 
+
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/">Home</a>
+    </li>
+    {% if logged_in == False %} 
+    <li class="nav-item">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/register">Sign Up</a>
+    </li>
+    </ul>
+
+        {% else %} 
+    <li class="nav-item">
+        <a class="nav-link" href="/feed">Feed</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/account">Account</a>
+    </li>
+    </ul>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+        </form>
+    {% endif %}
+    
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" href="/static/styles/index.css">
-    <!-- feed -->
-    <div class="nav">
-        <h1>Location Information</h1>
-    </div>
-    <div class="feed">
-        <h1>This is your feed</h1>
-        {% if not posts %}
-            <p>There are no posts</p>
-        {% else %}
-        <ul>
-            {% for index in posts %}
-            <li>
-                <div class="post-card">
-                    <h1 id="title">{{ posts[index].title }}</h1>
-                    <p id="content">{{ posts[index].content }}</p>
-                    <!-- <p>{{ posts[index].file }}</p> -->
-                    <div class="post-card-container">
-
-                            <form action="/like_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/like_post" method="post">{{ posts[index].likes|length }} Likes</button>
-                            </form>
-                            <form action="/dislike_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes|length }} Dislikes</button>
-                            </form>
-                            <!-- for these there should be a jinja if statment to check if post id matchs user id -->
-                            {% if (posts[index].user_id == user_id) %}
-                            <form action="/edit" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/edit_post" method="get">Edit Post</button>
-                            </form>
-                            <form action="/delete_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/delete_post" method="get">Delete Post</button>
-                            </form>
-                        
-                    </div>
+        <main class=""> 
+            <section>
+                {% if logged_in != True %}
+                <div id="landing-msg">
+                    <h1 id="welcome">Welcome to BarHive!</h1>
                 </div>
-                <!-- end here -->
+                
+                {% else %}
+                <h1 id="landing-msg">Welcome back, homie!</h1>
                 {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
-    <!-- button to make post -->
-    {% if logged_in %}
-    <form action="/create" method="get">
-        <div class="get_create">
-            <button type="submit">Make Post</button>
-        </div>
-    </form>
-    {% else %}
-    <form action="/login" method="get">
-        <div class="get_create">
-            <button type="submit">Make Post</button>
-        </div>
-    </form>
-    {% endif %}
+            </section>
+        </main>
 {% endblock %}

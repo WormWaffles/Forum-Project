@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request,session,g,url_for
 import random
 from src.post_feed import get_feed
+from src.__init__ import logged_in
 
 app = Flask(__name__)
 app.secret_key='somesecretkeythatonlyiknow'
@@ -21,7 +22,7 @@ users.append(User(id=2, username='Jimmy', password='secret2'))
 my_feed = get_feed()
 
 # sample vars
-logged_in = True
+# global logged_in = False
 user_id = 191
 #************
 
@@ -40,6 +41,7 @@ def before_request():
 
 @app.route('/')
 def index():
+
     return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id)
 
 @app.route('/feed')
@@ -53,26 +55,25 @@ def create():
     return render_template('create.html')
 
 
-@app.route('/login', methods=['GET','POST'])
-def login():
-    if request.method=='POST':
-        session.pop('user_id',None)
-
-        username = request.form['username']
-        password = request.form['password']
-
-        user = [x for x in users if x.username == username]
-        if user and user[0].password == password:
-            session['user_id'] = user[0].id
-            return redirect(url_for('account'))
-        else:
-            message = f"Username or password incorrect. Click here to "
-            return render_template('login.html', message=message)
-        
-        
-        return redirect(url_for('login'))
-    
+@app.get('/login')
+def login_nav():
     return render_template('login.html')
+
+
+@app.post('/login')
+def login():
+    session.pop('user_id',None)
+    username = request.form['username']
+    password = request.form['password']
+    user = [x for x in users if x.username == username]
+    if user and user[0].password == password:
+        session['user_id'] = user[0].id
+        global logged_in
+        logged_in = True
+        return redirect(url_for('account'))
+    else:
+        message = f"Username or password incorrect. Click here to "
+        return render_template('login.html', message=message)
 
 @app.route('/account')
 def account():
@@ -100,6 +101,8 @@ def register():
         new_user = User(id=random.randint(1000, 9999), username=username, password=password)
         users.append(new_user)
         session['user_id'] = new_user.id
+        global logged_in
+        logged_in = True
 
         return redirect(url_for('account'))
     
@@ -115,28 +118,28 @@ def add_post():
     # get random id
     post_id = random.randint(1, 100000)
     my_feed.create_post(post_id, user_id, title, content, file, [], [], [])
-    return redirect('/')
+    return redirect('/feed')
 
 # delete post
 @app.post('/delete_post')
 def delete_post():
     post_id = int(request.form.get('post_id'))
     my_feed.delete_post(post_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # like post
 @app.post('/like_post')
 def like_post():
     post_id = int(request.form.get('post_id'))
     my_feed.like_post(post_id, user_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # dislike post
 @app.post('/dislike_post')
 def dislike_post():
     post_id = int(request.form.get('post_id'))
     my_feed.dislike_post(post_id, user_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # edit post passthrough
 @app.post('/edit')
@@ -152,4 +155,4 @@ def edit_post():
     content = request.form.get('content')
     file = request.files['file']
     my_feed.update_post(post_id, title, content, file)
-    return redirect('/')
+    return redirect('/feed')
