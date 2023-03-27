@@ -1,7 +1,6 @@
 body
 {
     font-family: sans-serif;
-    
 }
 #title
 {
@@ -11,9 +10,6 @@ body
 #content
 {
    font-size: medium;
-}
-.feed {
-    list-style-type: none !important;
 }
 .post-card
 {
