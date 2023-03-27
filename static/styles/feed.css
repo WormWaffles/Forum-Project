@@ -15,21 +15,22 @@ body
 .post-card
 {
     /*work with width*/
-    width: auto;
+    max-width: 800px;
     height: auto;
     word-wrap: break-word;
-    padding: 5px;
-    background-color: rgb(211, 211, 211);
-    border: black solid 1px;
-    margin:auto;
+    padding: 25px 40px;
+    background-color: rgb(255, 255, 255);
+    /* border: black solid 1px; */
+    border-radius: 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    margin: auto;
     margin-bottom: 1rem;
     
 }
 .post-card-container
 {
     border-top:black solid 1px;
-    background-color: rgb(50, 50, 51); 
     display: flex;
-    justify-content: space-around;
+    justify-content: end;
     padding:5px;
 }
