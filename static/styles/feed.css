@@ -10,7 +10,10 @@ body
 }
 #content
 {
-   font-size: medium; 
+   font-size: medium;
+}
+.feed {
+    list-style-type: none !important;
 }
 .post-card
 {
@@ -24,8 +27,7 @@ body
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     margin: auto;
-    margin-bottom: 1rem;
-    
+    margin-bottom: 1rem;    
 }
 .post-card-container
 {
