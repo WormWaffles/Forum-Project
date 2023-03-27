@@ -156,3 +156,13 @@ def edit_post():
     file = request.files['file']
     my_feed.update_post(post_id, title, content, file)
     return redirect('/feed')
+
+# get error
+@app.get('/error')
+def error():
+    return render_template('error.html')
+
+# redirect to error.html
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect('/error')
