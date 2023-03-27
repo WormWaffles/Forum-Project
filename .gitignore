@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+/venv
+.DS_Store
+=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -160,3 +164,4 @@ cython_debug/
 #.idea/
 
 .DS_Store
+>>>>>>> 404a1abfd953c6b4d22f76062657f33238bb6b9a
