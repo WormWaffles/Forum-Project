@@ -1,4 +1,15 @@
 {% extends '_layout.html' %}
+
+{% block nav %} 
+    <div class="navbar-nav"></div>
+        <a class="nav-link active" href="/">Home</a>
+        <a class="nav-link" href="/feed">Feed</a>
+        <a class="nav-link" href="/account">Account</a>
+        <!-- <a class="nav-link" href="/login">Login</a> -->
+        <!-- <a class="nav-link" href="/register">Register</a> -->
+	</div> 
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" href="/static/styles/account.css">
     <!-- content -->
