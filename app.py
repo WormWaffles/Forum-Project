@@ -22,7 +22,7 @@ users.append(User(id=2, username='Jimmy', password='secret2'))
 my_feed = get_feed()
 
 # sample vars
-# global logged_in = Fals e
+# global logged_in = False
 user_id = 191
 #************
 
