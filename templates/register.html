@@ -1,4 +1,15 @@
 {% extends '_layout.html' %}
+
+{% block nav %} 
+    <div class="navbar-nav"></div>
+        <a class="nav-link active" href="/">Home</a>
+        <!-- <a class="nav-link" href="/feed">Feed</a> -->
+        <!-- <a class="nav-link" href="/account">Account</a> -->
+        <!-- <a class="nav-link" href="/login">Login</a> -->
+        <!-- <a class="nav-link" href="/register">Register</a> -->
+	</div> 
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" href="/static/styles/login.css">
     <!-- login page -->
@@ -6,52 +17,26 @@
     <p class="message">{{ message }}</p>
     {% endif %}
     <body>
-        <section class="hero is-info is-fullheight">
-          <div class="hero-body">
-            <div class="container">
-              <div class="columns is-centered">
-                <div class="column is-half">
-                  <form method="POST">
-                    <div class="field">
-                      <label class="label">Username</label>
-                      <div class="control has-icons-left has-icons-right">
-                        <input class="input" type="text" name="username" placeholder="Username" required>
-                        <span class="icon is-small is-left">
-                          <i class="fas fa-user"></i>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="field">
-                      <label class="label">Password</label>
-                      <p class="control has-icons-left">
-                        <input class="input" type="password" name="password" placeholder="Password" id="password" required>
-                        <span class="icon is-small is-left">
-                          <i class="fas fa-lock"></i>
-                        </span>
-                      </p>
-                    </div>
-                    <div class="field">
-                        <label class="label">Confirm Password</label>
-                        <p class="control has-icons-left">
-                          <input class="input" type="password" name="confirm_password" placeholder="ConfirmPassword" id="confirm_password" required>
-                          <span class="icon is-small is-left">
-                            <i class="fas fa-lock"></i>
-                          </span>
-                        </p>
-                      </div>
-                    <div class="field">
-                      <p class="control">
-                        <button type="submit" class="button is-success">
-                          Login
-                        </button>
-                      </p>
-                    </div>
-                  </form>
-                </div>
+      <section class="hero is-info is-fullheight">
+        <!--  -->
+        <div class="d-flex flex-column">
+          <form action="/register" method="post">
+              <div class="mb-3">
+                  <label for="username" class="form-label">Username</label>
+                  <input type="text" min="1" class="form-control" id="username" name="username" placeholder="Username" required>
               </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" min="1" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
+            <div class="mb-3">
+              <label for="confirm_password" class="form-label">Confirm Password</label>
+              <input type="password" min="1" class="form-control" id="confirm_password" name="confirm_password" placeholder="Password" required>
           </div>
-        </section>
+              <button type="submit" class="btn btn-dark">Login</button>
+              </form>
+        </div>
+      </section>
       </body>
 
 {% endblock %}
