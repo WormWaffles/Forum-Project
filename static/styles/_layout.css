@@ -5,14 +5,14 @@ body {
 /* Style for Navigation Bar */
 nav {
     background-color: #57A1BD; 
-    color: white;
     /* display: flex; */
     /* justify-content: space-between; */
     /* align-items: center; */
     /* padding: 10px; */
 }
 
-nav ul {
+header {
+    color: white !important;
     /* list-style: none; */
     /* margin: 0; */
     /* padding: 0; */
