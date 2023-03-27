@@ -1,22 +1,22 @@
+body {
+    background-color: #EFEFEF;
+}
+
 /* Style for Navigation Bar */
 nav {
-    background-color: #2196F3; /* Blue Background Color */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+    background-color: #57A1BD; 
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+    /* padding: 10px; */
 }
 
 nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-}
-
-nav li {
-    margin-left: 20px;
+    /* list-style: none; */
+    /* margin: 0; */
+    /* padding: 0; */
+    /* display: flex; */
+    /* align-items: center; */
 }
 
 nav a {
@@ -29,14 +29,18 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #1976D2; /* Darker Blue Background Color on Hover */
+    background-color: #5592a8; /* Darker Blue Background Color on Hover */
 }
 
 /* Style for Footer */
 footer {
-    background-color: #2196F3; /* Blue Background Color */
+    background-color: #57A1BD; /* Blue Background Color */
     padding: 10px;
     color: #FFFFFF; /* White Text Color */
     text-align: center;
     font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;  
 }
