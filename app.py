@@ -118,7 +118,7 @@ def add_post():
     # get random id
     post_id = random.randint(1, 100000)
     my_feed.create_post(post_id, user_id, title, content, file, [], [], [])
-    return redirect('/')
+    return redirect('/feed')
 
 # delete post
 @app.post('/delete_post')
