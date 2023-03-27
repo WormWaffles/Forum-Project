@@ -1,64 +1,25 @@
 {% extends '_layout.html' %}
+
+{% block nav %} 
+    <div class="navbar-nav"></div>
+        <a class="nav-link active" href="/">Home</a>
+        {% if logged_in %} 
+        <a class="nav-link" href="/feed">Feed</a>
+        {% endif %}
+	</div> 
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" href="/static/styles/index.css">
-    <!-- feed -->
-    <div class="nav">
-        <h1>Location Information</h1>
-    </div>
-    <div class="feed">
-        <h1>This is your feed</h1>
-        {% if not posts %}
-            <p>There are no posts</p>
-        {% else %}
-        <ul>
-            {% for index in posts %}
-            <li>
-                <div class="post-card">
-                    <h1 id="title">{{ posts[index].title }}</h1>
-                    <p id="content">{{ posts[index].content }}</p>
-                    <!-- <p>{{ posts[index].file }}</p> -->
-                    <div class="post-card-container">
-
-                            <form action="/like_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/like_post" method="post">{{ posts[index].likes|length }} Likes</button>
-                            </form>
-                            <form action="/dislike_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/dislike_post" method="post">{{ posts[index].dislikes|length }} Dislikes</button>
-                            </form>
-                            <!-- for these there should be a jinja if statment to check if post id matchs user id -->
-                            {% if (posts[index].user_id == user_id) %}
-                            <form action="/edit" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/edit_post" method="get">Edit Post</button>
-                            </form>
-                            <form action="/delete_post" method="post">
-                                <input type="hidden" name="post_id" value="{{ index }}">
-                                <button type="submit" action="/delete_post" method="get">Delete Post</button>
-                            </form>
-                        
-                    </div>
-                </div>
-                <!-- end here -->
+        <main class=""> 
+            <section>
+                {% if logged_in != True %}
+                <h1 id="welcome">Welcome to BarHive!</h1>
+                <form class="pt-3" action="/login" method="get"><button class="btn btn-dark">Login</button></form>
+                <form class="pt-3" action="/register" method="get"><button action="/register" class="btn btn-dark">Signup</button></form>
+                {% else %}
+                <h1 id="welcome">Welcome back, homie!</h1>
                 {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
-    <!-- button to make post -->
-    {% if logged_in %}
-    <form action="/create" method="get">
-        <div class="get_create">
-            <button type="submit">Make Post</button>
-        </div>
-    </form>
-    {% else %}
-    <form action="/login" method="get">
-        <div class="get_create">
-            <button type="submit">Make Post</button>
-        </div>
-    </form>
-    {% endif %}
+            </section>
+        </main>
 {% endblock %}
