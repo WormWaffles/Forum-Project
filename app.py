@@ -125,21 +125,21 @@ def add_post():
 def delete_post():
     post_id = int(request.form.get('post_id'))
     my_feed.delete_post(post_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # like post
 @app.post('/like_post')
 def like_post():
     post_id = int(request.form.get('post_id'))
     my_feed.like_post(post_id, user_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # dislike post
 @app.post('/dislike_post')
 def dislike_post():
     post_id = int(request.form.get('post_id'))
     my_feed.dislike_post(post_id, user_id)
-    return redirect('/')
+    return redirect('/feed')
 
 # edit post passthrough
 @app.post('/edit')
@@ -155,4 +155,4 @@ def edit_post():
     content = request.form.get('content')
     file = request.files['file']
     my_feed.update_post(post_id, title, content, file)
-    return redirect('/')
+    return redirect('/feed')
