@@ -37,9 +37,10 @@
         <main class=""> 
             <section>
                 {% if logged_in != True %}
-                <h1 id="welcome">Welcome to BarHive!</h1>
-                <form class="pt-3" action="/login" method="get"><button class="btn btn-dark">Login</button></form>
-                <form class="pt-3" action="/register" method="get"><button action="/register" class="btn btn-dark">Signup</button></form>
+                <div id="landing-msg">
+                    <h1 id="welcome">Welcome to BarHive!</h1>
+                </div>
+                
                 {% else %}
                 <h1 id="welcome">Welcome back, homie!</h1>
                 {% endif %}
