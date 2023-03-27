@@ -1,13 +1,35 @@
 {% extends '_layout.html' %}
 
 {% block nav %} 
-    <div class="navbar-nav"></div>
-        <a class="nav-link active" href="/">Home</a>
-        {% if logged_in %} 
+
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/">Home</a>
+    </li>
+    {% if logged_in == False %} 
+    <li class="nav-item">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/register">Sign Up</a>
+    </li>
+    </ul>
+
+        {% else %} 
+    <li class="nav-item">
         <a class="nav-link" href="/feed">Feed</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="/account">Account</a>
-        {% endif %}
-	</div> 
+    </li>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-dark" type="submit">Search</button>
+        </form>
+    </ul>
+    {% endif %}
+    
 {% endblock %}
 
 {% block body %}
