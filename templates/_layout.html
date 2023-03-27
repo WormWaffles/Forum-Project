@@ -8,18 +8,25 @@
 	<link rel="stylesheet" href="/static/styles/_layout.css">
 </head>
 <body>
-	<header class="d-flex flex-column">
-		<nav class="navbar navbar-expand-sm" data-bs-theme="dark"> 
+	<header class="">
+		<nav class="navbar navbar-expand-lg bg-body-tertiary">
 			<div class="container-fluid">
-				<div>
-					<a class="navbar-brand" href="/">BarHive</a>
-					<button class="navbar-toggler navbar-dark" id="dropdown" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-				</div>
+			  <a class="navbar-brand" href="/">BarHive</a>
 				{% block nav %}  {% endblock %}
+				<!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				  <li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="/">Home</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/login">Login</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link disabled">Account</a>
+				  </li>
+				</ul> -->
+
 			</div>
-		</nav>
+		  </nav>
 	</header>
     <div class="container pt-4">
         {% block body %}{% endblock %}
