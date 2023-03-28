@@ -33,6 +33,10 @@ nav a:hover {
     background-color: #5592a8; /* Darker Blue Background Color on Hover */
 }
 
+nav img {
+    height: 75%;
+}
+
 /* Style for Body  */
 .landing-msg {
     background-color: white;
