@@ -3,7 +3,7 @@ import random
 from src.post_feed import get_feed
 
 app = Flask(__name__)
-app.secret_key='somesecretkeythatonlyiknow'
+app.secret_key='SecretKey'
 
 # User Class
 class User:
@@ -14,9 +14,9 @@ class User:
 
 users=[]
 users.append(User(id=1, username='Admin', password='Admin'))
-users.append(User(id=2, username='Becca', password='secret'))
-users.append(User(id=2, username='Harry', password='secret1'))
-users.append(User(id=2, username='Jimmy', password='secret2'))
+users.append(User(id=2, username='Becca', password='Becca'))
+users.append(User(id=3, username='Harry', password='Harry'))
+users.append(User(id=4, username='Jimmy', password='Jimmy'))
 
 my_feed = get_feed()
 
