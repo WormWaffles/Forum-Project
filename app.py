@@ -42,11 +42,11 @@ def before_request():
 @app.route('/')
 def index():
 
-    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id)
+    return render_template('index.html', posts=my_feed.get_all_posts(), logged_in=logged_in, user_id=user_id, home="active")
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=my_feed.get_all_posts(), logged_in=logged_in)
+    return render_template('feed.html', posts=my_feed.get_all_posts(), logged_in=logged_in, feed="active")
 
 
 # go to create post page
@@ -57,7 +57,7 @@ def create():
 
 @app.get('/login')
 def login_nav():
-    return render_template('login.html')
+    return render_template('login.html', logged_in=logged_in, login="active")
 
 
 @app.post('/login')
@@ -70,43 +70,43 @@ def login():
         session['user_id'] = user[0].id
         global logged_in
         logged_in = True
-        return redirect(url_for('account'))
+        return redirect(url_for('account', account="active"))
     else:
         message = f"Username or password incorrect. Click here to "
-        return render_template('login.html', message=message)
+        return render_template('login.html', message=message, logged_in=logged_in, login="active")
 
 @app.route('/account')
 def account():
     if not g.user:
-        return redirect(url_for('login'))
+        return redirect(url_for('login', login="active"))
     
-    return render_template('account.html')
+    return render_template('account.html', account="active")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        global logged_in
         username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         
         if password != confirm_password:
             message = 'Passwords do not match.'
-            return render_template('register.html', message=message)
+            return render_template('register.html', message=message, logged_in=logged_in, register="active")
         
         existing_user = [x for x in users if x.username == username]
         if existing_user:
             message = 'Username already exists. Please choose a different username.'
-            return render_template('register.html', message=message)
+            return render_template('register.html', message=message, logged_in=logged_in)
         
         new_user = User(id=random.randint(1000, 9999), username=username, password=password)
         users.append(new_user)
         session['user_id'] = new_user.id
-        global logged_in
         logged_in = True
 
-        return redirect(url_for('account'))
+        return redirect(url_for('account', account="active"))
     
-    return render_template('register.html')
+    return render_template('register.html', logged_in=logged_in, register="active")
 
 
 # create post

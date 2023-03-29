@@ -1,18 +1,13 @@
-body
-{
-    font-family: sans-serif;
-}
-#title
-{
+#title {
     font-size: large;
     font-family: sans-serif;
 }
-#content
-{
-   font-size: medium;
+
+#content {
+    font-size: medium;
 }
-.post-card
-{
+
+.post-card {
     /*work with width*/
     max-width: 800px;
     height: auto;
@@ -23,12 +18,12 @@ body
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     margin: auto;
-    margin-bottom: 1rem;    
+    margin-bottom: 1rem;
 }
-.post-card-container
-{
-    border-top:black solid 1px;
+
+.post-card-container {
+    border-top: black solid 1px;
     display: flex;
     justify-content: end;
-    padding:5px;
+    padding: 5px;
 }

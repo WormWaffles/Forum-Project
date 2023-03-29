@@ -1,27 +1,22 @@
 body {
     background-color: #EFEFEF;
+    font-family: sans-serif;
+    /* this changes the font for every page extended by layout */
 }
 
 /* Style for Navigation Bar */
 nav {
-    background-color: #57A1BD; 
-    /* display: flex; */
-    /* justify-content: space-between; */
-    /* align-items: center; */
-    /* padding: 10px; */
+    background-color: #57A1BD;
 }
 
 header {
     color: white;
-    /* list-style: none; */
-    /* margin: 0; */
-    /* padding: 0; */
-    /* display: flex; */
-    /* align-items: center; */
+    z-index: 9999;
 }
 
 nav a {
-    color: #FFFFFF; /* White Text Color */
+    color: #FFFFFF;
+    /* White Text Color */
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
@@ -30,36 +25,30 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #5592a8; /* Darker Blue Background Color on Hover */
+    background-color: #5592a8;
+    /* Darker Blue Background Color on Hover */
 }
 
 nav img {
     height: 75%;
 }
 
-/* Style for Body  */
-.landing-msg {
-    background-color: white;
-    border-radius: 15px;
-    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
-    display: flex;
-    justify-content: center;
-    padding: 100px 10px;
-    margin-top: 100px;
-}   
-
 /* Style for Footer */
 footer {
-    background-color: #57A1BD; /* Blue Background Color */
+    background-color: #57A1BD;
+    /* Blue Background Color */
     padding: 10px;
-    color: #FFFFFF; /* White Text Color */
+    color: #FFFFFF;
+    /* White Text Color */
     text-align: center;
     font-size: 14px;
-    position: absolute;
+    position: flex;
     bottom: 0;
     width: 100%;
-    height: 7rem;  
+    height: 7rem;
 }
-.container pt-4 {
-    padding-top: 200px;
+
+.container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 }
