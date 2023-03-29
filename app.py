@@ -2,8 +2,14 @@ from flask import Flask, render_template, redirect, request,session,g,url_for
 import random
 from src.post_feed import get_feed
 from src.__init__ import logged_in
+from models import db
 
 app = Flask(__name__)
+
+# for database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:6184@localhost:5432/db_name'
+db.init_app(app)
+
 app.secret_key='SecretKey'
 
 # User Class
