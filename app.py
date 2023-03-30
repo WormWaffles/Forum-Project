@@ -99,7 +99,7 @@ def register():
             message = 'Username already exists. Please choose a different username.'
             return render_template('register.html', message=message, logged_in=logged_in)
         
-        new_user = User(id=random.randint(1000, 9999), username=username, password=password)
+        new_user = User(id=random.randint(10000, 99999), username=username, password=password)
         users.append(new_user)
         session['user_id'] = new_user.id
         logged_in = True

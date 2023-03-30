@@ -48,17 +48,10 @@
     {% endif %}
 </div>
 <!-- button to make post -->
-{% if logged_in %}
 <form action="/create" method="get">
     <div class="get_create">
         <button class="btn btn-success" type="submit">Make Post</button>
     </div>
 </form>
-{% else %}
-<form action="/login" method="get">
-    <div class="get_create">
-        <button class="btn btn-success" type="submit">Make Post</button>
-    </div>
-</form>
-{% endif %}
+
 {% endblock %}
