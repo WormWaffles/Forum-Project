@@ -1,14 +1,35 @@
 {% extends '_layout.html' %}
 {% block body %}
 <!-- edit post title content or file -->
-<form action="/edit_post" method="post" enctype="multipart/form-data">
-    <div class="edit_post">
-        <h1>Edit Post</h1>
-        <input type="hidden" name="post_id" value="{{ post_id }}">
-        <input type="text" name="title" value="{{ posts[post_id].title }}"><br>
-        <textarea type="text" name="content">{{ posts[post_id].content }}</textarea><br>
-        <input type="file" name="file" value="{{ posts[post_id].file }}"><br>
-        <button type="submit">Save</button>
-    </div>
-</form>
+<div class="page-title">
+    <h1>Edit Post</h1>
+</div>
+<div class="d-flex flex-column">
+    <form action="/edit_post" method="post" enctype="multipart/form-data">
+        <!-- keep the id -->
+        <div>
+            <input type="hidden" name="post_id" value="{{ post_id }}">
+        </div>
+        <!-- input for title of post -->
+        <div class="mb-3">
+            <!-- <label class="form-label">Title</label> -->
+            <input class="form-control" type="text" name="title" placeholder="Title" value="{{ posts[post_id].title }}">
+        </div>
+        <!-- input for post content -->
+        <div class="mb-3">
+            <!-- <label class="form-label">Content</label> -->
+            <textarea class="form-control" name="content" placeholder="Content"
+                rows="4">{{ posts[post_id].content }}</textarea>
+        </div>
+        <!-- input for single file attachment -->
+        <div class="mb-3">
+            <label class="form-label"></label>
+            <input class="form-control" type="file" name="file" value="{{ posts[post_id].file }}">
+        </div>
+        <!-- button for post -->
+        <div class="post">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
