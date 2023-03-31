@@ -1,62 +1,37 @@
-from src.user import User
+from src.models import db, User
 
-_users = None
+class Users:
 
-def get_users():
-    global _users
+    def get_all_users(self):
+        return User.query.all()
+    
+    def get_user_by_id(self, user_id):
+        return User.query.get(user_id)
+    
+    def get_user_by_name(self, username):
+        return User.query.filter_by(username=username).first()
+    
+    def create_user(self, username, password):
+        user = User(username=username, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    
+    def update_user(self, user_id, username, password):
+        user = self.get_user_by_id(user_id)
+        user.username = username
+        user.password = password
+        db.session.commit()
+        return user
+    
+    def delete_user(self, user_id):
+        user = self.get_user_by_id(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return user
+    
+    def clear(self):
+        User.query.delete()
+        db.session.commit()
 
-    class Users:
-        '''dict of users'''
-        def __init__(self):
-            self.users: dict[int, User] = {}
-
-        def get_all_users(self):
-            return self.users
-        
-        def find_user_by_name(self, username) -> User:
-            '''Find user by name'''
-            for user in self.users.values():
-                if user.username == username:
-                    return user
-            return None
-        
-        def find_user_by_id(self, user_id) -> User:
-            '''Find user by id'''
-            for user in self.users.values():
-                if user.id == user_id:
-                    return user
-            return None
-        
-        def create_user(self, username, password) -> User:
-            '''Create new user and add to users dict'''
-            user = User(username, password)
-            self.users[user.id] = user
-            return user
-        
-        def update_user(self, user_id, username, password) -> User:
-            '''Update existing user'''
-            user = self.users[user_id]
-            if not user:
-                raise ValueError(f'user with id {user_id} not found')
-            # update user
-            self.users[user_id] = user
-            user.username = username
-            user.password = password
-            return user
-        
-        def delete_user(self, user_id) -> User:
-            '''Delete existing user'''
-            user = self.users[user_id]
-            if not user:
-                raise ValueError(f'user with id {user_id} not found')
-            del self.users[user_id]
-            return user
-        
-        def clear(self) -> None:
-            '''Clear users dict'''
-            self.users.clear()
-
-    if _users is None:
-        _users = Users()
-
-    return _users
+users = Users()

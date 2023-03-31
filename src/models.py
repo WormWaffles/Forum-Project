@@ -15,5 +15,4 @@ class Post(db.Model):
     content = db.Column(db.String(80), nullable=False)
     file = db.Column(db.String(80), nullable=True)
     likes = db.Column(db.Integer, nullable=False)
-    dislikes = db.Column(db.Integer, nullable=False)
-    comments = db.Column(db.Integer, nullable=True)
+    # comments need to be implemented
