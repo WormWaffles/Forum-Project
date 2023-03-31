@@ -4,13 +4,13 @@
 <link rel="stylesheet" href="/static/styles/index.css">
 <main class="">
     <section>
-        {% if logged_in != True %}
+        {% if logged_in %}
+        <h1 id="landing-msg">Welcome back, homie!</h1>
+        
+        {% else %}
         <div class="landing-msg">
             <h1 id="welcome">Welcome to BarHive!</h1>
         </div>
-
-        {% else %}
-        <h1 id="landing-msg">Welcome back, homie!</h1>
         {% endif %}
     </section>
 </main>

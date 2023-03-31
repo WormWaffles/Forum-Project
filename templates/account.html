@@ -13,8 +13,11 @@
           {{g.user.username}}'s Profile
         </h1>
         <h2 class="subtitle">
-          You are user number #{{g.user.id}}
+          You are user number #{{g.user.user_id}}
         </h2>
+        <form action="/logout">
+          <button class="button is-danger" type="submit">Logout</button>
+        </form>
       </div>
     </div>
   </section>
