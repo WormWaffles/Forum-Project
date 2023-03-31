@@ -1,71 +1,39 @@
-from random import randint
-from src.post import Post
+from src.models import db, Post
 
-# Very inspired by Krevet
-_my_feed = None
+class PostFeed:
 
-def get_feed():
-    global _my_feed
+    def get_all_posts(self):
+        return Post.query.all()
+    
+    def get_post_by_id(self, post_id):
+        return Post.query.get(post_id)
+    
+    def create_post(self, user_id, title, content, file, likes):
+        post = Post(user_id=user_id, title=title, content=content, file=file, likes=likes)
+        db.session.add(post)
+        db.session.commit()
+        return post
+    
+    def update_post(self, post_id, title, content, file):
+        post = self.get_post_by_id(post_id)
+        post.title = title
+        post.content = content
+        post.file = file
+        db.session.commit()
+        return post
+    
+    def delete_post(self, post_id):
+        post = self.get_post_by_id(post_id)
+        db.session.delete(post)
+        db.session.commit()
+        return post
+    
+    def like_post(self, post_id, user_id):
+        # TODO: implement
+        pass
 
-    class PostFeed:
-        '''dict of movies [should be entered in database at one point]'''
-        def __init__(self):
-            self.posts: dict[int, Post] = {}
+    def clear(self):
+        Post.query.delete()
+        db.session.commit()
 
-        def get_all_posts(self):
-            return self.posts
-        
-        def create_post(self, post_id, user_id, title, content, file, likes, dislikes, comments) -> Post:
-            '''Create new post and add to posts dict'''
-            post = Post(post_id, user_id, title, content, file, likes, dislikes, comments)
-            self.posts[post.post_id] = post
-
-        def like_post(self, post_id, user_id) -> Post:
-            '''Like existing post'''
-            post = self.posts[post_id]
-            if not post:
-                raise ValueError(f'movie with id {post_id} not found')
-            if user_id in post.dislikes:
-                post.dislikes.remove(user_id)
-            if user_id not in post.likes:
-                post.likes.append(user_id)
-            return post
-        
-        def dislike_post(self, post_id, user_id) -> Post:
-            '''Dislike existing post'''
-            post = self.posts[post_id]
-            if not post:
-                raise ValueError(f'movie with id {post_id} not found')
-            if user_id in post.likes:
-                post.likes.remove(user_id)
-            if user_id not in post.dislikes:
-                post.dislikes.append(user_id)
-            return post
-
-        def update_post(self, post_id, title, content, file) -> Post:
-            '''Update existing post'''
-            post = self.posts[post_id]
-            if not post:
-                raise ValueError(f'movie with id {post_id} not found')
-            # update post
-            self.posts[post_id] = post
-            post.title = title
-            post.content = content
-            post.file = file
-            return post
-        
-        def delete_post(self, post_id) -> Post:
-            '''Delete existing post'''
-            post = self.posts[post_id]
-            if not post:
-                raise ValueError(f'movie with id {post_id} not found')
-            del self.posts[post_id]
-
-        def clear(self) -> None:
-            '''Clear all posts'''
-            self.posts = {}
-
-    if _my_feed is None:
-        _my_feed = PostFeed()
-
-    return _my_feed
+post_feed = PostFeed()

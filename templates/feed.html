@@ -9,35 +9,31 @@
     <p>There are no posts</p>
     {% else %}
     <ul style="list-style-type: none;">
-        {% for index in posts %}
+        {% for post in posts %}
         <li>
             <div class="post-card">
-                <h1 id="title">{{ posts[index].title }}</h1>
-                <p id="content">{{ posts[index].content }}</p>
-                <!-- <p>{{ posts[index].file }}</p> -->
+                <h1 id="title">{{ post.title }}</h1>
+                <p id="content">{{ post.content }}</p>
+                <!-- <p>{{ posts.file }}</p> -->
                 <div class="post-card-container">
 
+                    <!-- need to fix how likes work **** -->
                     <form action="/like_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ index }}">
-                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{
-                            posts[index].likes|length }} Likes</button>
+                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }} Likes</button>
                     </form>
-                    <form action="/dislike_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ index }}">
-                        <button class="btn btn-dark" type="submit" action="/dislike_post" method="post">{{
-                            posts[index].dislikes|length }} Dislikes</button>
-                    </form>
+
                     <form action="/edit" method="post">
-                        <input type="hidden" name="post_id" value="{{ index }}">
+                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
                         <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit Post</button>
                     </form>
                     <form action="/delete_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ index }}">
+                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
                         <button class="btn btn-dark" type="submit" action="/delete_post" method="get">Delete
                             Post</button>
                     </form>
                     <!-- for these there should be a jinja if statement to check if post id matchs user id -->
-                    <!-- {% if (posts[index].user_id == user_id) %} -->
+                    <!-- {% if (posts.user_id == user_id) %} -->
                 </div>
             </div>
             <!-- end here -->
