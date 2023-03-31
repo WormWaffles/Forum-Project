@@ -8,6 +8,7 @@ This guide will help you set up a database on your local machine for use with yo
 
 - [DataGrip](https://www.jetbrains.com/datagrip/) installed on your machine
 - Access to the `database_schema.sql` file
+- pip install -r requirements.txt 
 
 ## Steps
 
