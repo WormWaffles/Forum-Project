@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 
-# load database
+# Database Connection
 load_dotenv()
 
 db_user = os.getenv('DB_USER')
@@ -27,6 +27,7 @@ app.secret_key='SecretKey'
 
 # this can be put somewhere else i think
 def logged_in():
+    '''Checks if user is logged in'''
     if 'user_id' in session:
         return True
     else:
@@ -36,7 +37,6 @@ def logged_in():
 @app.before_request
 def before_request():
     g.user = None
-
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
         g.user = user
