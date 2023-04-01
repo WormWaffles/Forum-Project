@@ -1,0 +1,31 @@
+{% extends '_layout.html' %}
+{% block body %}
+<!-- edit post title content or file -->
+<div class="page-title">
+    <h1>Edit Account: {{ user.username }}</h1>
+</div>
+<div class="d-flex flex-column">
+    <form action="/account/edit" method="post" enctype="multipart/form-data">
+        <!-- keep the id -->
+        <div>
+            <input type="hidden" name="post_id" value="{{ user.user_id }}">
+        </div>
+        <!-- input for username -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="username" placeholder="username" value="{{ user.username }}">
+        </div>
+        <!-- input for password -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="password" placeholder="Password">
+        </div>
+        <!-- input for confirm password -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="confirm_password" placeholder="Confirm Password">
+        </div>
+        <!-- button for post -->
+        <div class="post">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
