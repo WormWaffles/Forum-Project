@@ -13,18 +13,18 @@
         <!-- input for title of post -->
         <div class="mb-3">
             <!-- <label class="form-label">Title</label> -->
-            <input class="form-control" type="text" name="title" placeholder="Title" value="{{ posts[post_id].title }}">
+            <input class="form-control" type="text" name="title" placeholder="Title" value="{{ post.title }}">
         </div>
         <!-- input for post content -->
         <div class="mb-3">
             <!-- <label class="form-label">Content</label> -->
             <textarea class="form-control" name="content" placeholder="Content"
-                rows="4">{{ posts[post_id].content }}</textarea>
+                rows="4">{{ post.content }}</textarea>
         </div>
         <!-- input for single file attachment -->
         <div class="mb-3">
             <label class="form-label"></label>
-            <input class="form-control" type="file" name="file" value="{{ posts[post_id].file }}">
+            <input class="form-control" type="file" name="file" value="{{ post.file }}">
         </div>
         <!-- button for post -->
         <div class="post">

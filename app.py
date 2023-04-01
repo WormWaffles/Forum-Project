@@ -44,12 +44,12 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('index.html', logged_in=logged_in(), home="active")
+    return render_template('index.html', logged_in=logged_in(), home="active", user=g.user)
 
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active")
+    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user)
 
 
 # go to create post page
@@ -87,7 +87,32 @@ def account():
     if not g.user:
         return redirect(url_for('login', login="active"))
     
-    return render_template('account.html', account="active")
+    return render_template('account.html', account="active", user=g.user)
+
+@app.route('/account/edit')
+def edit_account():
+    if not g.user:
+        return redirect(url_for('login', login="active"))
+    
+    return render_template('settings.html', account="active", user=g.user)
+
+@app.route('/account/edit', methods=['POST'])
+def edit_account_post():
+    print("edit account post")
+    if not g.user:
+        return redirect(url_for('login', login="active"))
+    
+    user_id = session['user_id']
+    username = request.form['username']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+    
+    if password != confirm_password:
+        message = 'Passwords do not match.'
+        return render_template('settings.html', message=message, logged_in=logged_in(), account="active")
+    users.update_user(user_id, username, password)
+    
+    return redirect(url_for('account', account="active"))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -108,7 +133,6 @@ def register():
         
         new_user = users.create_user(username, password)
         session['user_id'] = new_user.user_id
-        logged_in = True
 
         return redirect(url_for('account', account="active"))
     
@@ -171,9 +195,9 @@ def edit_post():
 # get error
 @app.get('/error')
 def error():
-    return render_template('error.html')
+    return render_template('error.html', user=g.user)
 
 # redirect to error.html
 @app.errorhandler(404)
 def page_not_found(e):
-    return redirect('/error')
+    return redirect('error')
