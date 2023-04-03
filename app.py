@@ -68,7 +68,7 @@ def login():
     session.pop('user_id',None)
     username = request.form['username']
     password = request.form['password']
-    user = users.get_user_by_name(username)
+    user = users.get_user_by_username(username)
     if user and user.password == password:
         session['user_id'] = user.user_id
         return redirect(url_for('account', account="active"))
@@ -104,13 +104,23 @@ def edit_account_post():
     
     user_id = session['user_id']
     username = request.form['username']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
+    about_me = request.form['about_me']
+    profile_pic = request.files['profile_pic']
+    banner_pic = request.files['banner_pic']
+    private = request.form.get('private')
+
+    # needs error handling
+    
     
     if password != confirm_password:
         message = 'Passwords do not match.'
         return render_template('settings.html', message=message, logged_in=logged_in(), account="active")
-    users.update_user(user_id, username, password)
+    users.update_user(user_id, username, password, first_name, last_name, email, about_me, profile_pic, banner_pic, private)
     
     return redirect(url_for('account', account="active"))
 
@@ -126,7 +136,7 @@ def register():
             message = 'Passwords do not match.'
             return render_template('register.html', message=message, logged_in=logged_in(), register="active")
         
-        existing_user = users.get_user_by_name(username)
+        existing_user = users.get_user_by_username(username)
         if existing_user:
             message = 'Username already exists. Please choose a different username.'
             return render_template('register.html', message=message, logged_in=logged_in())

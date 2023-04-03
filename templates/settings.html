@@ -6,21 +6,48 @@
 </div>
 <div class="d-flex flex-column">
     <form action="/account/edit" method="post" enctype="multipart/form-data">
-        <!-- keep the id -->
-        <div>
-            <input type="hidden" name="post_id" value="{{ user.user_id }}">
+        <!-- input for profile picture -->
+        <div class="mb-3">
+            <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
+                value="{% if user.profile_pic != None %}{{user.profile_pic}}{% endif %}">
         </div>
         <!-- input for username -->
         <div class="mb-3">
-            <input class="form-control" type="text" name="username" placeholder="username" value="{{ user.username }}">
+            <input class="form-control" type="text" name="username" placeholder="Username" value="{{ user.username }}">
+        </div>
+        <!-- input for first name -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="first_name" placeholder="First name"
+                value="{% if user.first_name != None %}{{user.first_name}}{% endif %}">
+            <!-- input for last name -->
+            <input class="form-control" type="text" name="last_name" placeholder="Last name"
+                value="{% if user.last_name != None %}{{user.last_name}}{% endif %}">
+        </div>
+        <!-- input for email -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="email" placeholder="Email"
+                value="{% if user.email != None %}{{user.email}}{% endif %}">
         </div>
         <!-- input for password -->
         <div class="mb-3">
             <input class="form-control" type="text" name="password" placeholder="Password">
-        </div>
-        <!-- input for confirm password -->
-        <div class="mb-3">
+            <!-- input for confirm password -->
             <input class="form-control" type="text" name="confirm_password" placeholder="Confirm Password">
+        </div>
+        <!-- text area for bio -->
+        <div class="mb-3">
+            <textarea class="form-control" name="about_me"
+                placeholder="About me">{% if user.about_me != None %}{{user.about_me}}{% endif %}</textarea>
+        </div>
+        <!-- input for banner picture -->
+        <div>
+            <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
+                value="{% if user.banner_pic != None %}{{user.banner_pic}}{% endif %}">
+        </div>
+        <!-- private account check box -->
+        <div class="mb-3">
+            <input type="checkbox" name="private" value="1" {% if user.private==1 %} checked {% endif %}>
+            <label for="private">Private Account</label>
         </div>
         <!-- button for post -->
         <div class="post">

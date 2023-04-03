@@ -10,17 +10,27 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          {{g.user.username}}'s Profile
+          {% if user.first_name and user.last_name %}
+          {{ g.user.first_name }} {{ g.user.last_name }}'s Profile
+          {% else %}
+          {{ g.user.username }}
+          {% endif %}
         </h1>
         <h2 class="subtitle">
-          You are user number #{{g.user.user_id}}
-        </h2>
-        <form action="/logout">
-          <button class="button is-danger" type="submit">Logout</button>
-        </form>
-        <form action="/account/edit">
-          <button class="button is-warning" type="submit">Edit Account</button>
-        </form>
+          {% if user.about_me %}
+          {{ g.user.about_me }}
+          {% else %}
+          This user has not written a bio yet.
+          {% endif %}
+          <h2 class="subtitle">
+            You are user number #{{g.user.user_id}}
+          </h2>
+          <form action="/logout">
+            <button class="button is-danger" type="submit">Logout</button>
+          </form>
+          <form action="/account/edit">
+            <button class="button is-warning" type="submit">Edit Account</button>
+          </form>
       </div>
     </div>
   </section>

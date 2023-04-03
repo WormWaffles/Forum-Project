@@ -10,22 +10,42 @@ class Users:
         '''Returns user by id'''
         return User.query.get(user_id)
     
-    def get_user_by_name(self, username):
-        '''Returns user by name'''
+    def get_user_by_username(self, username):
+        '''Returns user by username'''
         return User.query.filter_by(username=username).first()
     
     def create_user(self, username, password):
         '''Creates a user'''
-        user = User(username=username, password=password)
+        user = User(username=username, password=password, private=False)
         db.session.add(user)
         db.session.commit()
         return user
     
-    def update_user(self, user_id, username, password):
+    def save_profile_pic(self, user_id, profile_pic):
+        '''Saves profile pic'''
+        # TODO: implement
+        pass
+
+    def save_banner_pic(self, banner_pic, user_id):
+        '''Saves banner pic'''
+        # TODO: implement
+        pass
+
+    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, profile_pic, banner_pic, private):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
         user.password = password
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.about_me = about_me
+        self.save_profile_pic(user.user_id, profile_pic)
+        self.save_banner_pic(banner_pic, user.user_id)
+        if private == '1':
+            user.private = True
+        else:
+            user.private = False
         db.session.commit()
         return user
     
