@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
+from src.likes import likes
 from src.models import db
 from dotenv import load_dotenv
 import os
@@ -36,6 +37,7 @@ def logged_in():
 
 @app.before_request
 def before_request():
+    '''Checks if user is logged in'''
     g.user = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
@@ -49,7 +51,7 @@ def index():
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user)
+    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user, likes=likes.get_all_likes())
 
 
 # go to create post page
@@ -178,24 +180,24 @@ def delete_post():
 @app.get('/feed/like/<int:post_id>')
 def like_post(post_id):
     print("like post" + str(post_id))
-    # user_id = session['user_id']
-    # post_feed.like_post(post_id, user_id)
+    user_id = session['user_id']
+    post_feed.like_post(post_id, user_id)
     return "nothing"
 
 # dislike post
 @app.get('/feed/dislike/<int:post_id>')
 def dislike_post(post_id):
     print("dislike post" + str(post_id))
-    # user_id = session['user_id']
-    # post_feed.dislike_post(post_id, user_id)
+    user_id = session['user_id']
+    post_feed.dislike_post(post_id, user_id)
     return "nothing"
 
 # remove like or dislike
 @app.get('/feed/remove_like/<int:post_id>')
 def remove_like(post_id):
     print("remove like" + str(post_id))
-    # user_id = session['user_id']
-    # post_feed.remove_like(post_id, user_id)
+    user_id = session['user_id']
+    post_feed.remove_like(post_id, user_id)
     return "nothing"
 
 # edit post passthrough

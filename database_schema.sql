@@ -18,3 +18,10 @@ CREATE TABLE post (
     likes INTEGER NOT NULL,
     PRIMARY KEY (post_id)
 );
+
+CREATE TABLE user_likes (
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    like_type INTEGER NOT NULL,
+    PRIMARY KEY (user_id, post_id)
+);

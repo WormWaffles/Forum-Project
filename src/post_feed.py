@@ -1,4 +1,5 @@
 from src.models import db, Post
+from src.likes import likes
 
 class PostFeed:
 
@@ -35,10 +36,61 @@ class PostFeed:
     
     def like_post(self, post_id, user_id):
         '''Likes a post'''
-        # This needs to increment the likes column in the post table, but also add the user_id to the likes table
-        # TODO: implement
-        print("Like post")
-        pass
+        # check if user has already liked or disliked this post
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        post = self.get_post_by_id(post_id)
+        if like:
+            if like.like_type == -1:
+                post.likes += 1
+                likes.update_like(user_id, post_id, 0)
+            elif like.like_type == 0:
+                post.likes += 1
+                likes.update_like(user_id, post_id, 1)
+            else:
+                return
+        else:
+            likes.create_like(user_id, post_id, 1)
+            post.likes += 1
+        db.session.add(post)
+        db.session.commit()
+
+    def dislike_post(self, post_id, user_id):
+        '''Dislikes a post'''
+        # check if user has already liked or disliked this post
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        post = self.get_post_by_id(post_id)
+        if like:
+            if like.like_type == 1:
+                post.likes -= 2
+            elif like.like_type == 0:
+                post.likes -= 1
+            else:
+                return
+            likes.update_like(user_id, post_id, -1)
+        else:
+            likes.create_like(user_id, post_id, -1)
+            post.likes -= 1
+        db.session.add(post)
+        db.session.commit()
+        print("done")
+
+    def remove_like(self, post_id, user_id):
+        '''Removes a like or dislike'''
+        # check if user has already liked or disliked this post
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        if like:
+            post = self.get_post_by_id(post_id)
+            if like.like_type == 1:
+                post.likes -= 1
+            elif like.like_type == -1:
+                post.likes += 1
+            else:
+                return
+            likes.update_like(user_id, post_id, 0)
+        else:
+            likes.create_like(user_id, post_id, 0)
+        db.session.add(post)
+        db.session.commit()
 
     def clear(self):
         '''Clears all posts'''

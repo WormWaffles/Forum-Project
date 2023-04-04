@@ -19,7 +19,17 @@
                 <div class="post-card-container">
 
                     <!-- like button -->
-                    <button class="btn btn-dark" id="{{ post.post_id }}" for="like">Like</button:like>
+                    <button class="btn btn-dark" id="{{ post.post_id }}" for="like"
+                    {% for like in likes %}
+                    {% if like.post_id == post.post_id and like.user_id == user.user_id %}
+                    {% if like.like_type == 1 %}
+                    style="color: green;"
+                    {% elif like.like_type == -1 %}
+                    style="color: red;"
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    >{{ post.likes }} Likes</button:like>
 
                         <form action="/edit" method="post">
                             <input type="hidden" name="post_id" value="{{ post.post_id }}">
@@ -55,13 +65,21 @@
             if (event.detail === 1) {
                 timer = setTimeout(() => {
                     // single click action
-                    if (document.getElementById(button_id).style.color == "green" || document.getElementById(button_id).style.color == "red") {
+                    if (document.getElementById(button_id).style.color == "green") {
                         document.getElementById(button_id).style.color = "white";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
                         var request = new XMLHttpRequest()
                         request.open("GET", "/feed/remove_like/" + button_id, true)
                         request.send()
+                    } else if (document.getElementById(button_id).style.color == "red") {
+                        document.getElementById(button_id).style.color = "white";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/like/" + button_id, true)
+                        request.send()
                     } else {
                         document.getElementById(button_id).style.color = "green";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
                         var request = new XMLHttpRequest()
                         request.open("GET", "/feed/like/" + button_id, true)
                         request.send()
@@ -72,6 +90,11 @@
         button.addEventListener('dblclick', event => {
             clearTimeout(timer)
             // double click action
+            if (document.getElementById(button_id).style.color == "green") {
+                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 2 + " Likes"
+            } else {
+                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
+            }
             document.getElementById(button_id).style.color = "red";
             var request = new XMLHttpRequest()
             request.open("GET", "/feed/dislike/" + button_id, true)
