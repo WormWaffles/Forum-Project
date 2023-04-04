@@ -2,6 +2,31 @@
 
 {% block body %}
 <link rel="stylesheet" href="/static/styles/feed.css">
+
+<script>
+function myFunction(id) {
+    // this should change the like button
+    document.getElementById("like_" + id).style.color = "red";
+    var request = new XMLHttpRequest()
+    request.open("GET", "/feed/like/1" + id, true)
+    request.send()
+}
+function myOtherFunction(id) {
+    //this should change the like button (also toggle)
+    if (document.getElementById("like_" + id).style.color == "green" || document.getElementById("like_" + id).style.color == "red") {
+        document.getElementById("like_" + id).style.color = "black";
+        var request = new XMLHttpRequest()
+        request.open("GET", "/feed/like/" + id, true)
+        request.send()
+    } else {
+        document.getElementById("like_" + id).style.color = "green";
+        var request = new XMLHttpRequest()
+        request.open("GET", "/feed/like/" + id, true)
+        request.send()
+    }
+}
+</script>
+
 <!-- feed -->
 <div class="feed">
     <h1>Feed</h1>
@@ -22,6 +47,9 @@
                         <input type="hidden" name="post_id" value="{{ post.post_id }}">
                         <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }} Likes</button>
                     </form>
+
+                    <!-- like button -->
+                    <button id="like_{{ post.post_id }}" onclick="myOtherFunction('{{post.post_id}}')" ondblclick="myFunction('{{post.post_id}}')">Like</button>
 
                     <form action="/edit" method="post">
                         <input type="hidden" name="post_id" value="{{ post.post_id }}">

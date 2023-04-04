@@ -174,6 +174,14 @@ def delete_post():
 #     my_feed.dislike_post(post_id, user_id)
 #     return redirect('/feed')
 
+# like post
+@app.get('/feed/like/<int:post_id>')
+def like_post(post_id):
+    print("like post" + str(post_id))
+    # user_id = session['user_id']
+    # post_feed.like_post(post_id, user_id)
+    return "nothing"
+
 # edit post passthrough
 @app.post('/edit')
 def edit():

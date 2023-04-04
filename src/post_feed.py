@@ -37,6 +37,7 @@ class PostFeed:
         '''Likes a post'''
         # This needs to increment the likes column in the post table, but also add the user_id to the likes table
         # TODO: implement
+        print("Like post")
         pass
 
     def clear(self):
