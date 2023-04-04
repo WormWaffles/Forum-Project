@@ -26,9 +26,9 @@
                                 style="color: green;"
                             {% elif like.like_type == -1 %}
                                 style="color: red;"
-                            {% else %}
-                                style="color: white;"
                             {% endif %}
+                        {% else %}
+                            style="color: white;"
                         {% endif %}
                     {% endfor %}
                     >{{ post.likes }} Likes</button>
