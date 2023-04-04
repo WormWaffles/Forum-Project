@@ -182,6 +182,22 @@ def like_post(post_id):
     # post_feed.like_post(post_id, user_id)
     return "nothing"
 
+# dislike post
+@app.get('/feed/dislike/<int:post_id>')
+def dislike_post(post_id):
+    print("dislike post" + str(post_id))
+    # user_id = session['user_id']
+    # post_feed.dislike_post(post_id, user_id)
+    return "nothing"
+
+# remove like or dislike
+@app.get('/feed/remove_like/<int:post_id>')
+def remove_like(post_id):
+    print("remove like" + str(post_id))
+    # user_id = session['user_id']
+    # post_feed.remove_like(post_id, user_id)
+    return "nothing"
+
 # edit post passthrough
 @app.post('/edit')
 def edit():

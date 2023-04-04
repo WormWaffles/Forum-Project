@@ -3,30 +3,6 @@
 {% block body %}
 <link rel="stylesheet" href="/static/styles/feed.css">
 
-<script>
-function myFunction(id) {
-    // this should change the like button
-    document.getElementById("like_" + id).style.color = "red";
-    var request = new XMLHttpRequest()
-    request.open("GET", "/feed/like/1" + id, true)
-    request.send()
-}
-function myOtherFunction(id) {
-    //this should change the like button (also toggle)
-    if (document.getElementById("like_" + id).style.color == "green" || document.getElementById("like_" + id).style.color == "red") {
-        document.getElementById("like_" + id).style.color = "black";
-        var request = new XMLHttpRequest()
-        request.open("GET", "/feed/like/" + id, true)
-        request.send()
-    } else {
-        document.getElementById("like_" + id).style.color = "green";
-        var request = new XMLHttpRequest()
-        request.open("GET", "/feed/like/" + id, true)
-        request.send()
-    }
-}
-</script>
-
 <!-- feed -->
 <div class="feed">
     <h1>Feed</h1>
@@ -42,30 +18,21 @@ function myOtherFunction(id) {
                 <!-- <p>{{ posts.file }}</p> -->
                 <div class="post-card-container">
 
-                    <!-- need to fix how likes work **** -->
-                    <form action="/like_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
-                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }} Likes</button>
-                    </form>
-
                     <!-- like button -->
-                    <button id="like_{{ post.post_id }}" onclick="myOtherFunction('{{post.post_id}}')" ondblclick="myFunction('{{post.post_id}}')">Like</button>
+                    <button class="btn btn-dark" id="{{ post.post_id }}" for="like">Like</button:like>
 
-                    <form action="/edit" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
-                        <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit Post</button>
-                    </form>
-                    <form action="/delete_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
-                        <button class="btn btn-dark" type="submit" action="/delete_post" method="get">Delete
-                            Post</button>
-                    </form>
-                    <!-- for these there should be a jinja if statement to check if post id matchs user id -->
-                    <!-- {% if (posts.user_id == user_id) %} -->
+                        <form action="/edit" method="post">
+                            <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                            <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit
+                                Post</button>
+                        </form>
+                        <form action="/delete_post" method="post">
+                            <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                            <button class="btn btn-dark" type="submit" action="/delete_post" method="get">Delete
+                                Post</button>
+                        </form>
                 </div>
             </div>
-            <!-- end here -->
-            <!-- {% endif %} -->
         </li>
         {% endfor %}
     </ul>
@@ -77,5 +44,40 @@ function myOtherFunction(id) {
         <button class="btn btn-success" type="submit">Make Post</button>
     </div>
 </form>
+
+<script>
+    // for each button with for as like
+    for (let button of document.querySelectorAll('button[for^="like"]')) {
+        let button_id = button.getAttribute('id')
+        let timer
+        console.log(button_id)
+        button.addEventListener('click', event => {
+            if (event.detail === 1) {
+                timer = setTimeout(() => {
+                    // single click action
+                    if (document.getElementById(button_id).style.color == "green" || document.getElementById(button_id).style.color == "red") {
+                        document.getElementById(button_id).style.color = "white";
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/remove_like/" + button_id, true)
+                        request.send()
+                    } else {
+                        document.getElementById(button_id).style.color = "green";
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/like/" + button_id, true)
+                        request.send()
+                    }
+                }, 200)
+            }
+        })
+        button.addEventListener('dblclick', event => {
+            clearTimeout(timer)
+            // double click action
+            document.getElementById(button_id).style.color = "red";
+            var request = new XMLHttpRequest()
+            request.open("GET", "/feed/dislike/" + button_id, true)
+            request.send()
+        })
+    }
+</script>
 
 {% endblock %}
