@@ -38,6 +38,8 @@ def logged_in():
 @app.before_request
 def before_request():
     '''Checks if user is logged in'''
+    # post_feed.clear()
+    # likes.clear()
     g.user = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
