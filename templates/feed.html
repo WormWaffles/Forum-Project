@@ -20,17 +20,23 @@
 
                     <!-- like button, dont even ask bruh -->
                     <button class="btn btn-dark" id="{{ post.post_id }}" for="like"
-                    {% for like in likes %}
-                        {% if like.post_id == post.post_id and like.user_id == user.user_id %}
-                            {% if like.like_type == 1 %}
-                                style="color: green;"
-                            {% elif like.like_type == -1 %}
-                                style="color: red;"
+                    {% if likes %}
+                        {% for like in likes %}
+                            {% if like.post_id == post.post_id %}
+                                {% if like.user_id == user.user_id %}
+                                    {% if like.like_type == 1 %}
+                                        style="color: green;"
+                                    {% elif like.like_type == -1 %}
+                                        style="color: red;"
+                                    {% endif %}
+                                {% else %}
+                                    style="color: white;"
+                                {% endif %}
                             {% endif %}
-                        {% else %}
-                            style="color: white;"
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        style="color: white;"
+                    {% endif %}
                     >{{ post.likes }} Likes</button>
 
                     {% if post.user_id == g.user.user_id %}
@@ -42,8 +48,6 @@
                             Post</button>
                     </form>
                     {% endif %}
-                    <!-- for these there should be a jinja if statement to check if post id matchs user id -->
-                    <!-- {% if (posts.user_id == user_id) %} -->
                 </div>
             </div>
         </li>
@@ -67,7 +71,6 @@
             if (event.detail === 1) {
                 timer = setTimeout(() => {
                     // single click action
-                    console.log("single click")
                     // if the button is green, make it white and change the text to decrement the likes
                     if (document.getElementById(button_id).style.color == "green") {
                         document.getElementById(button_id).style.color = "white";
@@ -96,7 +99,6 @@
         button.addEventListener('dblclick', event => {
             clearTimeout(timer)
             // double click action
-            console.log("double click")
             // if the button is green, make it red and change the text to decrement the likes twice
             if (document.getElementById(button_id).style.color == "green") {
                 document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 2 + " Likes"

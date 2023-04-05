@@ -186,25 +186,10 @@ def delete_post(post_id):
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
-# TODO: add like and dislike functionality [I, Colin, am working on this]
-# # like post
-# @app.post('/feed/like/<post_id>')
-# def like_post(post_id):
-#     post_id = int(request.form.get('post_id'))
-#     my_feed.like_post(post_id, user_id)
-#     return redirect('/feed')
-
-# # dislike post
-# @app.post('/dislike_post')
-# def dislike_post():
-#     post_id = int(request.form.get('post_id'))
-#     my_feed.dislike_post(post_id, user_id)
-#     return redirect('/feed')
 
 # like post
 @app.get('/feed/like/<int:post_id>')
 def like_post(post_id):
-    print("like post" + str(post_id))
     user_id = session['user_id']
     post_feed.like_post(post_id, user_id)
     return "nothing"
@@ -212,7 +197,6 @@ def like_post(post_id):
 # dislike post
 @app.get('/feed/dislike/<int:post_id>')
 def dislike_post(post_id):
-    print("dislike post" + str(post_id))
     user_id = session['user_id']
     post_feed.dislike_post(post_id, user_id)
     return "nothing"
@@ -220,7 +204,6 @@ def dislike_post(post_id):
 # remove like or dislike
 @app.get('/feed/remove_like/<int:post_id>')
 def remove_like(post_id):
-    print("remove like" + str(post_id))
     user_id = session['user_id']
     post_feed.remove_like(post_id, user_id)
     return "nothing"
