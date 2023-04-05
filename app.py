@@ -51,44 +51,15 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('index.html', logged_in=logged_in(), home="active", user=g.user)
+    return render_template('index.html', logged_in=logged_in(), home="active", user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
 
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user, likes=likes.get_all_likes())
+    return render_template('feed.html', logged_in=logged_in(), feed="active", user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
-# go to create post page
-@app.route('/create')
-def create():
-    return render_template('create.html', user=g.user)
-
-
-@app.get('/login')
-def login_nav():
-    return render_template('login.html', logged_in=logged_in(), login="active")
-
-
-@app.post('/login')
-def login():
-    session.pop('user_id',None)
-    username = request.form['username']
-    password = request.form['password']
-    user = users.get_user_by_username(username)
-    if user and user.password == password:
-        session['user_id'] = user.user_id
-        return redirect(url_for('account'))
-    else:
-        message = f"Username or password incorrect. Click here to "
-        return render_template('login.html', message=message, logged_in=logged_in(), login="active")
-    
-# logoout
-@app.route('/logout')
-def logout():
-    session.pop('user_id', None)
-    return redirect(url_for('index'))
-
+# account page
 @app.route('/account')
 def account():
     if not g.user:
@@ -121,7 +92,6 @@ def edit_account_post():
     private = request.form.get('private')
 
     # needs more error handling
-    
     if password != "":
         message = ""
         unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
@@ -137,6 +107,32 @@ def edit_account_post():
     
     return redirect(url_for('account'))
 
+
+# login page
+@app.get('/login')
+def login_nav():
+    return render_template('login.html', logged_in=logged_in(), login="active")
+
+@app.post('/login')
+def login():
+    session.pop('user_id',None)
+    username = request.form['username']
+    password = request.form['password']
+    user = users.get_user_by_username(username)
+    if user and user.password == password:
+        session['user_id'] = user.user_id
+        return redirect(url_for('account'))
+    else:
+        message = f"Username or password incorrect. Click here to "
+        return render_template('login.html', message=message, logged_in=logged_in(), login="active")
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
+
+
+# register page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -166,6 +162,10 @@ def register():
 
 
 # create post
+@app.route('/create')
+def create():
+    return render_template('create.html', user=g.user)
+
 @app.post('/feed/post')
 def add_post():
     title = request.form.get('title')
@@ -208,14 +208,13 @@ def remove_like(post_id):
     post_feed.remove_like(post_id, user_id)
     return "nothing"
 
-# edit post passthrough
+# edit post
 @app.get('/feed/edit/<post_id>')
 def edit(post_id):
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
     return render_template('edit.html', post=post_feed.get_post_by_id(post_id), user=g.user)
 
-# edit post
 @app.post('/feed/edit/<post_id>')
 def edit_post(post_id):
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
@@ -228,12 +227,25 @@ def edit_post(post_id):
     post_feed.update_post(post_id, title, content, file)
     return redirect('/feed')
 
+
+#  view post
+@app.get('/feed/<post_id>')
+def view_post(post_id):
+    return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, like=likes.get_like_by_user_id_and_post_id(session['user_id'], post_id))
+
+# view user
+@app.get('/user/<user_id>')
+def view_user(user_id):
+    if int(g.user.user_id) == int(user_id):
+        return redirect('/account')
+    return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
+
+
 # get error
 @app.get('/error')
 def error():
     return render_template('error.html', user=g.user)
 
-# redirect to error.html
 @app.errorhandler(404)
 def page_not_found(e):
     return redirect('error')

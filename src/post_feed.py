@@ -7,6 +7,18 @@ class PostFeed:
         '''Returns all posts'''
         return Post.query.all()
     
+    def get_posts_by_user_id(self, user_id):
+        '''Returns all posts by user id'''
+        return Post.query.filter_by(user_id=user_id).all()
+    
+    def get_all_posts_ordered_by_likes(self):
+        '''Returns all posts ordered by likes'''
+        return Post.query.order_by(Post.likes.desc()).all()
+    
+    def get_all_posts_ordered_by_date(self):
+        '''Returns all posts ordered by date'''
+        return Post.query.order_by(Post.post_id.desc()).all()
+    
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
         return Post.query.get(post_id)
