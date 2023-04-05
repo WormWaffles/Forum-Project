@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
 from src.likes import likes
-from src.models import db
+from src.models import db, User
 from dotenv import load_dotenv
 import os
 
@@ -43,7 +43,10 @@ def before_request():
     g.user = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
-        g.user = user
+        if user == None:
+            session.pop('user_id', None)
+        else:
+            g.user = user
 
 
 @app.route('/')
@@ -72,10 +75,10 @@ def login():
     session.pop('user_id',None)
     username = request.form['username']
     password = request.form['password']
-    user = users.get_user_by_name(username)
+    user = users.get_user_by_username(username)
     if user and user.password == password:
         session['user_id'] = user.user_id
-        return redirect(url_for('account', account="active"))
+        return redirect(url_for('account'))
     else:
         message = f"Username or password incorrect. Click here to "
         return render_template('login.html', message=message, logged_in=logged_in(), login="active")
@@ -84,39 +87,55 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('index', logged_in=logged_in(), home="active"))
+    return redirect(url_for('index'))
 
 @app.route('/account')
 def account():
     if not g.user:
-        return redirect(url_for('login', login="active"))
+        return redirect(url_for('login'))
     
     return render_template('account.html', account="active", user=g.user)
 
 @app.route('/account/edit')
 def edit_account():
     if not g.user:
-        return redirect(url_for('login', login="active"))
+        return redirect(url_for('login'))
     
     return render_template('settings.html', account="active", user=g.user)
 
 @app.route('/account/edit', methods=['POST'])
 def edit_account_post():
-    print("edit account post")
     if not g.user:
-        return redirect(url_for('login', login="active"))
-    
+        return redirect(url_for('login'))
+        
     user_id = session['user_id']
     username = request.form['username']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
+    about_me = request.form['about_me']
+    profile_pic = request.files['profile_pic']
+    banner_pic = request.files['banner_pic']
+    private = request.form.get('private')
+
+    # needs more error handling
     
-    if password != confirm_password:
-        message = 'Passwords do not match.'
-        return render_template('settings.html', message=message, logged_in=logged_in(), account="active")
-    users.update_user(user_id, username, password)
+    if password != "":
+        message = ""
+        unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
+        if password != confirm_password:
+            message = 'Passwords do not match.'
+            return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+        if len(password) < 6:
+            message = 'Password must be at least 6 characters.'
+            return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+    else:
+        password = g.user.password
+    users.update_user(user_id, username, password, first_name, last_name, email, about_me, profile_pic, banner_pic, private)
     
-    return redirect(url_for('account', account="active"))
+    return redirect(url_for('account'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -128,9 +147,12 @@ def register():
         
         if password != confirm_password:
             message = 'Passwords do not match.'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active")
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username)
+        if len(password) < 6:
+            message = 'Password must be at least 6 characters.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username)
         
-        existing_user = users.get_user_by_name(username)
+        existing_user = users.get_user_by_username(username)
         if existing_user:
             message = 'Username already exists. Please choose a different username.'
             return render_template('register.html', message=message, logged_in=logged_in())
@@ -138,13 +160,13 @@ def register():
         new_user = users.create_user(username, password)
         session['user_id'] = new_user.user_id
 
-        return redirect(url_for('account', account="active"))
+        return redirect(url_for('account'))
     
     return render_template('register.html', logged_in=logged_in(), register="active")
 
 
 # create post
-@app.post('/add_post')
+@app.post('/feed/post')
 def add_post():
     title = request.form.get('title')
     content = request.form.get('content')
@@ -157,16 +179,17 @@ def add_post():
     return redirect('/feed')
 
 # delete post
-@app.post('/delete_post')
-def delete_post():
-    post_id = int(request.form.get('post_id'))
+@app.post('/feed/delete/<post_id>')
+def delete_post(post_id):
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
 # TODO: add like and dislike functionality [I, Colin, am working on this]
 # # like post
-# @app.post('/like_post')
-# def like_post():
+# @app.post('/feed/like/<post_id>')
+# def like_post(post_id):
 #     post_id = int(request.form.get('post_id'))
 #     my_feed.like_post(post_id, user_id)
 #     return redirect('/feed')
@@ -203,15 +226,17 @@ def remove_like(post_id):
     return "nothing"
 
 # edit post passthrough
-@app.post('/edit')
-def edit():
-    post_id = int(request.form.get('post_id'))
-    return render_template('edit.html', post=post_feed.get_post_by_id(post_id))
+@app.get('/feed/edit/<post_id>')
+def edit(post_id):
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
+    return render_template('edit.html', post=post_feed.get_post_by_id(post_id), user=g.user)
 
 # edit post
-@app.post('/edit_post')
-def edit_post():
-    post_id = int(request.form.get('post_id'))
+@app.post('/feed/edit/<post_id>')
+def edit_post(post_id):
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
     title = request.form.get('title')
     content = request.form.get('content')
     file = request.files['file']

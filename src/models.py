@@ -7,6 +7,13 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    first_name = db.Column(db.String(80), nullable=True)
+    last_name = db.Column(db.String(80), nullable=True)
+    email = db.Column(db.String(80), nullable=True)
+    about_me = db.Column(db.String(80), nullable=True)
+    profile_pic = db.Column(db.String(80), nullable=True)
+    banner_pic = db.Column(db.String(80), nullable=True)
+    private = db.Column(db.Boolean, nullable=False)
 
 # Post Model
 class Post(db.Model):
