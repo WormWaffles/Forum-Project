@@ -15,28 +15,21 @@
             <div class="post-card">
                 <h1 id="title">{{ post.title }}</h1>
                 <p id="content">{{ post.content }}</p>
-                <!-- <p>{{ posts.file }}</p> -->
+                <p id="user">Posted by: {{ post.user.username }}</p>
+                <!-- file goes here -->
                 <div class="post-card-container">
 
                     <!-- like button, dont even ask bruh -->
                     <button class="btn btn-dark" id="{{ post.post_id }}" for="like"
-                    {% if likes %}
-                        {% for like in likes %}
-                            {% if like.post_id == post.post_id %}
-                                {% if like.user_id == user.user_id %}
-                                    {% if like.like_type == 1 %}
-                                        style="color: green;"
-                                    {% elif like.like_type == -1 %}
-                                        style="color: red;"
-                                    {% endif %}
-                                {% else %}
-                                    style="color: white;"
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        style="color: white;"
-                    {% endif %}
+                    {% set btn_style = {'style': 'style=color:white'} %}
+                    {% for like in likes if like.post_id == post.post_id and like.user_id == user.user_id %}
+                        {% if like.like_type == 1 %}
+                            {% set _ = btn_style.update({'style': 'style=color:green'}) %}
+                        {% elif like.like_type == -1 %}
+                            {% set _ = btn_style.update({'style': 'style=color:red'}) %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ btn_style.style }}
                     >{{ post.likes }} Likes</button>
 
                     {% if post.user_id == g.user.user_id %}

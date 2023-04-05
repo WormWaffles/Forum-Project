@@ -62,7 +62,7 @@ def feed():
 # go to create post page
 @app.route('/create')
 def create():
-    return render_template('create.html')
+    return render_template('create.html', user=g.user)
 
 
 @app.get('/login')
