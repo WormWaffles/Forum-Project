@@ -1,4 +1,5 @@
 from src.models import db, Post
+from src.likes import likes
 
 class PostFeed:
 
@@ -41,9 +42,69 @@ class PostFeed:
     
     def like_post(self, post_id, user_id):
         '''Likes a post'''
-        # This needs to increment the likes column in the post table, but also add the user_id to the likes table
-        # TODO: implement
-        pass
+        # get like and post object that we need
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        post = self.get_post_by_id(post_id)
+        # if a like already exists
+        if like:
+            # if the like is a dislike, remove the dislike
+            if like.like_type == -1:
+                post.likes += 1
+                likes.update_like(user_id, post_id, 0)
+            elif like.like_type == 0: # if unliked, like the post
+                post.likes += 1
+                likes.update_like(user_id, post_id, 1)
+            else: # if this happens, the user is trying to like a post they already liked (aka inspect element)
+                return
+        # if a like does not exist, make a new one
+        else:
+            likes.create_like(user_id, post_id, 1)
+            post.likes += 1
+        # add and commit everything
+        db.session.add(post)
+        db.session.commit()
+
+    def dislike_post(self, post_id, user_id):
+        '''Dislikes a post'''
+        # get the like and post object that we need
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        post = self.get_post_by_id(post_id)
+        # if a like already exists
+        if like:
+            # if the like is a like, remove the like and add a dislike
+            if like.like_type == 1:
+                post.likes -= 2
+            elif like.like_type == 0: # if unliked, dislike the post
+                post.likes -= 1
+            else: # if this happens, the user is trying to dislike a post they already disliked (aka inspect element)
+                return
+            likes.update_like(user_id, post_id, -1)
+        else: # if a like does not exist, make a new one
+            likes.create_like(user_id, post_id, -1)
+            post.likes -= 1
+        # add and commit everything
+        db.session.add(post)
+        db.session.commit()
+
+    def remove_like(self, post_id, user_id):
+        '''Removes a like or dislike'''
+        # get the like object that we need
+        like = likes.get_like_by_user_id_and_post_id(user_id, post_id)
+        # if a like exists
+        if like:
+            post = self.get_post_by_id(post_id)
+            if like.like_type == 1: # if the like is a like, remove the like
+                post.likes -= 1
+            elif like.like_type == -1: # if the like is a dislike, remove the dislike
+                post.likes += 1
+            else:
+                return # if this happens, the user is trying to remove a like they don't have (aka inspect element)
+            likes.update_like(user_id, post_id, 0)
+        else:
+            return # if this happens, the user is trying to remove a like they don't have (aka inspect element)
+        # add and commit everything
+        db.session.add(post)
+        db.session.commit()
 
     def clear(self):
         '''Clears all posts'''

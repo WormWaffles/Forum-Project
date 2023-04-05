@@ -25,3 +25,9 @@ class Post(db.Model):
     file = db.Column(db.String(80), nullable=True)
     likes = db.Column(db.Integer, nullable=False)
     # comments need to be implemented
+
+# Likes Model
+class UserLikes(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, primary_key=True)
+    like_type = db.Column(db.Integer, nullable=False)

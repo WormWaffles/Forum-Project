@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
+from src.likes import likes
 from src.models import db, User
 from dotenv import load_dotenv
 import os
@@ -36,6 +37,9 @@ def logged_in():
 
 @app.before_request
 def before_request():
+    '''Checks if user is logged in'''
+    # post_feed.clear()
+    # likes.clear()
     g.user = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
@@ -52,13 +56,13 @@ def index():
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user)
+    return render_template('feed.html', posts=post_feed.get_all_posts(), logged_in=logged_in(), feed="active", user=g.user, likes=likes.get_all_likes())
 
 
 # go to create post page
 @app.route('/create')
 def create():
-    return render_template('create.html')
+    return render_template('create.html', user=g.user)
 
 
 @app.get('/login')
@@ -182,13 +186,27 @@ def delete_post(post_id):
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
-# TODO: add like and dislike functionality [I, Colin, am working on this]
-# # like post
-# @app.post('/feed/like/<post_id>')
-# def like_post(post_id):
-#     post_id = int(request.form.get('post_id'))
-#     my_feed.like_post(post_id, user_id)
-#     return redirect('/feed')
+
+# like post
+@app.get('/feed/like/<int:post_id>')
+def like_post(post_id):
+    user_id = session['user_id']
+    post_feed.like_post(post_id, user_id)
+    return "nothing"
+
+# dislike post
+@app.get('/feed/dislike/<int:post_id>')
+def dislike_post(post_id):
+    user_id = session['user_id']
+    post_feed.dislike_post(post_id, user_id)
+    return "nothing"
+
+# remove like or dislike
+@app.get('/feed/remove_like/<int:post_id>')
+def remove_like(post_id):
+    user_id = session['user_id']
+    post_feed.remove_like(post_id, user_id)
+    return "nothing"
 
 # edit post passthrough
 @app.get('/feed/edit/<post_id>')

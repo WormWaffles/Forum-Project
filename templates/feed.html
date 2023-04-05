@@ -2,6 +2,7 @@
 
 {% block body %}
 <link rel="stylesheet" href="/static/styles/feed.css">
+
 <!-- feed -->
 <div class="feed">
     <h1>Feed</h1>
@@ -14,14 +15,23 @@
             <div class="post-card">
                 <h1 id="title">{{ post.title }}</h1>
                 <p id="content">{{ post.content }}</p>
-                <!-- <p>{{ posts.file }}</p> -->
+                <p id="user">Posted by: {{ post.user.username }}</p>
+                <!-- file goes here -->
                 <div class="post-card-container">
 
-                    <!-- need to fix how likes work **** -->
-                    <form action="/feed/like/{{ post.post_id }}" method="post">
-                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }}
-                            Likes</button>
-                    </form>
+                    <!-- like button, dont even ask bruh -->
+                    <button class="btn btn-dark" id="{{ post.post_id }}" for="like"
+                    {% set btn_style = {'style': 'style=color:white'} %}
+                    {% for like in likes if like.post_id == post.post_id and like.user_id == user.user_id %}
+                        {% if like.like_type == 1 %}
+                            {% set _ = btn_style.update({'style': 'style=color:green'}) %}
+                        {% elif like.like_type == -1 %}
+                            {% set _ = btn_style.update({'style': 'style=color:red'}) %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ btn_style.style }}
+                    >{{ post.likes }} Likes</button>
+
                     {% if post.user_id == g.user.user_id %}
                     <form action="/feed/edit/{{ post.post_id }}" method="get">
                         <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit Post</button>
@@ -31,12 +41,8 @@
                             Post</button>
                     </form>
                     {% endif %}
-                    <!-- for these there should be a jinja if statement to check if post id matchs user id -->
-                    <!-- {% if (posts.user_id == user_id) %} -->
                 </div>
             </div>
-            <!-- end here -->
-            <!-- {% endif %} -->
         </li>
         {% endfor %}
     </ul>
@@ -48,5 +54,57 @@
         <button class="btn btn-success" type="submit">Make Post</button>
     </div>
 </form>
+
+<script>
+    // for each button with for as like
+    for (let button of document.querySelectorAll('button[for^="like"]')) {
+        let button_id = button.getAttribute('id')
+        let timer
+        button.addEventListener('click', event => {
+            if (event.detail === 1) {
+                timer = setTimeout(() => {
+                    // single click action
+                    // if the button is green, make it white and change the text to decrement the likes
+                    if (document.getElementById(button_id).style.color == "green") {
+                        document.getElementById(button_id).style.color = "white";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/remove_like/" + button_id, true)
+                        request.send()
+                    } // if the button is red, make it white and change the text to increment the likes
+                    else if (document.getElementById(button_id).style.color == "red") {
+                        document.getElementById(button_id).style.color = "white";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/like/" + button_id, true)
+                        request.send()
+                    } // if the button is white, make it green and change the text to increment the likes
+                    else {
+                        document.getElementById(button_id).style.color = "green";
+                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
+                        var request = new XMLHttpRequest()
+                        request.open("GET", "/feed/like/" + button_id, true)
+                        request.send()
+                    }
+                }, 200)
+            }
+        })
+        button.addEventListener('dblclick', event => {
+            clearTimeout(timer)
+            // double click action
+            // if the button is green, make it red and change the text to decrement the likes twice
+            if (document.getElementById(button_id).style.color == "green") {
+                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 2 + " Likes"
+            } // if the button is white, make red and decrement the likes once
+            else if (document.getElementById(button_id).style.color == "white") {
+                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
+            } // if red, do nothing
+            document.getElementById(button_id).style.color = "red";
+            var request = new XMLHttpRequest()
+            request.open("GET", "/feed/dislike/" + button_id, true)
+            request.send()
+        })
+    }
+</script>
 
 {% endblock %}
