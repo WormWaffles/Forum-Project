@@ -5,7 +5,7 @@
     <h1>Edit Post</h1>
 </div>
 <div class="d-flex flex-column">
-    <form action="/edit_post" method="post" enctype="multipart/form-data">
+    <form action="/feed/edit/{{ post.post_id }}" method="post" enctype="multipart/form-data">
         <!-- keep the id -->
         <div>
             <input type="hidden" name="post_id" value="{{ post.post_id }}">

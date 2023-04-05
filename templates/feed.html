@@ -18,20 +18,19 @@
                 <div class="post-card-container">
 
                     <!-- need to fix how likes work **** -->
-                    <form action="/like_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
-                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }} Likes</button>
+                    <form action="/feed/like/{{ post.post_id }}" method="post">
+                        <button class="btn btn-dark" type="submit" action="/like_post" method="post">{{ post.likes }}
+                            Likes</button>
                     </form>
-
-                    <form action="/edit" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                    {% if post.user_id == g.user.user_id %}
+                    <form action="/feed/edit/{{ post.post_id }}" method="get">
                         <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit Post</button>
                     </form>
-                    <form action="/delete_post" method="post">
-                        <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                    <form action="/feed/delete/{{ post.post_id }}" method="post">
                         <button class="btn btn-dark" type="submit" action="/delete_post" method="get">Delete
                             Post</button>
                     </form>
+                    {% endif %}
                     <!-- for these there should be a jinja if statement to check if post id matchs user id -->
                     <!-- {% if (posts.user_id == user_id) %} -->
                 </div>
