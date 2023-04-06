@@ -77,9 +77,23 @@ input:focus {
     border-color: #57A1BD;
 }
 
+.message {
+    height: 20px;
+    font-size: 12px;
+    margin-bottom: 0px;
+    padding: 5px;
+}
+
+.message-m {
+    font-size: 12px;
+    margin-bottom: 0px;
+    padding: 0px;
+    color: white;
+}
+
 .login-btn {
     width: 70%;
-    margin-top: 20px;
+    margin-top: 5px;
     padding: 10px;
     background-color: #57A1BD;
     color: #fff;

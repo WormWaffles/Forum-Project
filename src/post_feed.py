@@ -23,9 +23,9 @@ class PostFeed:
         '''Returns post by id'''
         return Post.query.get(post_id)
     
-    def create_post(self, user_id, title, content, file, likes):
+    def create_post(self, user_id, title, content, likes):
         '''Creates a post'''
-        post = Post(user_id=user_id, title=title, content=content, file=file, likes=likes)
+        post = Post(user_id=user_id, title=title, content=content, likes=likes)
         # self.set_file(post.post_id, file)
         db.session.add(post)
         db.session.commit()

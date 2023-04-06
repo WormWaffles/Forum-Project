@@ -9,11 +9,23 @@ class User(db.Model):
     password = db.Column(db.String(80), nullable=False)
     first_name = db.Column(db.String(80), nullable=True)
     last_name = db.Column(db.String(80), nullable=True)
-    email = db.Column(db.String(80), nullable=True)
+    email = db.Column(db.String(80), nullable=False)
     about_me = db.Column(db.String(80), nullable=True)
-    profile_pic = db.Column(db.String(80), nullable=True)
-    banner_pic = db.Column(db.String(80), nullable=True)
     private = db.Column(db.Boolean, nullable=False)
+
+# Business model
+class Business(db.Model):
+    business_id = db.Column(db.Integer, primary_key=True)
+    business_name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    business_description = db.Column(db.String(80), nullable=True)
+    address = db.Column(db.String(80), nullable=True)
+    city = db.Column(db.String(80), nullable=True)
+    state = db.Column(db.String(80), nullable=True)
+    zip_code = db.Column(db.String(80), nullable=True)
+    phone = db.Column(db.String(80), nullable=True)
+    website = db.Column(db.String(80), nullable=True)
 
 # Post Model
 class Post(db.Model):
@@ -22,7 +34,6 @@ class Post(db.Model):
     user = db.relationship('User', backref='users', lazy=True)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(80), nullable=False)
-    file = db.Column(db.String(80), nullable=True)
     likes = db.Column(db.Integer, nullable=False)
     # comments need to be implemented
 

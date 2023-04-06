@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
+from src.business import business_users
 from src.likes import likes
 from src.models import db, User
 from dotenv import load_dotenv
@@ -43,12 +44,19 @@ def before_request():
     # post_feed.clear()
     # likes.clear()
     g.user = None
+    g.business = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
         if user == None:
             session.pop('user_id', None)
         else:
             g.user = user
+    elif 'business_id' in session:
+        business = business_users.get_business_by_id(session['business_id'])
+        if business == None:
+            session.pop('business_id', None)
+        else:
+            g.business = business
 
 
 @app.route('/')
@@ -115,15 +123,19 @@ def login():
     info = {}
     if request.method == 'POST':
         session.pop('user_id',None)
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        user = users.get_user_by_username(username)
+        user = users.get_user_by_email(email)
+        bus = business_users.get_business_by_email(email)
         if user and user.password == password:
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
+        elif bus and bus.password == password:
+            session['business_id'] = bus.business_id
+            return redirect(url_for('business_account'))
         else:
-            message = f"Username or password incorrect. Click here to "
-            return render_template('login.html', message=message, logged_in=logged_in(), login="active")
+            message = f"Username or password incorrect."
+            return render_template('login.html', message=message, logged_in=logged_in(), login="active", info=info)
     return render_template('login.html', logged_in=logged_in(), login="active", info=info)
 
 @app.route('/logout')
@@ -166,7 +178,7 @@ def register():
                 message = 'email'
                 return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
         
-        new_user = users.create_user(username, password)
+        new_user = users.create_user(username, email, password)
         session['user_id'] = new_user.user_id
 
         return redirect(url_for('account'))
@@ -252,6 +264,55 @@ def view_user(user_id):
     if int(g.user.user_id) == int(user_id):
         return redirect('/account')
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
+
+# buesniess page
+# account page for business
+@app.route('/business/account')
+def business_account():
+    if not g.business:
+        return redirect(url_for('login'))
+    
+    return render_template('business_account.html', account="active", business=g.business)
+
+@app.route('/business/register', methods=['GET', 'POST'])
+def business():
+    info = {}
+    if request.method == 'POST':
+        global logged_in
+        business_name = request.form['business_name']
+        business_email = request.form['business_email']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+
+        info = {'business_name': business_name, 'business_email': business_email, 'password': password, 'confirm_password': confirm_password}
+        
+        if business_name != "" and business_email != "" and password != "" and confirm_password != "":
+            if not (re.fullmatch(regex, business_email)):
+                message = 'Email is not valid.'
+                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+            if password != confirm_password:
+                message = 'Passwords do not match.'
+                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+            if len(password) < 6:
+                message = 'Password must be at least 6 characters.'
+                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+            
+            existing_user = business_users.get_business_by_name(business_name)
+            if existing_user:
+                message = 'Username already exists.'
+                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+            
+            existing_email = business_users.get_business_by_email(business_email)
+            if existing_email:
+                message = 'email'
+                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        
+        new_user = business_users.create_business(business_name, business_email, password)
+        session['business_id'] = new_user.business_id
+
+        return redirect(url_for('business_account'))
+    
+    return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
 
 # error page
