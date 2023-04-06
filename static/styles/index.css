@@ -8,7 +8,7 @@
 }
 
 .post-card {
-    /*work with width*/
+    /* work with width */
     max-width: 800px;
     height: auto;
     word-wrap: break-word;
@@ -26,4 +26,13 @@
     display: flex;
     justify-content: end;
     padding: 5px;
+}
+
+.landing-msg {
+    padding: 100px;
+}
+
+.welcome {
+    font: normal normal 900 40px/50px Avenir;
+    color: #57A1BD;
 }

@@ -5,6 +5,7 @@ from src.likes import likes
 from src.models import db, User
 from dotenv import load_dotenv
 import os
+import re
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ db.init_app(app)
 
 # I don't know what this does
 app.secret_key='SecretKey'
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 # this can be put somewhere else i think
 def logged_in():
@@ -108,23 +110,21 @@ def edit_account_post():
     return redirect(url_for('account'))
 
 
-# login page
-@app.get('/login')
-def login_nav():
-    return render_template('login.html', logged_in=logged_in(), login="active")
-
-@app.post('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    session.pop('user_id',None)
-    username = request.form['username']
-    password = request.form['password']
-    user = users.get_user_by_username(username)
-    if user and user.password == password:
-        session['user_id'] = user.user_id
-        return redirect(url_for('account'))
-    else:
-        message = f"Username or password incorrect. Click here to "
-        return render_template('login.html', message=message, logged_in=logged_in(), login="active")
+    info = {}
+    if request.method == 'POST':
+        session.pop('user_id',None)
+        username = request.form['username']
+        password = request.form['password']
+        user = users.get_user_by_username(username)
+        if user and user.password == password:
+            session['user_id'] = user.user_id
+            return redirect(url_for('account'))
+        else:
+            message = f"Username or password incorrect. Click here to "
+            return render_template('login.html', message=message, logged_in=logged_in(), login="active")
+    return render_template('login.html', logged_in=logged_in(), login="active", info=info)
 
 @app.route('/logout')
 def logout():
@@ -135,30 +135,43 @@ def logout():
 # register page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    info = {}
     if request.method == 'POST':
         global logged_in
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        confirm_password = request.form['confirm_password']
+        confirm_password = request.form['confirm-password']
+
+        info = {'username': username, 'email': email, 'password': password, 'confirm_password': confirm_password}
         
-        if password != confirm_password:
-            message = 'Passwords do not match.'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username)
-        if len(password) < 6:
-            message = 'Password must be at least 6 characters.'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username)
-        
-        existing_user = users.get_user_by_username(username)
-        if existing_user:
-            message = 'Username already exists. Please choose a different username.'
-            return render_template('register.html', message=message, logged_in=logged_in())
+        if username != "" and email != "" and password != "" and confirm_password != "":
+            if not (re.fullmatch(regex, email)):
+                message = 'Email is not valid.'
+                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
+            if password != confirm_password:
+                message = 'Passwords do not match.'
+                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
+            if len(password) < 6:
+                message = 'Password must be at least 6 characters.'
+                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
+            
+            existing_user = users.get_user_by_username(username)
+            if existing_user:
+                message = 'Username already exists.'
+                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
+            
+            existing_email = users.get_user_by_email(email)
+            if existing_email:
+                message = 'email'
+                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
         
         new_user = users.create_user(username, password)
         session['user_id'] = new_user.user_id
 
         return redirect(url_for('account'))
     
-    return render_template('register.html', logged_in=logged_in(), register="active")
+    return render_template('register.html', logged_in=logged_in(), register="active", info=info)
 
 
 # create post
@@ -241,11 +254,7 @@ def view_user(user_id):
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
 
 
-# get error
-@app.get('/error')
-def error():
-    return render_template('error.html', user=g.user)
-
+# error page
 @app.errorhandler(404)
 def page_not_found(e):
-    return redirect('error')
+    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user), 404

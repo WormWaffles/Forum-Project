@@ -14,6 +14,10 @@ class Users:
         '''Returns user by username'''
         return User.query.filter_by(username=username).first()
     
+    def get_user_by_email(self, email):
+        '''Returns user by email'''
+        return User.query.filter_by(email=email).first()
+    
     def create_user(self, username, password):
         '''Creates a user'''
         user = User(username=username, password=password, private=False)
