@@ -43,7 +43,6 @@
 .left-card h2 {
     margin-top: 0;
     color: #7F7F7F;
-    /* font-weight: bold; */
     font: normal normal 900 45px/68px Avenir;
 }
 
@@ -89,6 +88,10 @@ input:focus {
     cursor: pointer;
 }
 
+.login-btn:hover {
+    background-color: #5592a8;
+}
+
 .signup-btn {
     width: 70%;
     margin-top: 20px;
@@ -99,6 +102,10 @@ input:focus {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.signup-btn:hover {
+    background-color: #f2f2f2;
 }
 
 .social-buttons {

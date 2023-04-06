@@ -1,39 +1,76 @@
 <!-- feed -->
+<link rel="stylesheet" href="/static/styles/_feed.css">
+
 <div class="feed">
     {% if not posts %}
-    <p>There are no posts</p>
+    <p>Nothing here...</p>
     {% else %}
     <ul style="list-style-type: none;">
         {% for post in posts %}
         <li>
             <div class="post-card">
-                <a href="/feed/{{ post.post_id }}"><h1 id="title">{{ post.title }}</h1></a>
-                <p id="content">{{ post.content }}</p>
-                <a href="/user/{{ post.user.user_id }}"><p id="user">Posted by: {{ post.user.username }}</p></a>
+                <div class="user_profile">
+                    <div class="pfp">
+                        <a href="/user/{{ post.user.user_id }}"><img class="user_picture"
+                                src="/static/images/sample_pfp.jpeg" alt="pfp"></a>
+                    </div>
+                    <div class="user_info">
+                        <a class="username" href="/user/{{ post.user.user_id }}">
+                            <p class="username" id="user">{{ post.user.username }}</p>
+                        </a>
+                        <p class="checked">checked into <a class="location" href="/StBarhops">St. Barhops</a></p>
+                        <div class="rating">
+                            <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                            <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                            <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                            <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                            <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                        </div>
+                    </div>
+                    <div class="settings">
+                        <!-- options to edit or delete -->
+                        <img src="/static/images/setting_icon.png" alt="settings" width="20" height="20">
+                    </div>
+                </div>
+                <div class="post_title">
+                    <a class="title" href="/feed/{{ post.post_id }}">
+                        <h1 class="title" id="title">{{ post.title }}</h1>
+                    </a>
+                </div>
+                <div class="content">
+                    <p id="content">"{{ post.content }}"</p>
+                </div>
                 <!-- file goes here -->
                 <div class="post-card-container">
 
+                    <div class="date">
+                        <p>2 days ago</p>
+                    </div>
+
                     <!-- like button, dont even ask bruh -->
-                    <button class="btn btn-dark" id="{{ post.post_id }}" for="like"
-                    {% set btn_style = {'style': 'style=color:white'} %}
-                    {% for like in likes if like.post_id == post.post_id and like.user_id == user.user_id %}
-                        {% if like.like_type == 1 %}
-                            {% set _ = btn_style.update({'style': 'style=color:green'}) %}
-                        {% elif like.like_type == -1 %}
-                            {% set _ = btn_style.update({'style': 'style=color:red'}) %}
-                        {% endif %}
-                    {% endfor %}
-                    {{ btn_style.style }}
-                    >{{ post.likes }} Likes</button>
+                    <div class="like">
+                        <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
+                        <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img"
+                        {% set like_icon = {'src': 'src=/static/images/likeButton_default.png'} %}
+                        {% for like in likes if like.post_id == post.post_id and like.user_id == user.user_id %}
+                            {% if like.like_type == 1 %}
+                                {% set _ = like_icon.update({'src': 'src=/static/images/likeButton_red.png'}) %}
+                            {% elif like.like_type == -1 %}
+                                {% set _ = like_icon.update({'src': 'src=/static/images/likeButton_grey.png'}) %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ like_icon.src }}
+                        ></a>
+                    </div>
 
                     {% if post.user_id == g.user.user_id %}
-                    <form action="/feed/edit/{{ post.post_id }}" method="get">
+                    <!-- <form action="/feed/edit/{{ post.post_id }}" method="get">
                         <button class="btn btn-dark" type="submit" action="/edit_post" method="get">Edit Post</button>
                     </form>
                     <form action="/feed/delete/{{ post.post_id }}" method="post">
                         <button class="btn btn-dark" type="submit" action="/delete_post" method="get">Delete
                             Post</button>
-                    </form>
+                    </form> -->
                     {% endif %}
                 </div>
             </div>
@@ -43,15 +80,15 @@
     {% endif %}
 </div>
 <!-- button to make post -->
-<form action="/create" method="get">
+<!-- <form action="/create" method="get">
     <div class="get_create">
         <button class="btn btn-success" type="submit">Make Post</button>
     </div>
-</form>
+</form> -->
 
 <script>
     // for each button with for as like
-    for (let button of document.querySelectorAll('button[for^="like"]')) {
+    for (let button of document.querySelectorAll('a[for^="like"]')) {
         let button_id = button.getAttribute('id')
         let timer
         button.addEventListener('click', event => {
@@ -59,23 +96,23 @@
                 timer = setTimeout(() => {
                     // single click action
                     // if the button is green, make it white and change the text to decrement the likes
-                    if (document.getElementById(button_id).style.color == "green") {
-                        document.getElementById(button_id).style.color = "white";
-                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
+                    if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_red.png')) {
+                        document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png';
+                        document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 1 + " Likes"
                         var request = new XMLHttpRequest()
                         request.open("GET", "/feed/remove_like/" + button_id, true)
                         request.send()
                     } // if the button is red, make it white and change the text to increment the likes
-                    else if (document.getElementById(button_id).style.color == "red") {
-                        document.getElementById(button_id).style.color = "white";
-                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
+                    else if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_grey.png')) {
+                        document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png';
+                        document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) + 1 + " Likes"
                         var request = new XMLHttpRequest()
                         request.open("GET", "/feed/like/" + button_id, true)
                         request.send()
                     } // if the button is white, make it green and change the text to increment the likes
                     else {
-                        document.getElementById(button_id).style.color = "green";
-                        document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) + 1 + " Likes"
+                        document.getElementById(button_id + "img").src = '/static/images/likeButton_red.png';
+                        document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) + 1 + " Likes"
                         var request = new XMLHttpRequest()
                         request.open("GET", "/feed/like/" + button_id, true)
                         request.send()
@@ -87,13 +124,13 @@
             clearTimeout(timer)
             // double click action
             // if the button is green, make it red and change the text to decrement the likes twice
-            if (document.getElementById(button_id).style.color == "green") {
-                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 2 + " Likes"
+            if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_red.png')) {
+                document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 2 + " Likes"
             } // if the button is white, make red and decrement the likes once
-            else if (document.getElementById(button_id).style.color == "white") {
-                document.getElementById(button_id).innerHTML = parseInt(document.getElementById(button_id).innerHTML) - 1 + " Likes"
+            else if (document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png') {
+                document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 1 + " Likes"
             } // if red, do nothing
-            document.getElementById(button_id).style.color = "red";
+            document.getElementById(button_id + "img").src = '/static/images/likeButton_grey.png';
             var request = new XMLHttpRequest()
             request.open("GET", "/feed/dislike/" + button_id, true)
             request.send()

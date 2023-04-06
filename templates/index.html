@@ -3,7 +3,7 @@
 {% block body %}
 
 <link rel="stylesheet" href="/static/styles/index.css">
-<main class="">
+<main>
     <section>
         {% if logged_in %}
         <h1>Feed: ordered by likes.</h1>
@@ -11,9 +11,15 @@
         {% else %}
         <div class="landing-msg">
             <h1 class="welcome">Join the world’s fastest growing<br>social media platform that<br>focuses on what really matters:<br>…gettin’ lit.</h1>
+            <a href="/register"><button class="join-btn">JOIN</button></a>
+        </div>
+    </section>
+        <div class="buisness-msg">
+            <h1 class="buisness-title">Buisnesses</h1>
+            <p class="buisness-text">Are you a buisness looking to advertise your venue? <br>Click the button below to learn more about BarHive buisness.</p>
+            <a href="/buisness"><button class="buisness-btn">BUISNESS</button></a>
         </div>
         {% endif %}
-    </section>
 </main>
 
 {% endblock %}

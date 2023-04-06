@@ -67,6 +67,10 @@ a {
     cursor: pointer;
 }
 
+.signup-btn:hover {
+    background-color: #5592a8;
+}
+
 .business-link {
     margin-top: 10px;
     font-size: 12px;
