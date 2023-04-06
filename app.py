@@ -200,7 +200,11 @@ def register():
 # create post
 @app.route('/create')
 def create():
-    return render_template('create.html', user=g.user)
+    if g.user:
+        return render_template('create.html', user=g.user)
+    elif g.business:
+        return render_template('create.html', business=g.business)
+    return redirect('/login')
 
 @app.post('/feed/post')
 def add_post():
@@ -210,8 +214,13 @@ def add_post():
     if not file:
         file = ""
     # get user id
-    user_id = session['user_id']
-    post_feed.create_post(user_id, title, content, file, 0)
+    if g.user:
+        user_id = session['user_id']
+    elif g.business:
+        user_id = session['business_id']
+    else:
+        return redirect('/error')
+    post_feed.create_post(user_id, title, content, 0)
     return redirect('/feed')
 
 # delete post
