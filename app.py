@@ -192,7 +192,7 @@ def add_post():
     return redirect('/feed')
 
 # delete post
-@app.post('/feed/delete/<post_id>')
+@app.get('/feed/delete/<post_id>')
 def delete_post(post_id):
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')

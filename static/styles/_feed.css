@@ -62,13 +62,6 @@
     padding-top: 5px;
 }
 
-.settings {
-    position: absolute;
-    padding: 20px;
-    top: 0;
-    right: 0;
-}
-
 .content {
     font: normal normal medium 20px/27px Avenir;
     color: #555555;
@@ -81,9 +74,26 @@
     padding-top: 2px;
 }
 
-.like {
-    display: flex;
+.comments {
     position: absolute;
+    display: flex;
+    right: 100px;
+    padding-top: 2px;
+    padding-right: 25px;
+    font: normal normal normal 15px/20px Avenir;
+    color: #707070;
+}
+
+.comment_icon {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    margin-top: 1px;
+}
+
+.like {
+    position: absolute;
+    display: flex;
     right: 0;
     padding-right: 25px;
     font: normal normal normal 15px/20px Avenir;
@@ -99,8 +109,45 @@
     width: 20px;
     height: 20px;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 p {
     margin-bottom: 0em;
+}
+
+.settings-container {
+    position: relative;
+    display: inline-block;
+    position: absolute;
+    padding: 20px;
+    top: 0;
+    right: 0;
+}
+
+.settings-container img {
+    cursor: pointer;
+}
+
+.settings-options {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    display: none;
+}
+
+.settings-option {
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.settings-option:hover {
+    background-color: gray;
+    color: white;
 }

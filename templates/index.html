@@ -6,7 +6,6 @@
 <main>
     <section>
         {% if logged_in %}
-        <h1>Feed: ordered by likes.</h1>
         {% include '_feed.html' %}
         {% else %}
         <div class="landing-msg">
