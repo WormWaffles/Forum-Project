@@ -69,7 +69,7 @@
                         <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
                         <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img"
                         {% set like_icon = {'src': 'src=/static/images/likeButton_default.png'} %}
-                        {% for like in likes if like.post_id == post.post_id and like.user_id == user.user_id %}
+                        {% for like in likes if like.post_id == post.post_id and like.user_id == user_id %}
                             {% if like.like_type == 1 %}
                                 {% set _ = like_icon.update({'src': 'src=/static/images/likeButton_red.png'}) %}
                             {% elif like.like_type == -1 %}
@@ -89,7 +89,6 @@
 
 <script>
     for (let settingsIcon of document.querySelectorAll('img[alt^="Settings"]')) {
-        // const settingsIcon = document.querySelector('.settings-icon');
         let the_id = settingsIcon.getAttribute('id')
         console.log(the_id)
         const settingsOptions = document.querySelector('div[for^="so' + the_id + '"]');

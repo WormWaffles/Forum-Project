@@ -34,6 +34,8 @@ def logged_in():
     '''Checks if user is logged in'''
     if 'user_id' in session:
         return True
+    elif 'business_id' in session:
+        return True
     else:
         return False
 
@@ -61,12 +63,18 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('index.html', logged_in=logged_in(), home="active", user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+    if g.business:
+        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+    elif g.user:
+        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=logged_in(), home="active")
 
 
 @app.route('/feed')
 def feed():
-    return render_template('feed.html', logged_in=logged_in(), feed="active", user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    if g.business:
+        return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
 # account page
@@ -140,7 +148,10 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
+    if 'user_id' in session:
+        session.pop('user_id', None)
+    elif 'business_id' in session:
+        session.pop('business_id', None)
     return redirect(url_for('index'))
 
 
@@ -215,21 +226,36 @@ def delete_post(post_id):
 # like post
 @app.get('/feed/like/<int:post_id>')
 def like_post(post_id):
-    user_id = session['user_id']
+    if g.user:
+        user_id = session['user_id']
+    elif g.business:
+        user_id = session['business_id']
+    else:
+        return redirect('/error')
     post_feed.like_post(post_id, user_id)
     return "nothing"
 
 # dislike post
 @app.get('/feed/dislike/<int:post_id>')
 def dislike_post(post_id):
-    user_id = session['user_id']
+    if g.user:
+        user_id = session['user_id']
+    elif g.business:
+        user_id = session['business_id']
+    else:
+        return redirect('/error')
     post_feed.dislike_post(post_id, user_id)
     return "nothing"
 
 # remove like or dislike
 @app.get('/feed/remove_like/<int:post_id>')
 def remove_like(post_id):
-    user_id = session['user_id']
+    if g.user:
+        user_id = session['user_id']
+    elif g.business:
+        user_id = session['business_id']
+    else:
+        return redirect('/error')
     post_feed.remove_like(post_id, user_id)
     return "nothing"
 
@@ -256,7 +282,9 @@ def edit_post(post_id):
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
-    return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, likes=likes.get_like_by_post_id(post_id))
+    if isinstance(post_id, int):
+        return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, likes=likes.get_like_by_post_id(post_id))
+    return redirect('/error')
 
 # view user
 @app.get('/user/<user_id>')
@@ -318,4 +346,6 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user), 404
+    if g.business:
+        return render_template('error.html', logged_in=logged_in(), e=e, business=g.business, user=None), 404
+    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user, business=None), 404
