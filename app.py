@@ -244,7 +244,7 @@ def edit_post(post_id):
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
-    return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, like=likes.get_like_by_user_id_and_post_id(session['user_id'], post_id))
+    return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, likes=likes.get_like_by_post_id(post_id))
 
 # view user
 @app.get('/user/<user_id>')
