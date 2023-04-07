@@ -6,6 +6,10 @@ class Likes:
         '''Returns all likes'''
         return UserLikes.query.all()
     
+    def get_like_by_post_id(self, post_id):
+        '''Returns like by id'''
+        return UserLikes.query.filter_by(post_id=post_id).all()
+    
     def get_like_by_user_id_and_post_id(self, user_id, post_id):
         '''Returns like by id'''
         return UserLikes.query.filter_by(user_id=user_id, post_id=post_id).first()

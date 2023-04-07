@@ -16,11 +16,7 @@
 			<div class="container-fluid">
 				<img src="/static/images/barHive_logoWhite45.png" alt="Bee Logo" width="30" height="24"
 					class="d-inline-block align-text-top">
-				{% if business %}
 				<a class="navbar-brand" href="/">BarHive Business</a>
-				{% else %}
-				<a class="navbar-brand" href="/">BarHive</a>
-				{% endif %}
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
 						<a class="nav-link {{ home }}" aria-current="page" href="/">Home</a>
@@ -30,20 +26,18 @@
 						<a class="nav-link {{ login }}" href="/login">Login</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link {{ register }}" href="/register">Sign Up</a>
+						<a class="nav-link {{ register }}" href="/business/register">Sign Up</a>
 					</li>
 				</ul>
 
 				{% else %}
 
 				<li class="nav-item">
-					<a class="nav-link {{ feed }}" href="/feed">Feed</a>
+					<a class="nav-link {{ feed }}" href="/business/feed">Feed</a>
 				</li>
 				<li class="nav-item">
 					{% if user %}
-					<a class="nav-link {{ account }}" href="/account">{{ user.username }}</a>
-					{% else %}
-					<a class="nav-link {{ account }}" href="/business/account">{{ business.business_name }}</a>
+					<a class="nav-link {{ account }}" href="/business/account">{{ user.username }}</a>
 					{% endif %}
 				</li>
 				</ul>

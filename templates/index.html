@@ -1,17 +1,24 @@
 {% extends '_layout.html' %}
 
 {% block body %}
+
 <link rel="stylesheet" href="/static/styles/index.css">
-<main class="">
+<main>
     <section>
         {% if logged_in %}
-        <h1 id="landing-msg">Welcome back, homie!</h1>
-        
+        {% include '_feed.html' %}
         {% else %}
         <div class="landing-msg">
-            <h1 id="welcome">Welcome to BarHive!</h1>
+            <h1 class="welcome">Join the world’s fastest growing<br>social media platform that<br>focuses on what really matters:<br>…gettin’ lit.</h1>
+            <a href="/register"><button class="join-btn">JOIN</button></a>
+        </div>
+    </section>
+        <div class="business-msg">
+            <h1 class="business-title">Businesses</h1>
+            <p class="business-text">Are you a buisness looking to advertise your venue? <br>Click the button below to learn more about BarHive business.</p>
+            <a href="/business/register"><button class="business-btn">BUSINESS</button></a>
         </div>
         {% endif %}
-    </section>
 </main>
+
 {% endblock %}

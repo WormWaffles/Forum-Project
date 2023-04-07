@@ -3,30 +3,37 @@
 {% block body %}
 <link rel="stylesheet" href="/static/styles/create.css">
 <!-- form  -->
-<div class-="page-title">
-    <h1>Create a Post</h1>
-</div>
-<div class="d-flex flex-column">
-    <form action="/feed/post" method="post" enctype="multipart/form-data">
-        <!-- input for title of post -->
-        <div class="mb-3">
-            <!-- <label class="form-label">Title</label> -->
-            <input class="form-control" type="text" name="title" placeholder="Title">
-        </div>
-        <!-- input for post content -->
-        <div class="mb-3">
-            <!-- <label class="form-label">Content</label> -->
-            <textarea class="form-control" name="content" placeholder="Content" rows="4"></textarea>
-        </div>
-        <!-- input for single file attachment -->
-        <div class="mb-3">
-            <label class="form-label"></label>
-            <input class="form-control" type="file" name="file">
-        </div>
-        <!-- button for post -->
-        <div class="post">
-            <button class="btn btn-success" type="submit">Post</button>
-        </div>
-    </form>
+<div class="create-card">
+    <div>
+        <h1 class="page-title">Create a Post</h1>
+    </div>
+    <div class="create-container">
+        <form action="/feed/post" method="post" enctype="multipart/form-data">
+            <!-- input for title of post -->
+            <div class="title-div">
+                <label>Title your post</label>
+                <input class="title" type="text" name="title" required>
+            </div>
+            <!-- input for post content -->
+            <div class="content-div">
+                <label>Write something...</label>
+                <textarea class="content" name="content" rows="4"></textarea>
+            </div>
+            <!-- input for single file attachment -->
+            <div class="file-div">
+                <div class="file-upload-btn-wrapper">
+                    <input name="file" type="file" id="myFileInput" style="display: none;">
+                    <button class="file-btn" onclick="document.getElementById('myFileInput').click(); return false;">
+                        <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                    </button>
+                    <span class="upload-label">Upload</span>
+                </div>
+            </div>
+            <!-- button for post -->
+            <div class="post">
+                <button class="post-btn" type="submit">Post</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
