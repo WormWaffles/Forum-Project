@@ -44,3 +44,5 @@ CREATE TABLE user_likes (
     like_type INTEGER NOT NULL,
     PRIMARY KEY (user_id, post_id)
 );
+
+-- post has poster_id which connects to user, business, or admin
