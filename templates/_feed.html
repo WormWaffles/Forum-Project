@@ -22,13 +22,13 @@
                                 src="/static/images/sample_pfp.jpeg" alt="pfp"></a>
                     </div>
                     <div class="user_info">
-                        {% if post.user.username %}
+                        {% if post.user.is_business %}
                         <a class="username" href="/user/{{ post.user.user_id }}">
                             <p class="username" id="user">{{ post.user.username }}</p>
                         </a>
                         {% else %}
                         <a class="username" href="/business/{{ post.user_id }}">
-                            <p class="username" id="user">{{ businesses[post.user_id].business_name }}</p>
+                            <p class="username" id="user">{{ post.user.username }}</p>
                         </a>
                         {% endif %}
                         <p class="checked">checked into <a class="location" href="/StBarhops">St. Barhops</a></p>

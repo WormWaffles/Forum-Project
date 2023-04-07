@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
-from src.business import business_users
 from src.likes import likes
 from src.models import db, User
 from dotenv import load_dotenv
@@ -34,8 +33,6 @@ def logged_in():
     '''Checks if user is logged in'''
     if 'user_id' in session:
         return True
-    elif 'business_id' in session:
-        return True
     else:
         return False
 
@@ -46,28 +43,19 @@ def before_request():
     # post_feed.clear()
     # likes.clear()
     g.user = None
-    g.business = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
         if user == None:
             session.pop('user_id', None)
         else:
             g.user = user
-    elif 'business_id' in session:
-        business = business_users.get_business_by_id(session['business_id'])
-        if business == None:
-            session.pop('business_id', None)
-        else:
-            g.business = business
 
 
 @app.route('/')
 def index():
-    if g.business:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
-    elif g.user:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
-    return render_template('index.html', logged_in=logged_in(), home="active")
+    if g.user:
+        return render_template('index.html', logged_in=logged_in(), home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=False, home="active")
 
 
 @app.route('/feed')
