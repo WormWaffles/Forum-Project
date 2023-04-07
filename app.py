@@ -64,17 +64,17 @@ def before_request():
 @app.route('/')
 def index():
     if g.business:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
     elif g.user:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
     return render_template('index.html', logged_in=logged_in(), home="active")
 
 
 @app.route('/feed')
 def feed():
     if g.business:
-        return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
-    return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+        return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
+    return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
 
 
 # account page
@@ -292,14 +292,19 @@ def edit_post(post_id):
 @app.get('/feed/<post_id>')
 def view_post(post_id):
     if isinstance(post_id, int):
+        print(post_id)
         return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, likes=likes.get_like_by_post_id(post_id))
     return redirect('/error')
 
 # view user
 @app.get('/user/<user_id>')
 def view_user(user_id):
-    if int(g.user.user_id) == int(user_id):
-        return redirect('/account')
+    if g.user:
+        if int(g.user.user_id) == int(user_id):
+            return redirect('/account')
+    elif g.business:
+        if int(g.business.business_id) == int(user_id):
+            return redirect(url_for('/business/account'))
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
 
 # buesniess page

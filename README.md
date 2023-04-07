@@ -2,6 +2,8 @@
 
 # Setting up the Database
 
+**NOTE: when the database_schema changes, it is probably better to delete your database and make a new one.**
+
 This guide will help you set up a database on your local machine for use with your project.
 
 ## Prerequisites
