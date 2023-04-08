@@ -23,11 +23,11 @@
                     </div>
                     <div class="user_info">
                         {% if post.user.is_business %}
-                        <a class="username" href="/user/{{ post.user.user_id }}">
+                        <a class="username" href="/business/{{ post.user_id }}">
                             <p class="username" id="user">{{ post.user.username }}</p>
                         </a>
                         {% else %}
-                        <a class="username" href="/business/{{ post.user_id }}">
+                        <a class="username" href="/user/{{ post.user.user_id }}">
                             <p class="username" id="user">{{ post.user.username }}</p>
                         </a>
                         {% endif %}
@@ -75,7 +75,7 @@
                         <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
                         <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img"
                         {% set like_icon = {'src': 'src=/static/images/likeButton_default.png'} %}
-                        {% for like in likes if like.post_id == post.post_id and like.user_id == user_id %}
+                        {% for like in likes if like.post_id == post.post_id and like.user_id == g.user.user_id %}
                             {% if like.like_type == 1 %}
                                 {% set _ = like_icon.update({'src': 'src=/static/images/likeButton_red.png'}) %}
                             {% elif like.like_type == -1 %}

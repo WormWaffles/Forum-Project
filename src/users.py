@@ -18,14 +18,17 @@ class Users:
         '''Returns user by email'''
         return User.query.filter_by(email=email).first()
     
-    def create_user(self, username, email, password):
+    def create_user(self, username, email, password, is_business=False):
         '''Creates a user'''
-        user = User(username=username, email=email, password=password, private=False)
+        if is_business:
+            user = User(username=username, email=email, password=password, private=False, is_business=True)
+        else:
+            user = User(username=username, email=email, password=password, private=False, is_business=False)
         db.session.add(user)
         db.session.commit()
         return user
 
-    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private):
+    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
@@ -38,6 +41,16 @@ class Users:
             user.private = True
         else:
             user.private = False
+
+        # Business
+        if is_business != None:
+            user.address = address
+            user.city = city
+            user.state = state
+            user.zip_code = zip_code
+            user.phone = phone
+            user.website = website
+
         db.session.commit()
         return user
     
