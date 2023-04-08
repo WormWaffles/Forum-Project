@@ -20,7 +20,7 @@ CREATE TABLE "user" (
     state VARCHAR(80),
     zip_code INTEGER,
     phone INTEGER,
-    website VARCHAR(80),
+    website VARCHAR(80)
 );
 
 CREATE TABLE post (
