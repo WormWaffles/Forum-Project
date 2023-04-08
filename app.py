@@ -327,7 +327,7 @@ def business():
         new_user = users.create_user(username=business_name, email=business_email, password=password, is_business=True)
         session['user_id'] = new_user.user_id
 
-        return redirect(url_for('business_account'))
+        return redirect(url_for('account'))
     
     return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
