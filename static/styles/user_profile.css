@@ -1,0 +1,108 @@
+.profile-links a:link {
+    text-decoration: none;
+    color:#57A1BD;
+  }
+  
+.profile-links a:visited {
+    text-decoration: none;
+    color:#57A1BD;
+  }
+
+.banner img{
+    width: 100%;
+}
+
+.banner {
+    height: 300px;
+    object-fit:cover; 
+    object-position: bottom;   
+    overflow:hidden;
+}
+
+.avatar {
+    object-fit:cover; 
+    overflow:hidden;
+    object-position: center;  
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid white;
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    z-index: 2;
+}
+
+.avatar img{
+    width: 100%;
+}
+
+.container {
+    max-width: 1000px;
+}
+
+.mid-container {
+    display: grid;
+    grid-template-columns: 500px 100px 500px; 
+    grid-template-areas: 
+    " name none links ";
+    
+}
+
+.header {
+    background-color: rgb(255, 255, 255);
+    border-radius: 0 0 15px 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+}
+
+.profile-links {
+    font-family: Poppins, sans-serif;
+    color: #57A1BD;
+    grid-area: links;
+    justify-self: space-evenly; 
+}
+
+.profile-name {
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+    color: #57A1BD;
+    margin-left: 3em;
+    grid-area: name;
+}
+
+.bottom {
+    padding: 2em 3em;
+}
+
+.subtitle {
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    color: #7F7F7F;
+    text-align: center;
+}
+
+.description {
+    font-family: Poppins, sans-serif;
+    color: #555555;
+    padding-top: 2em;
+}
+
+.follow {
+    text-align: center;
+}
+
+.posts form{
+    font-family: Poppins, sans-serif;
+    padding-top: 1.5em;
+    display: inline-block;
+}
+
+#follow-btn {
+    font-family: Poppins, sans-serif;
+    background-color: #57A1BD !important;
+    color: white;
+    margin-left: 3em;
+}
+
+

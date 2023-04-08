@@ -17,16 +17,12 @@ header {
 nav a {
     color: #FFFFFF;
     /* White Text Color */
+    font-family: Poppins, sans-serif;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
     padding: 10px;
     border-radius: 5px;
-}
-
-nav a:hover {
-    background-color: #5592a8;
-    /* Darker Blue Background Color on Hover */
 }
 
 nav img {
@@ -49,6 +45,25 @@ footer {
 }
 
 .my-container {
-    padding-top: 5rem;
+    padding-top: 3.5rem;
     padding-bottom: 3rem;
 }
+
+#search {
+    font-family: Poppins, sans-serif;
+}
+
+.search-container{
+    width: 300px;
+}
+
+input.transparent-input{
+    background-color:rgba(255, 255, 255, 0) !important;
+    color: rgb(255, 255, 255) !important;
+    border-color: #FFFFFF !important;
+ }
+
+ input.transparent-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(255, 255, 255);
+    opacity: 1; /* Firefox */
+  }

@@ -1,0 +1,98 @@
+.links a:link {
+    text-decoration: none;
+    color:#57A1BD;
+  }
+  
+.links a:visited {
+    text-decoration: none;
+    color:#57A1BD;
+  }
+
+.banner img{
+    width: 100%;
+}
+
+.banner {
+    height: 300px;
+    object-fit:cover; 
+    object-position: bottom;   
+    overflow:hidden;
+}
+
+.avatar {
+    object-fit:cover; 
+    overflow:hidden;
+    object-position: center;  
+    width: 200px;
+    height: 200px;
+    border: 2px solid white;
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, -35%);
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    z-index: 2;
+}
+
+.avatar img{
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    max-width: 1000px;
+}
+
+.header {
+    background-color: rgb(255, 255, 255);
+    border-radius: 0 0 15px 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+}
+
+.title {
+    font-family: Poppins, sans-serif;
+    text-align: center;
+}
+
+.links {
+    font-family: Poppins, sans-serif;
+    color: #57A1BD;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottom {
+    padding: 3em;
+}
+
+.subtitle {
+    font-family: Poppins, sans-serif;
+    font-weight: 200;
+    font-size: 24px;
+    color: #7F7F7F;
+    text-align: center;
+}
+
+.description {
+    font-family: Poppins, sans-serif;
+    color: #57A1BD;
+    padding-top: 2em;
+}
+
+.follow {
+    text-align: center;
+}
+
+.posts form{
+    font-family: Poppins, sans-serif;
+    padding-top: 1.5em;
+    display: inline-block;
+}
+
+#follow-btn {
+    font-family: Poppins, sans-serif;
+    background-color: #57A1BD !important;
+    color: white;
+}
+
+
