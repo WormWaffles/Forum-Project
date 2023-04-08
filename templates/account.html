@@ -3,10 +3,18 @@
 {% block body %}
 <link rel="stylesheet" href="/static/styles/account.css">
 
+{% if user %}
+  {% if user.is_business %}
+    {% include "view_business_profile.html" %}
+  {% else %}
+    {% include "view_user_profile.html" %}
+  {% endif %}
+{% else %}
   {% if g.user.is_business %}
     {% include "business_profile.html" %}
   {% else %}
     {% include "user_profile.html" %}
   {% endif %}
+{% endif %}
 
 {% endblock %}

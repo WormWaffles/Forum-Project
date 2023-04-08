@@ -288,7 +288,7 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
+    return render_template('account.html', user=users.get_user_by_id(user_id))
 
 # buesniess page
 @app.route('/business/register', methods=['GET', 'POST'])
@@ -335,9 +335,9 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    if g.business:
-        return render_template('error.html', logged_in=logged_in(), e=e, business=g.business, user=None), 404
-    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user, business=None), 404
+    if g.user.is_business:
+        return render_template('error.html', logged_in=logged_in(), e=e), 404
+    return render_template('error.html', logged_in=logged_in(), e=e), 404
 
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')
