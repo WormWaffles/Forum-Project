@@ -37,7 +37,7 @@
                         <p>Elevate your spirits with our craft cocktails.</p>
                     </div>
                     <div class="description">
-                        {% if user.about_me %}
+                        {% if g.user.about_me %}
                             {{ g.user.about_me }}
                         {% else %}
                             <p>Welcome to our luxurious cocktail venue! We offer a unique and unforgettable experience for cocktail 

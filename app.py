@@ -70,6 +70,8 @@ def feed():
 def account():
     if not g.user:
         return redirect(url_for('login'))
+    if g.user.is_business:
+        return render_template('account.html', account="active")
     return render_template('account.html', account="active")
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -263,9 +265,9 @@ def edit(post_id):
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
-    if isinstance(post_id, int):
-        print(post_id)
-        return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), likes=likes.get_like_by_post_id(post_id))
+    post = post_feed.get_post_by_id(post_id)
+    if post:
+        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
     return redirect('/error')
 
 # view user
@@ -277,14 +279,6 @@ def view_user(user_id):
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
 
 # buesniess page
-# account page for business
-@app.route('/business/account')
-def business_account():
-    if not g.user:
-        return redirect(url_for('login'))
-    
-    return render_template('business_account.html', account="active")
-
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
     info = {}
