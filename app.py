@@ -87,8 +87,6 @@ def feed():
 def account():
     if not g.user:
         return redirect(url_for('login'))
-    if g.user.is_business:
-        return render_template('business_account.html', account="active")
     return render_template('account.html', account="active")
 
 @app.route('/account/edit', methods=['GET', 'POST'])
