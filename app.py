@@ -1,4 +1,6 @@
-from flask import Flask, render_template, redirect, request, session, g, url_for
+import pathlib
+from flask import Flask, abort, render_template, redirect, request, session, g, url_for
+import requests
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
 from src.business import business_users
@@ -7,6 +9,11 @@ from src.models import db, User
 from dotenv import load_dotenv
 import os
 import re
+from google.oauth2 import id_token
+from google_auth_oauthlib.flow import Flow
+import google.auth.transport.requests
+from pip._vendor import cachecontrol
+
 
 app = Flask(__name__)
 
@@ -25,9 +32,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-# I don't know what this does
+# vars
 app.secret_key='SecretKey'
+GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+
+# Google Auth
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
+flow = Flow.from_client_secrets_file(
+    client_secrets_file=client_secret_file,
+    scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'openid'],
+    redirect_uri='http://127.0.0.1:5000/callback'
+)
 
 # this can be put somewhere else i think
 def logged_in():
@@ -148,10 +165,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    if 'user_id' in session:
-        session.pop('user_id', None)
-    elif 'business_id' in session:
-        session.pop('business_id', None)
+    session.clear()
     return redirect(url_for('index'))
 
 
@@ -363,3 +377,40 @@ def page_not_found(e):
     if g.business:
         return render_template('error.html', logged_in=logged_in(), e=e, business=g.business, user=None), 404
     return render_template('error.html', logged_in=logged_in(), e=e, user=g.user, business=None), 404
+
+# ********** GOOGLE LOGIN **********
+@app.route('/callback')
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+
+    if not session["state"] == request.args["state"]:
+        abort(500)  # State does not match!
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+    
+    username = id_info.get("name")
+    if '(' and ')' in username:
+        usernames = username.split(" ")
+        username = usernames[len(usernames) - 1].replace("(", "")
+        username = username.replace(")", "")
+    email = id_info.get("email")
+    info = {'username': username, 'email': email}
+    print(username)
+    print(email)
+    return redirect(url_for('register'), logged_in=logged_in(), register="active", info=info)
+
+@app.route('/googlelogin')
+def googlelogin():
+    authorization_url, state = flow.authorization_url()
+    session["state"] = state
+    return redirect(authorization_url)
+# ********** GOOGLE LOGIN **********
