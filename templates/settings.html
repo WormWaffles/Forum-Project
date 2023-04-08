@@ -2,7 +2,7 @@
 {% block body %}
 <!-- edit post title content or file -->
 <div class="page-title">
-    <h1>Edit Account: {{ user.username }}</h1>
+    <h1>Edit Account: {{ g.user.username }}</h1>
 </div>
 {% if message %}
 <p class="message" style="color: red;">Error: {{ message }}</p>
@@ -12,24 +12,24 @@
         <!-- input for profile picture -->
         <div class="mb-3">
             <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
-            value="{% if user.profile_pic != None %}{{user.profile_pic}}{% endif %}">
+            value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
         </div>
         <!-- input for username -->
         <div class="mb-3">
-            <input class="form-control" type="text" name="username" placeholder="Username" value="{{ user.username }}">
+            <input class="form-control" type="text" name="username" placeholder="Username" value="{{ g.user.username }}">
         </div>
         <!-- input for first name -->
         <div class="mb-3">
             <input class="form-control" type="text" name="first_name" placeholder="First name"
-            value="{% if user.first_name != None %}{{user.first_name}}{% endif %}">
+            value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
             <!-- input for last name -->
             <input class="form-control" type="text" name="last_name" placeholder="Last name"
-            value="{% if user.last_name != None %}{{user.last_name}}{% endif %}">
+            value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
         </div>
         <!-- input for email -->
         <div class="mb-3">
             <input class="form-control" type="text" name="email" placeholder="Email"
-            value="{% if user.email != None %}{{user.email}}{% endif %}">
+            value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
         </div>
         <!-- input for password -->
         <div class="mb-3">
@@ -40,16 +40,16 @@
         <!-- text area for bio -->
         <div class="mb-3">
             <textarea class="form-control" name="about_me"
-            placeholder="About me">{% if user.about_me != None %}{{user.about_me}}{% endif %}</textarea>
+            placeholder="About me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
         </div>
         <!-- input for banner picture -->
         <div>
             <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
-            value="{% if user.banner_pic != None %}{{user.banner_pic}}{% endif %}">
+            value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
         </div>
         <!-- private account check box -->
         <div class="mb-3">
-            <input type="checkbox" name="private" value="1" {% if user.private==1 %} checked {% endif %}>
+            <input type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
             <label for="private">Private Account</label>
         </div>
         <!-- button for post -->
