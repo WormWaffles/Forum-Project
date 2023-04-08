@@ -26,7 +26,7 @@
                     </div>
                     
                     <div class="description">
-                        {% if user.about_me %}
+                        {% if g.user.about_me %}
                             {{ g.user.about_me }}
                         {% else %}
                             <p> Hi there, my name is {{ g.user.username }} and I’m a freelance writer and avid traveler. I love exploring new places and immersing 
