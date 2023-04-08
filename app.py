@@ -288,6 +288,7 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
+    return render_template('account.html', account="active", user=users.get_user_by_id(user_id))
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
 
 # buesniess page
