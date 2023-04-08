@@ -88,7 +88,7 @@ def account():
     if not g.user:
         return redirect(url_for('login'))
     if g.user.is_business:
-        return render_template('account.html', account="active")
+        return render_template('business_account.html', account="active")
     return render_template('account.html', account="active")
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -141,9 +141,6 @@ def login():
         if user and user.password == password:
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
-        elif bus and bus.password == password:
-            session['business_id'] = bus.business_id
-            return redirect(url_for('business_account'))
         else:
             message = f"Username or password incorrect."
             return render_template('login.html', message=message, logged_in=logged_in(), login="active", info=info)
