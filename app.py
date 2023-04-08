@@ -369,7 +369,7 @@ def callback():
     info = {'username': username, 'email': email}
     print(username)
     print(email)
-    return redirect(url_for('register'), logged_in=logged_in(), register="active", info=info)
+    return render_template('register.html', logged_in=logged_in(), register="active", info=info)
 
 @app.route('/googlelogin')
 def googlelogin():
