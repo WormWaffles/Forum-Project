@@ -2,9 +2,11 @@
 
 {% block body %}
 <link rel="stylesheet" href="/static/styles/account.css">
-  {% if business %}
+
+  {% if g.user.is_business %}
     {% include "business_profile.html" %}
   {% else %}
     {% include "user_profile.html" %}
   {% endif %}
+
 {% endblock %}

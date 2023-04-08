@@ -13,13 +13,8 @@ class User(db.Model):
     about_me = db.Column(db.String(80), nullable=True)
     private = db.Column(db.Boolean, nullable=False)
 
-# Business model
-class Business(db.Model):
-    business_id = db.Column(db.Integer, primary_key=True)
-    business_name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    business_description = db.Column(db.String(80), nullable=True)
+    # Business
+    is_business = db.Column(db.Boolean, nullable=False)
     address = db.Column(db.String(80), nullable=True)
     city = db.Column(db.String(80), nullable=True)
     state = db.Column(db.String(80), nullable=True)

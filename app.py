@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, g, url_for
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
-from src.business import business_users
 from src.likes import likes
 from src.models import db, User
 from dotenv import load_dotenv
@@ -34,8 +33,6 @@ def logged_in():
     '''Checks if user is logged in'''
     if 'user_id' in session:
         return True
-    elif 'business_id' in session:
-        return True
     else:
         return False
 
@@ -46,35 +43,26 @@ def before_request():
     # post_feed.clear()
     # likes.clear()
     g.user = None
-    g.business = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
         if user == None:
             session.pop('user_id', None)
         else:
             g.user = user
-    elif 'business_id' in session:
-        business = business_users.get_business_by_id(session['business_id'])
-        if business == None:
-            session.pop('business_id', None)
-        else:
-            g.business = business
 
 
 @app.route('/')
 def index():
-    if g.business:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
-    elif g.user:
-        return render_template('index.html', logged_in=logged_in(), home="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
-    return render_template('index.html', logged_in=logged_in(), home="active")
+    if g.user:
+        return render_template('index.html', logged_in=logged_in(), home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=False, home="active")
 
 
 @app.route('/feed')
 def feed():
-    if g.business:
-        return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.business.business_id, business=g.business, user=None, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
-    return render_template('feed.html', logged_in=logged_in(), feed="active", user_id=g.user.user_id, user=g.user, posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), businesses=business_users.get_all_businesses())
+    if g.user:
+        return render_template('index.html', logged_in=logged_in(), feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    return render_template('feed.html', logged_in=False, feed="active")
 
 
 # account page
@@ -82,48 +70,47 @@ def feed():
 def account():
     if not g.user:
         return redirect(url_for('login'))
-    
-    return render_template('account.html', account="active", user=g.user)
+    if g.user.is_business:
+        return render_template('account.html', account="active")
+    return render_template('account.html', account="active")
 
-@app.route('/account/edit')
+@app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
-    if not g.user:
-        return redirect(url_for('login'))
-    
-    return render_template('settings.html', account="active", user=g.user)
-
-@app.route('/account/edit', methods=['POST'])
-def edit_account_post():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    user_id = session['user_id']
-    username = request.form['username']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    email = request.form['email']
-    password = request.form['password']
-    confirm_password = request.form['confirm_password']
-    about_me = request.form['about_me']
-    profile_pic = request.files['profile_pic']
-    banner_pic = request.files['banner_pic']
-    private = request.form.get('private')
-
-    # needs more error handling
-    if password != "":
-        message = ""
-        unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
-        if password != confirm_password:
-            message = 'Passwords do not match.'
-            return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
-        if len(password) < 6:
-            message = 'Password must be at least 6 characters.'
-            return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+    if request.method == 'GET':
+        if not g.user:
+            return redirect(url_for('login'))
+        return render_template('settings.html', account="active")
     else:
-        password = g.user.password
-    users.update_user(user_id, username, password, first_name, last_name, email, about_me, profile_pic, banner_pic, private)
-    
-    return redirect(url_for('account'))
+        if not g.user:
+            return redirect(url_for('login'))
+            
+        user_id = session['user_id']
+        username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        about_me = request.form['about_me']
+        profile_pic = request.files['profile_pic']
+        banner_pic = request.files['banner_pic']
+        private = request.form.get('private')
+
+        # needs more error handling
+        if password != "":
+            message = ""
+            unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
+            if password != confirm_password:
+                message = 'Passwords do not match.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            if len(password) < 6:
+                message = 'Password must be at least 6 characters.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+        else:
+            password = g.user.password
+        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private)
+        
+        return redirect(url_for('account'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -134,13 +121,9 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = users.get_user_by_email(email)
-        bus = business_users.get_business_by_email(email)
         if user and user.password == password:
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
-        elif bus and bus.password == password:
-            session['business_id'] = bus.business_id
-            return redirect(url_for('business_account'))
         else:
             message = f"Username or password incorrect."
             return render_template('login.html', message=message, logged_in=logged_in(), login="active", info=info)
@@ -198,30 +181,28 @@ def register():
 
 
 # create post
-@app.route('/create')
+@app.route('/create', methods=['GET', 'POST'])
 def create():
-    if g.user:
-        return render_template('create.html', user=g.user)
-    elif g.business:
-        return render_template('create.html', business=g.business)
-    return redirect('/login')
-
-@app.post('/feed/post')
-def add_post():
-    title = request.form.get('title')
-    content = request.form.get('content')
-    file = request.files['file']
-    if not file:
-        file = ""
-    # get user id
-    if g.user:
-        user_id = session['user_id']
-    elif g.business:
-        user_id = session['business_id']
+    if request.method == 'GET':
+        if g.user:
+            return render_template('create.html')
+        return redirect('/login')
     else:
-        return redirect('/error')
-    post_feed.create_post(user_id, title, content, 0)
-    return redirect('/feed')
+        title = request.form.get('title')
+        content = request.form.get('content')
+        file = request.files['file']
+        if not file:
+            file = ""
+        # get user id
+        if g.user:
+            user_id = session['user_id']
+        elif g.business:
+            user_id = session['business_id']
+        else:
+            return redirect('/error')
+        post_feed.create_post(user_id, title, content, 0)
+        return redirect('/feed')
+    
 
 # delete post
 @app.get('/feed/delete/<post_id>')
@@ -237,8 +218,6 @@ def delete_post(post_id):
 def like_post(post_id):
     if g.user:
         user_id = session['user_id']
-    elif g.business:
-        user_id = session['business_id']
     else:
         return redirect('/error')
     post_feed.like_post(post_id, user_id)
@@ -249,8 +228,6 @@ def like_post(post_id):
 def dislike_post(post_id):
     if g.user:
         user_id = session['user_id']
-    elif g.business:
-        user_id = session['business_id']
     else:
         return redirect('/error')
     post_feed.dislike_post(post_id, user_id)
@@ -261,39 +238,36 @@ def dislike_post(post_id):
 def remove_like(post_id):
     if g.user:
         user_id = session['user_id']
-    elif g.business:
-        user_id = session['business_id']
     else:
         return redirect('/error')
     post_feed.remove_like(post_id, user_id)
     return "nothing"
 
 # edit post
-@app.get('/feed/edit/<post_id>')
+@app.route('/feed/edit/<post_id>', methods=['GET', 'POST'])
 def edit(post_id):
-    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
-        return redirect('/error')
-    return render_template('edit.html', post=post_feed.get_post_by_id(post_id), user=g.user)
-
-@app.post('/feed/edit/<post_id>')
-def edit_post(post_id):
-    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
-        return redirect('/error')
-    title = request.form.get('title')
-    content = request.form.get('content')
-    file = request.files['file']
-    if not file:
-        file = ""
-    post_feed.update_post(post_id, title, content, file)
-    return redirect('/feed')
+    if request.method == 'GET':
+        if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+            return redirect('/error')
+        return render_template('edit.html', post=post_feed.get_post_by_id(post_id))
+    else:
+        if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+            return redirect('/error')
+        title = request.form.get('title')
+        content = request.form.get('content')
+        file = request.files['file']
+        if not file:
+            file = ""
+        post_feed.update_post(post_id, title, content, file)
+        return redirect('/feed')
 
 
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
-    if isinstance(post_id, int):
-        print(post_id)
-        return render_template('view_post.html', post=post_feed.get_post_by_id(post_id), user=g.user, likes=likes.get_like_by_post_id(post_id))
+    post = post_feed.get_post_by_id(post_id)
+    if post:
+        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
     return redirect('/error')
 
 # view user
@@ -302,20 +276,9 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    elif g.business:
-        if int(g.business.business_id) == int(user_id):
-            return redirect(url_for('/business/account'))
     return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
 
 # buesniess page
-# account page for business
-@app.route('/business/account')
-def business_account():
-    if not g.business:
-        return redirect(url_for('login'))
-    
-    return render_template('business_account.html', account="active", business=g.business)
-
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
     info = {}
@@ -339,18 +302,18 @@ def business():
                 message = 'Password must be at least 6 characters.'
                 return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
             
-            existing_user = business_users.get_business_by_name(business_name)
+            existing_user = users.get_user_by_username(business_name)
             if existing_user:
                 message = 'Username already exists.'
                 return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
             
-            existing_email = business_users.get_business_by_email(business_email)
+            existing_email = users.get_user_by_email(business_email)
             if existing_email:
                 message = 'email'
                 return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
         
-        new_user = business_users.create_business(business_name, business_email, password)
-        session['business_id'] = new_user.business_id
+        new_user = users.create_user(username=business_name, email=business_email, password=password, is_business=True)
+        session['user_id'] = new_user.user_id
 
         return redirect(url_for('business_account'))
     
@@ -360,6 +323,4 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    if g.business:
-        return render_template('error.html', logged_in=logged_in(), e=e, business=g.business, user=None), 404
-    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user, business=None), 404
+    return render_template('error.html', logged_in=logged_in(), e=e), 404

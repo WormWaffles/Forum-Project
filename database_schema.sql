@@ -11,22 +11,16 @@ CREATE TABLE "user" (
     email VARCHAR(80) NOT NULL,
     about_me VARCHAR(500),
     private BOOLEAN DEFAULT NULL,
-    PRIMARY KEY (user_id)
-);
+    PRIMARY KEY (user_id),
 
-CREATE TABLE business (
-    business_id SERIAL NOT NULL,
-    business_name VARCHAR(80) NOT NULL,
-    email VARCHAR(80) NOT NULL,
-    password VARCHAR(80) NOT NULL,
-    business_description VARCHAR(500),
+    -- business stuff
+    is_business BOOLEAN NOT NULL,
     address VARCHAR(80),
     city VARCHAR(80),
     state VARCHAR(80),
     zip_code INTEGER,
     phone INTEGER,
     website VARCHAR(80),
-    PRIMARY KEY (business_id)
 );
 
 CREATE TABLE post (
