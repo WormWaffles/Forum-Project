@@ -210,8 +210,6 @@ def create():
         # get user id
         if g.user:
             user_id = session['user_id']
-        elif g.business:
-            user_id = session['business_id']
         else:
             return redirect('/error')
         post_feed.create_post(user_id, title, content, 0)
