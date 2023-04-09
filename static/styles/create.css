@@ -10,7 +10,7 @@
 }
 
 .page-title {
-    font: normal normal 900 50px/68px Avenir;
+    font: normal normal 900 50px/68px Poppins;
     color: #555555;
 }
 
@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font: normal normal 900 18px/25px Avenir;
+    font: normal normal 900 18px/25px Poppins;
     color: #7F7F7F;
     padding-bottom: 15px;
 }
@@ -83,7 +83,7 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font: normal normal 900 18px/25px Avenir;
+    font: normal normal 900 18px/25px Poppins;
     color: #7F7F7F;
     padding-bottom: 15px;
 }
