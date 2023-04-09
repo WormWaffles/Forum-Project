@@ -87,8 +87,6 @@ def feed():
 def account():
     if not g.user:
         return redirect(url_for('login'))
-    if g.user.is_business:
-        return render_template('account.html', account="active")
     return render_template('account.html', account="active")
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -288,7 +286,7 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    return render_template('view_user.html', user=users.get_user_by_id(user_id), posts=post_feed.get_posts_by_user_id(user_id), logged_in=logged_in())
+    return render_template('account.html', user=users.get_user_by_id(user_id))
 
 # buesniess page
 @app.route('/business/register', methods=['GET', 'POST'])
@@ -327,7 +325,7 @@ def business():
         new_user = users.create_user(username=business_name, email=business_email, password=password, is_business=True)
         session['user_id'] = new_user.user_id
 
-        return redirect(url_for('business_account'))
+        return redirect(url_for('account'))
     
     return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
@@ -335,9 +333,9 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    if g.business:
-        return render_template('error.html', logged_in=logged_in(), e=e, business=g.business, user=None), 404
-    return render_template('error.html', logged_in=logged_in(), e=e, user=g.user, business=None), 404
+    if g.user.is_business:
+        return render_template('error.html', logged_in=logged_in(), e=e), 404
+    return render_template('error.html', logged_in=logged_in(), e=e), 404
 
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')

@@ -3,7 +3,7 @@
 }
 
 .welcome {
-    font: normal normal 900 40px/50px Avenir;
+    font: normal normal 900 40px/50px Poppins;
     color: #57A1BD;
 }
 
@@ -13,7 +13,7 @@
     padding: 15px;
     background-color: #EFEFEF;
     color: #57A1BD;
-    font: normal normal 900 20px/15px Avenir;
+    font: normal normal 900 20px/15px Poppins;
     border: #57A1BD solid 2px;
     border-radius: 5px;
     cursor: pointer;
@@ -32,12 +32,12 @@
 }
 
 .business-title {
-    font: normal normal 900 60px/70px Avenir;
+    font: normal normal 900 60px/70px Poppins;
     color: white;
 }
 
 .business-text {
-    font: normal normal normal 400 40px/50px Avenir;
+    font: normal normal normal 400 40px/50px Poppins;
     color: white;
 }
 
@@ -47,7 +47,7 @@
     padding: 15px;
     background-color: #57A1BD;
     color: #EFEFEF;
-    font: normal normal 900 20px/15px Avenir;
+    font: normal normal 900 20px/15px Poppins;
     border: #EFEFEF solid 2px;
     border-radius: 5px;
     cursor: pointer;
