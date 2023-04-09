@@ -54,10 +54,3 @@ class Rating(db.Model):
 
     def __repr__(self):
         return f'{self.rating}-star rating created for {self.business_id} by {self.post_id}'
-
-#     CREATE TABLE ratings (
-#     rating_id SERIAL NOT NULL PRIMARY KEY,
-#     rating SMALLINT NOT NULL,
-#     business_id INTEGER NOT NULL REFERENCES "user"(user_id),
-#     post_id INTEGER NOT NULL REFERENCES post(post_id)
-# );
