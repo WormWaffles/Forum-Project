@@ -1,12 +1,29 @@
-body {
-    background-color: #EFEFEF;
+:root {
+    --bg: #EFEFEF; /* #575757 dark */
+    --primary: #57A1BD; /* #383838 dark */
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
+}
+
+/* :root:has(#darkModeToggle[value="on"]) {
+    --bg: #575757;
+    --primary: #383838;
+} */
+
+:root:has(#darkModeToggle:checked) {
+    --bg: #575757;
+    --primary: #383838;
+}
+
+body { 
+    background-color: var(--bg);
     font-family: sans-serif;
     /* this changes the font for every page extended by layout */
 }
 
 /* Style for Navigation Bar */
 nav {
-    background-color: #57A1BD;
+    background-color: var(--primary);
 }
 
 header {
@@ -31,7 +48,7 @@ nav img {
 
 /* Style for Footer */
 footer {
-    background-color: #57A1BD;
+    background-color: var(--primary);
     /* Blue Background Color */
     padding: 10px;
     color: #FFFFFF;
@@ -74,3 +91,83 @@ input.transparent-input::placeholder {
     border-width: 1px 1px 1px 0px  !important;
 }
 
+
+
+  
+
+
+                                        /* SLIDER STYLING */
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  
+  .toggle-switch {
+    position: relative;
+    width: 200px;
+  }
+  
+  label {
+    position: absolute;
+    left: 13px;
+    width: 100%;
+    height: 100px;
+    background-color: #575757;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+  
+  input {
+    position: absolute;
+    display: none;
+  }
+  
+  .slider {
+    position: absolute;
+    left: 1px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    transition: 0.3s;
+  }
+  
+  input:checked ~ .slider {
+    background-color: #EFEFEF;
+  }
+  
+  .slider::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    box-shadow: inset 28px -4px 0px 0px #EFEFEF;
+    background-color: #575757;
+    transition: 0.3s;
+  }
+  
+  input:checked ~ .slider::before {
+    transform: translateX(95px);
+    background-color: #575757;
+    box-shadow: none;
+  }
+  
+  /* a {
+    position: relative;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    top: 150px;
+    left: 10px;
+    font-size: 10px;
+    text-decoration: none;
+    color: var(--link);
+    font-weight: bold;
+    text-align: center;
+  } */
+  
+  a:hover {
+    color: var(--link-hover);
+  }
