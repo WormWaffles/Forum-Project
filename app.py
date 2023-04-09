@@ -4,7 +4,8 @@ import requests
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
 from src.likes import likes
-from src.models import db, User
+from src.rating import rating
+from src.models import db, User, Rating
 from dotenv import load_dotenv
 import os
 import re
@@ -28,6 +29,8 @@ db_name = os.getenv('DB_NAME')
 app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 
@@ -85,9 +88,12 @@ def feed():
 # account page
 @app.route('/account')
 def account():
+    star = 0;
+    if g.user.is_business:
+        star = rating.get_rating_average(g.user.user_id)
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('account.html', account="active")
+    return render_template('account.html', account="active", rating=star)
 
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
@@ -290,7 +296,7 @@ def view_user(user_id):
             return redirect('/account')
     return render_template('account.html', user=users.get_user_by_id(user_id))
 
-# buesniess page
+# business page
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
     info = {}
