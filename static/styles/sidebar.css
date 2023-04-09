@@ -5,26 +5,15 @@
     font-family: Poppins, sans-serif;
     font-weight: 400;
     text-decoration: none;
-    color: #57A1BD;
+    /* color: #57A1BD; */
     text-align: center;
 }
-
-.sidebar-list a:link {
-    text-decoration: none;
-    color:#57A1BD;
-  }
-  
-.sidebar-list a:visited {
-    text-decoration: none;
-    color:#57A1BD;
-  }
-
 
 .sidebar-container {
     width: 350px;
     background-color: white;
     border-radius: 15px;
-    border: 3px solid #57A1BD;
+    border: 3px solid var(--primary);
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     padding: 2em;
 }
@@ -32,7 +21,7 @@
 .sidebar-header{
     font-family: Poppins, sans-serif;
     font-weight: 500;
-    color: #57A1BD;
+    color: var(--primary);
 }
 
 .sidebar-header h1{
@@ -48,7 +37,7 @@
     background-color:rgba(255, 255, 255, 0) !important;
     color: rgba(87, 162, 189) !important;
     border-width: 1px 0px 1px 1px  !important;
-    border-color: #57A1BD !important;
+    border-color: var(--primary) !important;
 }
 
 .search input.transparent-input::placeholder { 
@@ -70,8 +59,8 @@
 }
 
 .btn-primary, .btn-primary:visited {
-    background-color: #57A1BD !important;
-    border-color: #57A1BD !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
 }
 
 .btn-primary:hover, .btn-primary:active {
@@ -80,34 +69,34 @@
 }
 
 .divider {
-    border-bottom: 2px solid #57A1BD;
+    border-bottom: 2px solid var(--primary);
 }
 
 .btn-post{
     background-color: rgba(255, 255, 255, 0);
-    border-color: #57A1BD;
-    color: #57A1BD;
+    border-color: var(--primary);
+    color: var(--primary);
     width: 100%;
     font-family: Poppins, sans-serif;
 }
 
 .btn-post:hover, .btn-post:active {
     background-color: #23c3fc1c !important;
-    border-color: #57A1BD !important;
-    color: #57A1BD;
-    outline: #57A1BD;
+    border-color: var(--primary) !important;
+    color: var(--primary);
+    outline: var(--primary);
 }
 
 .btn-search {
     border-width: 1px 1px 1px 0  !important;
-    border-color: #57A1BD !important;
+    border-color: var(--primary) !important;
 }
 .btn-search:hover {
     background-color: #23c3fc1c !important;
 }
 
 .icon-blue {
-    color: #57A1BD;
+    color: var(--primary);
 }
 
 .location img{
