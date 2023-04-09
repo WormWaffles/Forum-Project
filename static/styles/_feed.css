@@ -47,37 +47,37 @@
 }
 
 .username {
-    font: normal normal 900 24px/33px Avenir;
+    font: normal normal 900 24px/33px Poppins;
     color: #535353;
     text-decoration: none;
 }
 
 .checked {
-    font: normal normal normal 20px/27px Avenir;
+    font: normal normal normal 20px/27px Poppins;
     color: #535353;
 }
 
 .location {
-    font: normal normal 900 20px/27px Avenir;
+    font: normal normal 900 20px/27px Poppins;
     color: #36A3C0;
     text-decoration: none;
 }
 
 .title {
-    font: normal normal 900 24px/33px Avenir;
+    font: normal normal 900 24px/33px Poppins;
     color: #535353;
     text-decoration: none;
     padding-top: 5px;
 }
 
 .content {
-    font: normal normal medium 20px/27px Avenir;
+    font: normal normal medium 20px/27px Poppins;
     color: #555555;
 }
 
 .date {
     /* push to the left */
-    font: oblique normal normal 15px/20px Avenir;
+    font: oblique normal normal 15px/20px Poppins;
     color: #707070;
     padding-top: 2px;
 }
@@ -88,7 +88,7 @@
     right: 100px;
     padding-top: 2px;
     padding-right: 25px;
-    font: normal normal normal 15px/20px Avenir;
+    font: normal normal normal 15px/20px Poppins;
     color: #707070;
 }
 
@@ -104,7 +104,7 @@
     display: flex;
     right: 0;
     padding-right: 25px;
-    font: normal normal normal 15px/20px Avenir;
+    font: normal normal normal 15px/20px Poppins;
     color: #707070;
 }
 
