@@ -37,18 +37,18 @@
 
 .right-card h2 {
     padding-top: 100px;
-    font: normal normal 900 35px/55px Avenir;
+    font: normal normal 900 35px/55px Poppins;
     color: white;
 }
 
 .left-card h2 {
     margin-top: 0;
     color: #7F7F7F;
-    font: normal normal 900 45px/68px Avenir;
+    font: normal normal 900 45px/68px Poppins;
 }
 
 .right-card span {
-    font: normal normal normal 14px/19px Avenir;
+    font: normal normal normal 14px/19px Poppins;
     color: white;
 }
 
@@ -112,7 +112,7 @@ input:focus {
     margin-top: 20px;
     padding: 10px;
     background-color: white;
-    font: normal normal normal 14px/19px Avenir;
+    font: normal normal normal 14px/19px Poppins;
     color: #747474;
     border: none;
     border-radius: 5px;
@@ -144,7 +144,7 @@ input:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font: normal normal normal 14px/19px Avenir;
+    font: normal normal normal 14px/19px Poppins;
     color: #7F7F7F;
 }
 
