@@ -1,5 +1,11 @@
 CREATE DATABASE barhive;
 
+-- DROP TABLES IF THEY EXIST TO PREVENT ERRORS
+DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS user_likes;
+DROP TABLE IF EXISTS ratings;
+
 -- WAIT TO ADD TABLES UNTIL AFTER THE DATABASE IS CREATED
 
 CREATE TABLE "user" (
@@ -26,8 +32,8 @@ CREATE TABLE "user" (
 CREATE TABLE post (
     post_id SERIAL NOT NULL,
     user_id INTEGER NOT NULL,
-    title varchar(80) NOT NULL,
-    content varchar(500) NOT NULL,
+    title VARCHAR(80) NOT NULL,
+    content VARCHAR(500) NOT NULL,
     likes INTEGER NOT NULL,
     PRIMARY KEY (post_id)
 );
@@ -39,4 +45,13 @@ CREATE TABLE user_likes (
     PRIMARY KEY (user_id, post_id)
 );
 
+CREATE TABLE rating (
+    rating_id SERIAL NOT NULL PRIMARY KEY,
+    rating SMALLINT NOT NULL,
+    business_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    post_id INTEGER NOT NULL REFERENCES post(post_id)
+);
+
+
 -- post has poster_id which connects to user, business, or admin
+-- rating has business_id which connects to user and post_id which connects to post and then to the author

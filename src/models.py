@@ -37,3 +37,20 @@ class UserLikes(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, primary_key=True)
     like_type = db.Column(db.Integer, nullable=False)
+
+# Rating Model
+class Rating(db.Model):
+    rating_id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.SmallInteger, nullable=False)
+    business_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    # user = db.relationship('User', backref='users', lazy=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
+    # post = db.relationship('Post', backref='post_id', lazy=True)
+
+    def __init__(self, rating, business_id, post_id):
+        self.rating = rating
+        self.business_id = business_id
+        self.post_id = post_id
+
+    def __repr__(self):
+        return f'{self.rating}-star rating created for {self.business_id} by {self.post_id}'
