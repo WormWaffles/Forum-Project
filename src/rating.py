@@ -1,4 +1,4 @@
-from src.models import db, Rating, User
+from src.models import db, Rating
 from sqlalchemy.sql import func
 
 class Ratings:
