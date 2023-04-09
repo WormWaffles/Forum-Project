@@ -9,7 +9,10 @@ class Ratings:
     
     def get_rating_average(self, user_id):
         '''Returns average rating'''
-        average = round(db.session.query(func.avg(Rating.rating)).filter(Rating.business_id == user_id).scalar())
+        if db.session.query(func.avg(Rating.rating)).filter(Rating.business_id == user_id).scalar() is None:
+            average = 0
+        else:
+            average = round(db.session.query(func.avg(Rating.rating)).filter(Rating.business_id == user_id).scalar())
         return average
     
     def create_rating(self, rating, user_id, post_id):
