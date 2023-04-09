@@ -1,11 +1,11 @@
 .profile-links a:link {
     text-decoration: none;
-    color:#57A1BD;
+    color:var(--primary);
   }
   
 .profile-links a:visited {
     text-decoration: none;
-    color:#57A1BD;
+    color:var(--primary);
   }
 
 .banner img{
@@ -58,7 +58,7 @@
 
 .profile-links {
     font-family: Poppins, sans-serif;
-    color: #57A1BD;
+    color: var(--primary);
     grid-area: links;
     justify-self: space-evenly; 
 }
@@ -66,7 +66,7 @@
 .profile-name {
     font-family: Poppins, sans-serif;
     font-weight: 500;
-    color: #57A1BD;
+    color: var(--primary);
     margin-left: 3em;
     grid-area: name;
 }
@@ -100,7 +100,7 @@
 
 #follow-btn {
     font-family: Poppins, sans-serif;
-    background-color: #57A1BD !important;
+    background-color: var(--primary) !important;
     color: white;
     margin-left: 3em;
 }
