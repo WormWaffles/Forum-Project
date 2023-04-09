@@ -12,7 +12,7 @@ h2 {
     margin-top: 0;
     color: #7F7F7F;
     /* font-weight: bold; */
-    font: normal normal 900 45px/68px Avenir;
+    font: normal normal 900 45px/68px Poppins;
 }
 
 form {
@@ -109,7 +109,7 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font: normal normal normal 14px/19px Avenir;
+    font: normal normal normal 14px/19px Poppins;
     color: #7F7F7F;
 }
 
