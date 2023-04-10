@@ -4,12 +4,30 @@
 <!-- business body -->
 
 <body>
-    <section class="">
-        <div class="container">
-            <div class="secondary-container">
-                <div class="header">
-                    <div class="banner">
-                        <img src="/static/images/sample_banner1.jpg" alt="banner">
+  <section class="">
+    <div class="container">
+        <div class="secondary-container">
+            <div class="header">
+                <div class="banner">
+                    <img src="/static/images/sample_banner1.jpg" alt="banner">
+                </div>
+                <div class="z-2 rounded-3 avatar">
+                    <img src="/static/images/barhops_logo.png" alt="">
+                </div>
+                <div class="bottom">
+                    <div class="links">
+                        <a href="/account">REVIEWS</a>
+                        <a href="/account">EVENTS</a>
+                        <span id="rating">
+                            {% for r in range(rating) %}
+                            <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
+                            {% endfor %}
+                            {% for r in range(5-rating) %}
+                            <img src="/static/images/empty-star_blue.png" alt="star" width="25" height="25">
+                            {% endfor %}
+                        </span>
+                        <a href="/account">FEATURES</a>
+                        <a href="/account">MENU</a>
                     </div>
                     <div class="z-2 rounded-3 avatar">
                         <img src="/static/images/barhops_logo.png" alt="">
