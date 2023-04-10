@@ -4,53 +4,55 @@
 <!-- user body -->
 
 <body>
-  <section class="">
-    <div class="container">
-        <div class="secondary-container">
-            <div class="header">
-                <div class="banner">
-                    <img src="/static/images/sample_banner2.png" alt="banner">
-                </div>
-                <div class="z-2 avatar">
-                    <img src="/static/images/sample_avatar1.jpg" alt="">
-                </div>
-                <div class="bottom">
-                    <div class="mid-container">
-                        <div class="profile-name">
-                            <h3 class="">{{ g.user.username }} </h3>
-                        </div>
-                        <div class="profile-links">
-                            <a href="/account">122 Followers</a>
-                            <button id="follow-btn" class="btn" type="submit">+ Follow</button>
-                        </div>
+    <section class="">
+        <div class="container">
+            <div class="secondary-container">
+                <div class="header">
+                    <div class="banner">
+                        <img src="/static/images/sample_banner2.png" alt="banner">
                     </div>
-                    
-                    <div class="description">
-                        {% if g.user.about_me %}
+                    <div class="z-2 avatar">
+                        <img src="/static/images/sample_avatar1.jpg" alt="">
+                    </div>
+                    <div class="bottom">
+                        <div class="mid-container">
+                            <div class="profile-name">
+                                <h3 class="">{{ g.user.username }} </h3>
+                            </div>
+                            <div class="profile-links">
+                                <a href="/account">122 Followers</a>
+                                <button id="follow-btn" class="btn" type="submit">+ Follow</button>
+                            </div>
+                        </div>
+
+                        <div class="description">
+                            {% if g.user.about_me %}
                             {{ g.user.about_me }}
-                        {% else %}
-                            <p> Hi there, my name is {{ g.user.username }} and I’m a freelance writer and avid traveler. I love exploring new places and immersing 
-                                myself in different cultures, which often inspires my writing. When I’m not traveling, I enjoy spending time outdoors hiking, 
-                                practicing yoga, or simply enjoying a good book in the park. I’m also a bit of a foodie and love trying new restaurants and 
-                                experimenting with new recipes in the kitchen. Overall, I’m a curious and adventurous person who enjoys experiencing all that 
+                            {% else %}
+                            <p> Hi there, my name is {{ g.user.username }} and I’m a freelance writer and avid traveler.
+                                I love exploring new places and immersing
+                                myself in different cultures, which often inspires my writing. When I’m not traveling, I
+                                enjoy spending time outdoors hiking,
+                                practicing yoga, or simply enjoying a good book in the park. I’m also a bit of a foodie
+                                and love trying new restaurants and
+                                experimenting with new recipes in the kitchen. Overall, I’m a curious and adventurous
+                                person who enjoys experiencing all that
                                 life has to offer.</p>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="posts">                
-                <form action="/logout">
-                    <button class="btn btn-danger" type="submit">Logout</button>
-                </form>
-                <form action="/account/edit">
-                    <button class="btn btn-warning" type="submit">Edit Account</button>
-                </form>
+                <div class="posts">
+                    <form action="/logout">
+                        <button class="btn btn-danger" type="submit">Logout</button>
+                    </form>
+                    <form action="/account/edit">
+                        <button class="btn btn-warning" type="submit">Edit Account</button>
+                    </form>
+                </div>
             </div>
         </div>
-        
-
-    </div>
-  </section>
+    </section>
 </body>
 
 {% endblock %}
