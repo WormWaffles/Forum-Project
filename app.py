@@ -82,19 +82,19 @@ def index():
 
 @app.route('/feed')
 def feed():
-    if g.user:
-        return render_template('index.html', logged_in=logged_in(), feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
-    return render_template('feed.html', logged_in=False, feed="active")
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('index.html', logged_in=logged_in(), feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
 # account page
 @app.route('/account')
 def account():
     star = 0;
-    if g.user.is_business:
-        star = rating.get_rating_average(g.user.user_id)
     if not g.user:
         return redirect(url_for('login'))
+    if g.user.is_business:
+        star = rating.get_rating_average(g.user.user_id)
     return render_template('account.html', account="active", rating=star)
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -203,10 +203,10 @@ def register():
 # create post
 @app.route('/create', methods=['GET', 'POST'])
 def create():
+    if not g.user:
+        return redirect(url_for('login'))
     if request.method == 'GET':
-        if g.user:
-            return render_template('create.html')
-        return redirect('/login')
+        return render_template('create.html')
     else:
         title = request.form.get('title')
         content = request.form.get('content')
@@ -214,10 +214,7 @@ def create():
         if not file:
             file = ""
         # get user id
-        if g.user:
-            user_id = session['user_id']
-        else:
-            return redirect('/error')
+        user_id = session['user_id']
         post_feed.create_post(user_id, title, content, 0)
         return redirect('/feed')
     
@@ -225,6 +222,8 @@ def create():
 # delete post
 @app.get('/feed/delete/<post_id>')
 def delete_post(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
     post_feed.delete_post(post_id)
@@ -264,6 +263,8 @@ def remove_like(post_id):
 # edit post
 @app.route('/feed/edit/<post_id>', methods=['GET', 'POST'])
 def edit(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if request.method == 'GET':
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
@@ -283,6 +284,8 @@ def edit(post_id):
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
         return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
@@ -291,10 +294,15 @@ def view_post(post_id):
 # view user
 @app.get('/user/<user_id>')
 def view_user(user_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    return render_template('account.html', user=users.get_user_by_id(user_id))
+    user = users.get_user_by_id(user_id)
+    if user:
+        return render_template('account.html', user=user)
+    return redirect('/error')
 
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
@@ -341,9 +349,8 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    if g.user.is_business:
-        return render_template('error.html', logged_in=logged_in(), e=e), 404
     return render_template('error.html', logged_in=logged_in(), e=e), 404
+
 
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')

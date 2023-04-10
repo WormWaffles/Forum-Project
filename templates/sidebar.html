@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/static/styles/sidebar.css">
 
 <div class="sidebar-container">
-    <div class="sidebar-content"> 
+    <div class="sidebar-content">
         <div class="sidebar-header">
             <h1 class="sidebar-title">FEED</h1>
         </div>
@@ -9,34 +9,35 @@
         <div class="search">
             <span class="">
                 <form id="search" class="d-flex input-group" role="search">
-                    <input class="form-control transparent-input shadow-none" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control transparent-input shadow-none" type="search" placeholder="Search"
+                        aria-label="Search">
                     <button class="btn btn-search" type="submit"><span class="bi-search icon-blue"></span></button>
                 </form>
             </span>
         </div>
-            <div class="sidebar-item">                
-                <form action="/feed">
-                    <button class="btn btn-primary" type="submit">Near Me</button>
-                </form>
-                <form action="/feed">
-                    <button class="btn btn-primary" type="submit">Friends</button>
-                </form>
-                <form action="/feed">
-                    <button class="btn btn-primary" type="submit">Venues</button>
-                </form>
-                <form action="/feed">
-                    <button class="btn btn-primary" type="submit">Events</button>
-                </form>
-                <div class="location">
-                    <img src="/static/images/sample-map.png">
-                </div>
-                <div class="post">
-                    <form action="/create" method="get">
-                        <div class="get_create">
-                            <button class="btn btn-post" type="submit">Create Post</button>
-                        </div>
-                    </form>
-                </div>
+        <div class="sidebar-item">
+            <form action="/feed">
+                <button class="btn btn-primary" type="submit">Near Me</button>
+            </form>
+            <form action="/feed">
+                <button class="btn btn-primary" type="submit">Friends</button>
+            </form>
+            <form action="/feed">
+                <button class="btn btn-primary" type="submit">Venues</button>
+            </form>
+            <form action="/feed">
+                <button class="btn btn-primary" type="submit">Events</button>
+            </form>
+            <div class="location">
+                <img src="/static/images/sample-map.png">
             </div>
+            <div class="post">
+                <form action="/create" method="get">
+                    <div class="get_create">
+                        <button class="btn btn-post" type="submit">Create Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
