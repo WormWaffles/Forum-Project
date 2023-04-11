@@ -1,7 +1,7 @@
 import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for
 import requests
-from src.post_feed import post_feed # NOTE: we have these two new variables
+from src.post_feed import post_feed
 from src.users import users
 from src.likes import likes
 from src.rating import rating
