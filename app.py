@@ -95,7 +95,7 @@ def account():
         star = rating.get_rating_average(g.user.user_id)
     if not g.user:
         return redirect(url_for('login'))
-    Follows.get_followers_num(g.user.user_id)
+    followers = Follows.get_followers_num(g.user.user_id)
     return render_template('account.html', account="active", rating=star,followers=followers)
 #data base should complete
 #need to list usernames for whatever user profile the "followers" button is clicked at the moment it only displays the followers ids
@@ -306,7 +306,8 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    return render_template('account.html', user=users.get_user_by_id(user_id))
+    followers = Follows.get_followers_num(user_id)
+    return render_template('account.html', user=users.get_user_by_id(user_id),followers=followers)
 
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
