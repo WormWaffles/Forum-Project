@@ -23,10 +23,12 @@
 .container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-gap: 5em;
+    grid-gap: 1em;
+
     padding-left: 20px;
     padding-top: 30px;
     padding-bottom: 65px;
+    
     background-color: white;
     border-right: 1px solid #ccc;
     border-left: 1px solid #ccc;
