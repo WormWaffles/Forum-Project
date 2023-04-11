@@ -6,6 +6,7 @@
 
 <body>
   <div class="card">
+    <!-- title of card -->
     <h2>Create an Account</h2>
     <div class="social-login">
       <span>Create an account using your social networks</span>
@@ -14,6 +15,7 @@
         <a href="twitter.com"><img class="twitter" src="/static/images/twitter_icon_1.webp" alt="facebook" width="40"
             height="40"></a>
       </div>
+      <!-- weird -- or -- with lines -->
       <div class="or-line">
         <span class="or-span">
           or
@@ -27,6 +29,7 @@
         minlength="6" required>
       <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
       <p class="privacy">By creating an account, you agree to our <a href="/policy">Privacy Policy.</a></p>
+      <!-- error message handler -->
       <div class="message">
         {% if message %}
         {% if message == "email" %}
@@ -38,6 +41,7 @@
       </div>
       <button type="submit" class="signup-btn">Sign Up</button>
     </form>
+    <!-- link to business register -->
     <a href="/business/register" class="business-link">Are you a business?</a>
   </div>
 </body>
