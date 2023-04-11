@@ -30,17 +30,16 @@ db_name = os.getenv('DB_NAME')
 app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 app.config['SQLALCHEMY_ECHO'] = False # set to True to see SQL queries
 
 db.init_app(app)
 
 # vars
 app.secret_key='SecretKey'
-GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 # Google Auth
+GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
@@ -49,7 +48,7 @@ flow = Flow.from_client_secrets_file(
     redirect_uri='http://127.0.0.1:5000/callback'
 )
 
-# this can be put somewhere else i think
+# Check if user is logged in
 def logged_in():
     '''Checks if user is logged in'''
     if 'user_id' in session:
@@ -76,7 +75,7 @@ def before_request():
 @app.route('/')
 def index():
     if g.user:
-        return render_template('index.html', logged_in=logged_in(), home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
     return render_template('index.html', logged_in=False, home="active")
 
 
@@ -84,13 +83,13 @@ def index():
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=logged_in(), feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
 # account page
 @app.route('/account')
 def account():
-    star = 0;
+    star = 0
     if not g.user:
         return redirect(url_for('login'))
     if g.user.is_business:
