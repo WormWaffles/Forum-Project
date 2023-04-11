@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False # set to True to see SQL queries
 
 db.init_app(app)
 

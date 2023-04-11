@@ -89,13 +89,9 @@
 <script>
     for (let settingsIcon of document.querySelectorAll('img[alt^="Settings"]')) {
         let the_id = settingsIcon.getAttribute('id')
-        console.log(the_id)
         const settingsOptions = document.querySelector('div[for^="so' + the_id + '"]');
 
-        console.log(settingsOptions)
-
         settingsIcon.addEventListener('click', function () {
-            console.log('clicked' + the_id)
             settingsOptions.style.display = 'block';
         });
 
