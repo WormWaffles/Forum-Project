@@ -142,6 +142,8 @@ def login():
         session.pop('user_id',None)
         email = request.form['email']
         password = request.form['password']
+        if password is None:
+            abort(400)
         user = users.get_user_by_email(email)
         if user and user.password == password:
             session['user_id'] = user.user_id
@@ -376,9 +378,8 @@ def callback():
         session['user_id'] = existing_user.user_id
         return redirect(url_for('account'))
     else:
-        password = "google"
         email = id_info.get("email")
-        new_user = users.create_user(username, email, password)
+        new_user = users.create_user(username, email, None)
         session['user_id'] = new_user.user_id
 
     return redirect(url_for('account'))
