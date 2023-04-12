@@ -1,5 +1,5 @@
 import pathlib
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for
+from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
@@ -14,6 +14,7 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests
 from pip._vendor import cachecontrol
+import secrets
 
 
 app = Flask(__name__)
@@ -49,6 +50,12 @@ flow = Flow.from_client_secrets_file(
     redirect_uri='http://127.0.0.1:5000/callback'
 )
 
+# barhive favicon
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                          'favicon.ico',mimetype='image/vnd.microsoft.icon')
+
 # this can be put somewhere else i think
 def logged_in():
     '''Checks if user is logged in'''
@@ -63,6 +70,7 @@ def before_request():
     '''Checks if user is logged in'''
     # post_feed.clear()
     # likes.clear()
+    # users.clear()
     g.user = None
     if 'user_id' in session:
         user = users.get_user_by_id(session['user_id'])
@@ -226,8 +234,6 @@ def create():
         # get user id
         if g.user:
             user_id = session['user_id']
-        elif g.business:
-            user_id = session['business_id']
         else:
             return redirect('/error')
         post_feed.create_post(user_id, title, content, 0)
@@ -382,11 +388,26 @@ def callback():
         usernames = username.split(" ")
         username = usernames[len(usernames) - 1].replace("(", "")
         username = username.replace(")", "")
+    
+    # check if user exists
+    name_existing_user = users.get_user_by_username(username)
+    email_existing_user = users.get_user_by_email(id_info.get("email"))
+    if name_existing_user or email_existing_user:
+        if name_existing_user:
+            message = 'Username already exists.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
+
+        if email_existing_user:
+            message = 'email'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
+
     email = id_info.get("email")
-    info = {'username': username, 'email': email}
-    print(username)
-    print(email)
-    return render_template('register.html', logged_in=logged_in(), register="active", info=info)
+    password = secrets.token_urlsafe(8)
+
+    new_user = users.create_user(username, email, password)
+    session['user_id'] = new_user.user_id
+
+    return redirect(url_for('account'))
 
 @app.route('/googlelogin')
 def googlelogin():
