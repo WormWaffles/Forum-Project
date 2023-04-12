@@ -1,5 +1,5 @@
 import pathlib
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for
+from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
@@ -47,6 +47,12 @@ flow = Flow.from_client_secrets_file(
     scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'openid'],
     redirect_uri='http://127.0.0.1:5000/callback'
 )
+
+# barhive favicon
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                          'favicon.ico',mimetype='image/vnd.microsoft.icon')
 
 # this can be put somewhere else i think
 def logged_in():
