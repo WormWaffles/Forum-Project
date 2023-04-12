@@ -1,10 +1,11 @@
 import pathlib
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for
+from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed
 from src.users import users
 from src.likes import likes
 from src.rating import rating
+from src.user_follow import Follows
 from src.models import db, User, Rating
 from dotenv import load_dotenv
 import os
@@ -13,7 +14,6 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests
 from pip._vendor import cachecontrol
-import secrets
 
 
 app = Flask(__name__)
@@ -142,6 +142,8 @@ def login():
         session.pop('user_id',None)
         email = request.form['email']
         password = request.form['password']
+        if password is None:
+            abort(400)
         user = users.get_user_by_email(email)
         if user and user.password == password:
             session['user_id'] = user.user_id
@@ -298,6 +300,7 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
+
     user = users.get_user_by_id(user_id)
     if user:
         return render_template('account.html', user=user)
@@ -354,6 +357,7 @@ def page_not_found(e):
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')
 def callback():
+    print("callback")
     flow.fetch_token(authorization_response=request.url)
 
     if not session["state"] == request.args["state"]:
@@ -377,27 +381,20 @@ def callback():
         username = username.replace(")", "")
     
     # check if user exists
-    name_existing_user = users.get_user_by_username(username)
-    email_existing_user = users.get_user_by_email(id_info.get("email"))
-    if name_existing_user or email_existing_user:
-        if name_existing_user:
-            message = 'Username already exists.'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
-
-        if email_existing_user:
-            message = 'email'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
-
-    email = id_info.get("email")
-    password = secrets.token_urlsafe(8)
-
-    new_user = users.create_user(username, email, password)
-    session['user_id'] = new_user.user_id
+    existing_user = users.get_user_by_email(id_info.get("email"))
+    if existing_user:
+        session['user_id'] = existing_user.user_id
+        return redirect(url_for('account'))
+    else:
+        email = id_info.get("email")
+        new_user = users.create_user(username, email, None)
+        session['user_id'] = new_user.user_id
 
     return redirect(url_for('account'))
 
 @app.route('/googlelogin')
 def googlelogin():
+    print("googlelogin")
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
