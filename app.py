@@ -5,6 +5,7 @@ from src.post_feed import post_feed # NOTE: we have these two new variables
 from src.users import users
 from src.likes import likes
 from src.rating import rating
+from src.user_follow import Follows
 from src.models import db, User, Rating
 from dotenv import load_dotenv
 import os
@@ -97,11 +98,22 @@ def feed():
 @app.route('/account')
 def account():
     star = 0;
+    followers = 0;
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('account.html', account="active", rating=star)
+    followers = Follows.get_followers_num(g.user.user_id)
+    return render_template('account.html', account="active", rating=star,followers=followers)
+#data base should complete
+#need to list usernames for whatever user profile the "followers" button is clicked at the moment it only displays the followers ids
+#need to implement and get the follow button working
+#need to style the table that shows followers
+#fix routing so that clicking on someone elses followers tab takes you to their followers and not the users
+@app.route('/account/followers')
+def account_followers():
+    this_user = session['user_id']
+    return render_template('followers.html', followers_list=Follows.get_all_followers(this_user))
 
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
@@ -300,7 +312,8 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    return render_template('account.html', user=users.get_user_by_id(user_id))
+    followers = Follows.get_followers_num(user_id)
+    return render_template('account.html', user=users.get_user_by_id(user_id),followers=followers)
 
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])

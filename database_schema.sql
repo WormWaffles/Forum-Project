@@ -52,6 +52,9 @@ CREATE TABLE rating (
     post_id INTEGER NOT NULL REFERENCES post(post_id)
 );
 
-
+CREATE TABLE follower (
+    follower_user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    followed_user_id INTEGER NOT NULL REFERENCES "user"(user_id)
+);
 -- post has poster_id which connects to user, business, or admin
 -- rating has business_id which connects to user and post_id which connects to post and then to the author
