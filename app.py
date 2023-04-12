@@ -1,7 +1,7 @@
 import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
-from src.post_feed import post_feed # NOTE: we have these two new variables
+from src.post_feed import post_feed
 from src.users import users
 from src.likes import likes
 from src.rating import rating
@@ -30,17 +30,16 @@ db_name = os.getenv('DB_NAME')
 app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-app.config['SQLALCHEMY_ECHO'] = False
+app.config['SQLALCHEMY_ECHO'] = False # set to True to see SQL queries
 
 db.init_app(app)
 
 # vars
 app.secret_key='SecretKey'
-GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 # Google Auth
+GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
@@ -49,13 +48,7 @@ flow = Flow.from_client_secrets_file(
     redirect_uri='http://127.0.0.1:5000/callback'
 )
 
-# barhive favicon
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                          'favicon.ico',mimetype='image/vnd.microsoft.icon')
-
-# this can be put somewhere else i think
+# Check if user is logged in
 def logged_in():
     '''Checks if user is logged in'''
     if 'user_id' in session:
@@ -82,37 +75,26 @@ def before_request():
 @app.route('/')
 def index():
     if g.user:
-        return render_template('index.html', logged_in=logged_in(), home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
+        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
     return render_template('index.html', logged_in=False, home="active")
 
 
 @app.route('/feed')
 def feed():
-    if g.user:
-        return render_template('index.html', logged_in=logged_in(), feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
-    return render_template('feed.html', logged_in=False, feed="active")
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
 # account page
 @app.route('/account')
 def account():
-    star = 0;
-    followers = 0;
-    if g.user.is_business:
-        star = rating.get_rating_average(g.user.user_id)
+    star = 0
     if not g.user:
         return redirect(url_for('login'))
-    followers = Follows.get_followers_num(g.user.user_id)
-    return render_template('account.html', account="active", rating=star,followers=followers)
-#data base should complete
-#need to list usernames for whatever user profile the "followers" button is clicked at the moment it only displays the followers ids
-#need to implement and get the follow button working
-#need to style the table that shows followers
-#fix routing so that clicking on someone elses followers tab takes you to their followers and not the users
-@app.route('/account/followers')
-def account_followers():
-    this_user = session['user_id']
-    return render_template('followers.html', followers_list=Follows.get_all_followers(this_user))
+    if g.user.is_business:
+        star = rating.get_rating_average(g.user.user_id)
+    return render_template('account.html', account="active", rating=star)
 
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
@@ -222,10 +204,10 @@ def register():
 # create post
 @app.route('/create', methods=['GET', 'POST'])
 def create():
+    if not g.user:
+        return redirect(url_for('login'))
     if request.method == 'GET':
-        if g.user:
-            return render_template('create.html')
-        return redirect('/login')
+        return render_template('create.html')
     else:
         title = request.form.get('title')
         content = request.form.get('content')
@@ -233,10 +215,7 @@ def create():
         if not file:
             file = ""
         # get user id
-        if g.user:
-            user_id = session['user_id']
-        else:
-            return redirect('/error')
+        user_id = session['user_id']
         post_feed.create_post(user_id, title, content, 0)
         return redirect('/feed')
     
@@ -244,6 +223,8 @@ def create():
 # delete post
 @app.get('/feed/delete/<post_id>')
 def delete_post(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
     post_feed.delete_post(post_id)
@@ -283,6 +264,8 @@ def remove_like(post_id):
 # edit post
 @app.route('/feed/edit/<post_id>', methods=['GET', 'POST'])
 def edit(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if request.method == 'GET':
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
@@ -302,6 +285,8 @@ def edit(post_id):
 #  view post
 @app.get('/feed/<post_id>')
 def view_post(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
         return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
@@ -310,11 +295,16 @@ def view_post(post_id):
 # view user
 @app.get('/user/<user_id>')
 def view_user(user_id):
+    if not g.user:
+        return redirect(url_for('login'))
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-    followers = Follows.get_followers_num(user_id)
-    return render_template('account.html', user=users.get_user_by_id(user_id),followers=followers)
+
+    user = users.get_user_by_id(user_id)
+    if user:
+        return render_template('account.html', user=user)
+    return redirect('/error')
 
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
@@ -361,9 +351,8 @@ def business():
 # error page
 @app.errorhandler(404)
 def page_not_found(e):
-    if g.user.is_business:
-        return render_template('error.html', logged_in=logged_in(), e=e), 404
     return render_template('error.html', logged_in=logged_in(), e=e), 404
+
 
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')

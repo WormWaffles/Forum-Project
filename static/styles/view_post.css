@@ -12,7 +12,6 @@
 
 .post-card-container {
     display: flex;
-    /* justify-content: end; */
     padding: 5px;
 }
 
@@ -22,8 +21,6 @@
 }
 
 .pfp {
-    /* width: 100px;
-    height: 100px; */
     border-radius: 50%;
 }
 

@@ -1,28 +1,28 @@
 .links a:link {
     text-decoration: none;
-    color:#57A1BD;
-  }
-  
+    color: #57A1BD;
+}
+
 .links a:visited {
     text-decoration: none;
-    color:#57A1BD;
-  }
+    color: #57A1BD;
+}
 
-.banner img{
+.banner img {
     width: 100%;
 }
 
 .banner {
     height: 300px;
-    object-fit:cover; 
-    object-position: bottom;   
-    overflow:hidden;
+    object-fit: cover;
+    object-position: bottom;
+    overflow: hidden;
 }
 
 .avatar {
-    object-fit:cover; 
-    overflow:hidden;
-    object-position: center;  
+    object-fit: cover;
+    overflow: hidden;
+    object-position: center;
     width: 200px;
     height: 200px;
     border: 2px solid white;
@@ -34,7 +34,7 @@
     z-index: 2;
 }
 
-.avatar img{
+.avatar img {
     width: 100%;
     height: 100%;
 }
@@ -83,7 +83,7 @@
     text-align: center;
 }
 
-.posts form{
+.posts form {
     font-family: Poppins, sans-serif;
     padding-top: 1.5em;
     display: inline-block;
@@ -94,5 +94,3 @@
     background-color: #57A1BD !important;
     color: white;
 }
-
-

@@ -11,13 +11,13 @@
 
 .sidebar-list a:link {
     text-decoration: none;
-    color:#57A1BD;
-  }
-  
+    color: #57A1BD;
+}
+
 .sidebar-list a:visited {
     text-decoration: none;
-    color:#57A1BD;
-  }
+    color: #57A1BD;
+}
 
 
 .sidebar-container {
@@ -29,13 +29,13 @@
     padding: 2em;
 }
 
-.sidebar-header{
+.sidebar-header {
     font-family: Poppins, sans-serif;
     font-weight: 500;
     color: #57A1BD;
 }
 
-.sidebar-header h1{
+.sidebar-header h1 {
     margin-bottom: 0;
 }
 
@@ -44,16 +44,16 @@
     margin: 1.5em 0;
 }
 
-.search input.transparent-input{
-    background-color:rgba(255, 255, 255, 0) !important;
+.search input.transparent-input {
+    background-color: rgba(255, 255, 255, 0) !important;
     color: rgba(87, 162, 189) !important;
-    border-width: 1px 0px 1px 1px  !important;
+    border-width: 1px 0px 1px 1px !important;
     border-color: #57A1BD !important;
 }
 
-.search input.transparent-input::placeholder { 
+.search input.transparent-input::placeholder {
     color: rgba(87, 162, 189, .5) !important;
-    opacity: 1; 
+    opacity: 1;
     font-size: 14px;
 }
 
@@ -69,12 +69,14 @@
     font-family: Poppins, sans-serif;
 }
 
-.btn-primary, .btn-primary:visited {
+.btn-primary,
+.btn-primary:visited {
     background-color: #57A1BD !important;
     border-color: #57A1BD !important;
 }
 
-.btn-primary:hover, .btn-primary:active {
+.btn-primary:hover,
+.btn-primary:active {
     background-color: #58adcb !important;
     border-color: #58adcb !important;
 }
@@ -83,7 +85,7 @@
     border-bottom: 2px solid #57A1BD;
 }
 
-.btn-post{
+.btn-post {
     background-color: rgba(255, 255, 255, 0);
     border-color: #57A1BD;
     color: #57A1BD;
@@ -91,7 +93,8 @@
     font-family: Poppins, sans-serif;
 }
 
-.btn-post:hover, .btn-post:active {
+.btn-post:hover,
+.btn-post:active {
     background-color: #23c3fc1c !important;
     border-color: #57A1BD !important;
     color: #57A1BD;
@@ -99,9 +102,10 @@
 }
 
 .btn-search {
-    border-width: 1px 1px 1px 0  !important;
+    border-width: 1px 1px 1px 0 !important;
     border-color: #57A1BD !important;
 }
+
 .btn-search:hover {
     background-color: #23c3fc1c !important;
 }
@@ -110,7 +114,7 @@
     color: #57A1BD;
 }
 
-.location img{
+.location img {
     width: 100%;
     margin: 1em 0;
     cursor: pointer;
