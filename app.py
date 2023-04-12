@@ -13,7 +13,6 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests
 from pip._vendor import cachecontrol
-import secrets
 
 
 app = Flask(__name__)
@@ -31,7 +30,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 
 db.init_app(app)
 
@@ -348,6 +347,7 @@ def page_not_found(e):
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')
 def callback():
+    print("callback")
     flow.fetch_token(authorization_response=request.url)
 
     if not session["state"] == request.args["state"]:
@@ -371,27 +371,21 @@ def callback():
         username = username.replace(")", "")
     
     # check if user exists
-    name_existing_user = users.get_user_by_username(username)
-    email_existing_user = users.get_user_by_email(id_info.get("email"))
-    if name_existing_user or email_existing_user:
-        if name_existing_user:
-            message = 'Username already exists.'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
-
-        if email_existing_user:
-            message = 'email'
-            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info={})
-
-    email = id_info.get("email")
-    password = secrets.token_urlsafe(8)
-
-    new_user = users.create_user(username, email, password)
-    session['user_id'] = new_user.user_id
+    existing_user = users.get_user_by_email(id_info.get("email"))
+    if existing_user:
+        session['user_id'] = existing_user.user_id
+        return redirect(url_for('account'))
+    else:
+        password = "google"
+        email = id_info.get("email")
+        new_user = users.create_user(username, email, password)
+        session['user_id'] = new_user.user_id
 
     return redirect(url_for('account'))
 
 @app.route('/googlelogin')
 def googlelogin():
+    print("googlelogin")
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
