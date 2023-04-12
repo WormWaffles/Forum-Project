@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS ratings;
 CREATE TABLE "user" (
     user_id SERIAL NOT NULL,
     username VARCHAR(80) NOT NULL,
-    password VARCHAR(80) NOT NULL,
+    password VARCHAR(80),
     first_name VARCHAR(80),
     last_name VARCHAR(80),
     email VARCHAR(80) NOT NULL,
