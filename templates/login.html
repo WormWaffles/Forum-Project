@@ -1,6 +1,7 @@
 {% extends '_layout.html' %}
 
 {% block body %}
+
 <!-- login page -->
 <link rel="stylesheet" href="/static/styles/login.css">
 
@@ -10,10 +11,11 @@
       <!-- title -->
       <h2>Login to Your Account</h2>
       <div class="social-login">
-        <span>Create an account using your social networks</span>
+        <span>Login to an account using your social networks</span>
         <!-- buttons for login API's -->
         <div class="social-buttons">
-          <a href="/googlelogin"><img class="google" src="/static/images/google_icon_1.webp" alt="google" width="55" height="55"></a>
+          <a href="/googlelogin"><img class="google" src="/static/images/google_icon_1.webp" alt="google" width="55"
+              height="55"></a>
           <a href="twitter.com"><img class="twitter" src="/static/images/twitter_icon_1.webp" alt="facebook" width="40"
               height="40"></a>
         </div>
@@ -30,7 +32,8 @@
         <!-- error message handler -->
         <div class="message">
           {% if message %}
-            <p class="message-m" style="color: red;">*Error: {{ message }} Click here to <a href="/register">Sign Up</a></p>
+          <p class="message-m" style="color: red;">*Error: {{ message }} Click here to <a href="/register">Sign Up</a>
+          </p>
           {% endif %}
         </div>
         <button type="submit" class="login-btn">Login</button>

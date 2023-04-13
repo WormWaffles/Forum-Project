@@ -1,5 +1,7 @@
 {% extends '_layout.html' %}
+
 {% block body %}
+
 <!-- edit post title content or file -->
 <link rel="stylesheet" href="/static/styles/settings.css">
 
@@ -9,82 +11,51 @@
 {% if message %}
 <p class="message" style="color: red;">Error: {{ message }}</p>
 {% endif %}
-<div class="container">
-    <div class="d-flex flex-column"> <!--deleted 'flex-column'-->
-        <form action="/account/edit" method="post" enctype="multipart/form-data">
 
-            <!--image of user-->
-            <div class="z-2 avatar">
-                <img src="/static/images/sample_avatar1.jpg" alt="avatar">
-            </div>
-
-            <!-- input for profile picture -->
-            <div class="mb-3">
-                <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
+<div class="d-flex flex-column">
+    <form action="/account/edit" method="post" enctype="multipart/form-data">
+        <!-- input for profile picture -->
+        <div class="mb-3">
+            <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
                 value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
-            </div>
-
-            <!-- input for username -->
-            <div class="mb-3">
-                <label for="username">Username</label>
-                <input class="form-control" type="text" name="username" placeholder="New Username" value="{{ g.user.username }}">
-            </div>
-
-            <!-- input for first name -->
-            <div class="mb-3">
-                <lable for="first_name">First Name</lable>
-                <input class="form-control" type="text" name="first_name" placeholder="Change First name"
+        </div>
+        <!-- input for username -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="username" placeholder="Username"
+                value="{{ g.user.username }}">
+        </div>
+        <!-- input for first name -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="first_name" placeholder="First name"
                 value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
-            </div>
-
             <!-- input for last name -->
-            <div class="mb-3">
-                <lable for="last_name">Last Name</lable>
-                <input class="form-control" type="text" name="last_name" placeholder="Change Last name"
+            <input class="form-control" type="text" name="last_name" placeholder="Last name"
                 value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
-            </div>
-
-            <!-- input for email -->
-            <div class="mb-3">
-                <lable for="email">Email</lable>
-                <input class="form-control" type="text" name="email" placeholder="Update Email"
+        </div>
+        <!-- input for email -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="email" placeholder="Email"
                 value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
-            </div>
-
-            <!-- input for password -->
-            <div class="mb-3">
-                <lable for="new_password">New Password</lable>
-                <input class="form-control" type="text" name="password" placeholder="Enter New Password" minlength="6">
-            </div>
-
+        </div>
+        <!-- input for password -->
+        <div class="mb-3">
+            <input class="form-control" type="text" name="password" placeholder="Password" minlength="6">
             <!-- input for confirm password -->
-            <div class="mb-3">
-                <lable for="re-type_password">Re-Type Password</lable>
-                <input class="form-control" type="text" name="confirm_password" placeholder="Confirm New Password">
-            </div>
-            
-            <!-- text area for bio -->
-            <div class="mb-3">
-                <lable for="about_me">About Me</lable>
-                <textarea class="form-control" name="about_me"
-                placeholder="Enter New Info About me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
-            </div>
-
-            <!-- banner -->
-            <div class="mb-3">
-                <div class="banner">
-                    <img src="/static/images/sample_banner2.png" alt="banner">
-                </div>
-            </div>
-
-            <!-- input for banner picture -->
-            <div class="mb-3">
-                <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
+            <input class="form-control" type="text" name="confirm_password" placeholder="Confirm Password">
+        </div>
+        <!-- text area for bio -->
+        <div class="mb-3">
+            <textarea class="form-control" name="about_me"
+                placeholder="About me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
+        </div>
+        <!-- input for banner picture -->
+        <div>
+            <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
                 value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
-            </div>
+        </div>
+        <!-- private account check box -->
+        <div class="mb-3">
 
-            <!-- private account check box -->
-            
             <input type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
             <label for="private">Set profile to private</label>
             
@@ -98,4 +69,5 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
