@@ -1,64 +1,112 @@
-.page-title {
-    text-align: center;
-    padding-top: 15px;
+.page {
+    background-color: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px 8rem;
 }
 
-.mb-3 {
+.username {
+    color: #57A1BD;
+    font: normal normal 900 24px/33px Avenir;
+    padding-top: 10px;
+}
+
+.input_username {
     display: grid;
-    /*grid-template-columns: auto auto auto;*/
-    gap: 10px;
-    padding: 10px;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
 }
 
-.form-control {
-    width: 70%;
+.input_username input {
     padding: 10px;
-    /*margin-top: 10px;*/
+    margin-top: 5px;
+    margin-bottom: 5px;
     border-radius: 8px;
     border: 1px solid #A6CAD8;
     background-color: #A6CAD84B;
     font-size: 14px;
 }
 
-.container {
+.input_name {
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-gap: 1em;
-
-    padding-left: 20px;
-    padding-top: 30px;
-    padding-bottom: 65px;
-    
-    background-color: white;
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
 }
 
-.avatar img{
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    padding-bottom: 25px;
+.input_name label {
+    width: 48%;
 }
 
-.image-container {
-    width: 150px;
-    height: 150px;
-}
-  
-.image-container img {
-    width:100%;
+.input_name input {
+    width: 48%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
 }
 
-.banner img{
-    width: 100%;
-    height: auto;
-    object-fit:cover; 
-    object-position: bottom;   
-    overflow:hidden;
-    border-radius: 5px;
+.fname {
+    margin-right: 17px;
+}
+
+.input_email {
+    display: grid;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.input_email input {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
+}
+
+.input_pass {
+    display: grid;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.input_pass label {
+    width: 48%;
+}
+
+.input_pass input {
+    width: 48%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
+}
+
+.input_bio {
+    display: grid;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.input_bio textarea {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: #57A1BD;
 }

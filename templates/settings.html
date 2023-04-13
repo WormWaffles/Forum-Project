@@ -5,60 +5,75 @@
 <!-- edit post title content or file -->
 <link rel="stylesheet" href="/static/styles/settings.css">
 
-<div class="page-title">
-    <h1>Account Settings: {{ g.user.username }}</h1>
-</div>
 {% if message %}
 <p class="message" style="color: red;">Error: {{ message }}</p>
 {% endif %}
 
-<div class="d-flex flex-column">
-    <form action="/account/edit" method="post" enctype="multipart/form-data">
-        <!-- input for profile picture -->
-        <div class="mb-3">
-            <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
-                value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
-        </div>
-        <!-- input for username -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="username" placeholder="Username"
-                value="{{ g.user.username }}">
-        </div>
-        <!-- input for first name -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="first_name" placeholder="First name"
-                value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
-            <!-- input for last name -->
-            <input class="form-control" type="text" name="last_name" placeholder="Last name"
-                value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
-        </div>
-        <!-- input for email -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="email" placeholder="Email"
-                value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
-        </div>
-        <!-- input for password -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="password" placeholder="Password" minlength="6">
-            <!-- input for confirm password -->
-            <input class="form-control" type="text" name="confirm_password" placeholder="Confirm Password">
-        </div>
-        <!-- text area for bio -->
-        <div class="mb-3">
-            <textarea class="form-control" name="about_me"
-                placeholder="About me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
-        </div>
-        <!-- input for banner picture -->
-        <div>
-            <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
-                value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
-        </div>
-        <!-- private account check box -->
-        <div class="mb-3">
+<div class="page">
+    <div class="d-flex flex-column">
+        <form action="/account/edit" method="post" enctype="multipart/form-data">
+            <!-- username -->
+            <div class="username">
+                <h3>{{ g.user.username }}</h3>
+            </div>
+            <!-- input for profile picture -->
+            <div class="profile_pic">
+                <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
+                    value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
+            </div>
+            <!-- input for username -->
+            <div class="input_username">
+                <label for="username">Username</label>
+                <input type="text" name="username" placeholder="Username" value="{{ g.user.username }}">
+            </div>
+            <!-- input for first name -->
+            <div class="input_name">
+                <div>
+                    <label class="fname" for="first_name">First Name</label>
+                    <label for="last_name">Last Name</label>
+                </div>
+                <div>
+                    <input class="fname" type="text" name="first_name"
+                        value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
+                    <!-- input for last name -->
+                    <input type="text" name="last_name"
+                        value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
+                </div>
+            </div>
+            <!-- input for email -->
+            <div class="input_email">
+                <label for="email">Email</label>
+                <input type="text" name="email" placeholder="Email"
+                    value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
+            </div>
+            <!-- input for password -->
+            <div class="input_pass">
+                <div>
+                    <label class="fname" for="new_pass">New Password</label>
+                    <label for="retype">Re-Type Password</label>
+                </div>
+                <div>
+                    <input class="fname" type="text" name="password" minlength="6">
+                    <!-- input for confirm password -->
+                    <input type="text" name="confirm_password">
+                </div>
+            </div>
+            <!-- text area for bio -->
+            <div class="input_bio">
+                <label for="about_me">About Me</label>
+                <textarea name="about_me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
+            </div>
+            <!-- input for banner picture -->
+            <div>
+                <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
+                    value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
+            </div>
+            <!-- private account check box -->
+            <div class="input_private">
+                <input class="checkbox" type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
+                <label for="private">Set profile to private</label>
+            </div>
 
-            <input type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
-            <label for="private">Set profile to private</label>
-            
 
             <!-- button for post -->
             <div class="mb-3">
@@ -66,8 +81,9 @@
                     <button class="btn btn-success" type="submit">Save</button>
                 </div>
             </div>
-        </form>
     </div>
+    </form>
+</div>
 </div>
 
 {% endblock %}
