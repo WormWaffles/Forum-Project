@@ -17,45 +17,63 @@
                 <h3>{{ g.user.username }}</h3>
             </div>
             <!-- input for profile picture -->
-            <div class="profile_pic">
-                <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
-                    value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
-            </div>
-            <!-- input for username -->
-            <div class="input_username">
-                <label for="username">Username</label>
-                <input type="text" name="username" placeholder="Username" value="{{ g.user.username }}">
-            </div>
-            <!-- input for first name -->
-            <div class="input_name">
+            <div class="picture_upload">
                 <div>
-                    <label class="fname" for="first_name">First Name</label>
-                    <label for="last_name">Last Name</label>
+                    <img class="profile_pic"
+                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_pfp.jpeg{% endif %}"
+                        alt="profile picture">
                 </div>
-                <div>
-                    <input class="fname" type="text" name="first_name"
-                        value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
-                    <!-- input for last name -->
-                    <input type="text" name="last_name"
-                        value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
+                <div class="file-div">
+                    <div class="upload-btn-wrapper-first">
+                        <input name="profile_pic" type="file" id="myFileInput" style="display: none;">
+                        <button class="file-btn"
+                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                        </button>
+                        <span class="file-upload-label">Upload New Profile Picture</span>
+                    </div>
                 </div>
             </div>
-            <!-- input for email -->
-            <div class="input_email">
-                <label for="email">Email</label>
-                <input type="text" name="email" placeholder="Email"
-                    value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
-            </div>
-            <!-- input for password -->
-            <div class="input_pass">
-                <div>
-                    <label class="fname" for="new_pass">New Password</label>
-                    <label for="retype">Re-Type Password</label>
+            <div class="set_input">
+                <!-- input for username -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="username">Username</label>
+                        <label for="email">Email</label>
+                    </div>
+                    <!-- input for email -->
+                    <div>
+                        <input class="first_label" type="text" name="username" placeholder="Username"
+                            value="{{ g.user.username }}">
+                        <input type="text" name="email" placeholder="Email"
+                            value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
+                    </div>
                 </div>
-                <div>
-                    <input class="fname" type="text" name="password" minlength="6">
-                    <!-- input for confirm password -->
-                    <input type="text" name="confirm_password">
+                <!-- input for first name -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="first_name">First Name</label>
+                        <label for="last_name">Last Name</label>
+                    </div>
+                    <div>
+                        <input class="first_label" type="text" name="first_name"
+                            value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
+                        <!-- input for last name -->
+                        <input type="text" name="last_name"
+                            value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
+                    </div>
+                </div>
+                <!-- input for password -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="new_pass">New Password</label>
+                        <label for="retype">Re-Type Password</label>
+                    </div>
+                    <div>
+                        <input class="first_label" type="text" name="password" minlength="6">
+                        <!-- input for confirm password -->
+                        <input type="text" name="confirm_password">
+                    </div>
                 </div>
             </div>
             <!-- text area for bio -->
@@ -64,14 +82,28 @@
                 <textarea name="about_me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
             </div>
             <!-- input for banner picture -->
-            <div>
-                <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
-                    value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
+            <div class="picture_upload">
+                <div>
+                    <img class="banner_pic"
+                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_banner2.png{% endif %}"
+                        alt="profile picture">
+                </div>
+                <div class="file-div">
+                    <div class="upload-btn-wrapper-last">
+                        <input name="banner_pic" type="file" id="myFileInput" style="display: none;">
+                        <button class="file-btn"
+                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                        </button>
+                        <span class="file-upload-label">Upload New Banner</span>
+                    </div>
+                </div>
             </div>
             <!-- private account check box -->
             <div class="input_private">
-                <input class="checkbox" type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
-                <label for="private">Set profile to private</label>
+                <input class="checkbox" type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {%
+                    endif %}>
+                <label for="private">Set profile to private.</label>
             </div>
 
 
@@ -81,9 +113,14 @@
                     <button class="btn btn-success" type="submit">Save</button>
                 </div>
             </div>
+        </form>
+        <form action="/account">
+            <button class="btn btn-warning" type="submit">Back</button>
+        </form>
+        <form action="/logout">
+            <button class="btn btn-danger" type="submit">Logout</button>
+        </form>
     </div>
-    </form>
-</div>
 </div>
 
 {% endblock %}
