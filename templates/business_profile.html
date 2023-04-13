@@ -29,7 +29,7 @@
                             <a href="/account">FEATURES</a>
                             <a href="/account">MENU</a>
                         </div>
-                        <div class="z-2 rounded-3 avatar">
+                        <!-- <div class="z-2 rounded-3 avatar">
                             <img src="/static/images/barhops_logo.png" alt="">
                         </div>
                         <div class="bottom">
@@ -45,37 +45,29 @@
                                 </span>
                                 <a href="/account">FEATURES</a>
                                 <a href="/account">MENU</a>
-                            </div>
+                            </div> -->
                             <div class="title pt-3">
                                 <h1 class="title">
                                     {{ g.user.username }}
                                 </h1>
                             </div>
                             <div class="subtitle">
-                                <p>Elevate your spirits with our craft cocktails.</p>
+                                {% if g.user.subtitle %}
+                                {{ g.user.subtitle }}
+                                {% else %}
+                                <p>Nothings here...</p>
+                                {% endif %}
                             </div>
                             <div class="description">
                                 {% if g.user.about_me %}
                                 {{ g.user.about_me }}
                                 {% else %}
-                                <p>Welcome to our luxurious cocktail venue! We offer a unique and unforgettable
-                                    experience
-                                    for cocktail
-                                    enthusiasts. Our expert mixologists have crafted a menu of exquisite cocktails made
-                                    with
-                                    premium
-                                    spirits and fresh, high-quality ingredients. Relax, unwind and indulge in our
-                                    signature
-                                    cocktails in
-                                    our cozy and elegant venue. Come join us and discover the art of mixology in our
-                                    stylish
-                                    cocktail haven.</p>
+                                <p>Nothings here...</p>
                                 {% endif %}
                             </div>
                             <div class="follow">
-                                <button id="follow-btn" class="btn" type="submit">+ Follow</button>
+                                <button id="follow-btn" class="btn" type="submit">Follow</button>
                             </div>
-
                         </div>
                     </div>
                     <div class="posts">
