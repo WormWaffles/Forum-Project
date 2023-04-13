@@ -4,15 +4,25 @@
 <!-- user body -->
 
 <body>
-    <section class="">
-        <div class="container">
-            <div class="secondary-container">
-                <div class="header">
-                    <div class="banner">
-                        <img src="/static/images/sample_banner2.png" alt="banner">
-                    </div>
-                    <div class="z-2 avatar">
-                        <img src="/static/images/sample_avatar1.jpg" alt="">
+  <section class="">
+    <div class="container">
+        <div class="secondary-container">
+            <div class="header">
+                <div class="banner">
+                    <img src="/static/images/sample_banner2.png" alt="banner">
+                </div>
+                <div class="z-2 avatar">
+                    <img src="/static/images/sample_avatar1.jpg" alt="">
+                </div>
+                <div class="bottom">
+                    <div class="mid-container">
+                        <div class="profile-name">
+                            <h3 class="">{{ g.user.username }} </h3>
+                        </div>
+                        <div class="profile-links">
+                            <a href="/account/followers">{{ followers }} Followers</a>
+                            <button id="follow-btn" class="btn" type="submit">+ Follow</button>
+                        </div>
                     </div>
                     <div class="bottom">
                         <div class="mid-container">

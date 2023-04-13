@@ -47,6 +47,11 @@ class Rating(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
     # post = db.relationship('Post', backref='post_id', lazy=True)
 
+class Follower(db.Model):
+    follower_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    followed_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+        
+
     def __init__(self, rating, business_id, post_id):
         self.rating = rating
         self.business_id = business_id
