@@ -53,7 +53,7 @@ for (let button of document.querySelectorAll('a[for^="like"]')) {
         if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_red.png')) {
             document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 2 + " Likes"
         } // if the button is white, make red and decrement the likes once
-        else if (document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png') {
+        else if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_default.png')) {
             document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 1 + " Likes"
         } // if red, do nothing
         document.getElementById(button_id + "img").src = '/static/images/likeButton_grey.png';
