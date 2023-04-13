@@ -76,27 +76,17 @@
             <form action="/feed">
                 <button class="btn btn-primary" type="submit">Events</button>
             </form>
-            <div class="location">
-                <img src="/static/images/sample-map.png">
-            </div>
+            <div id="map"></div>
+                <script
+                  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFoKhJXjpdutYp5APDID5ZVG4fi--9PDg&callback=initMap&v=weekly"
+                  defer
+                ></script>
             <div class="post">
                 <form action="/create" method="get">
                     <div class="get_create">
                         <button class="btn btn-post" type="submit">Create Post</button>
                     </div>
                 </form>
-                <div id="map"></div>
-                <script
-                  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFoKhJXjpdutYp5APDID5ZVG4fi--9PDg&callback=initMap&v=weekly"
-                  defer
-                ></script>
-                <div class="post">
-                    <form action="/create" method="get">
-                        <div class="get_create"> 
-                            <button class="btn btn-post" type="submit">Create Post</button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
