@@ -5,69 +5,123 @@
 <!-- edit post title content or file -->
 <link rel="stylesheet" href="/static/styles/settings.css">
 
-<div class="page-title">
-    <h1>Account Settings: {{ g.user.username }}</h1>
-</div>
 {% if message %}
 <p class="message" style="color: red;">Error: {{ message }}</p>
 {% endif %}
 
-<div class="d-flex flex-column">
-    <form action="/account/edit" method="post" enctype="multipart/form-data">
-        <!-- input for profile picture -->
-        <div class="mb-3">
-            <input class="form-control" type="file" name="profile_pic" placeholder="profile_pic"
-                value="{% if g.user.profile_pic != None %}{{ g.user.profile_pic }}{% endif %}">
-        </div>
-        <!-- input for username -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="username" placeholder="Username"
-                value="{{ g.user.username }}">
-        </div>
-        <!-- input for first name -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="first_name" placeholder="First name"
-                value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
-            <!-- input for last name -->
-            <input class="form-control" type="text" name="last_name" placeholder="Last name"
-                value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
-        </div>
-        <!-- input for email -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="email" placeholder="Email"
-                value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
-        </div>
-        <!-- input for password -->
-        <div class="mb-3">
-            <input class="form-control" type="text" name="password" placeholder="Password" minlength="6">
-            <!-- input for confirm password -->
-            <input class="form-control" type="text" name="confirm_password" placeholder="Confirm Password">
-        </div>
-        <!-- text area for bio -->
-        <div class="mb-3">
-            <textarea class="form-control" name="about_me"
-                placeholder="About me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
-        </div>
-        <!-- input for banner picture -->
-        <div>
-            <input class="form-control" type="file" name="banner_pic" placeholder="banner_pic"
-                value="{% if g.user.banner_pic != None %}{{ g.user.banner_pic }}{% endif %}">
-        </div>
-        <!-- private account check box -->
-        <div class="mb-3">
-
-            <input type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {% endif %}>
-            <label for="private">Set profile to private</label>
-            
-
-            <!-- button for post -->
-            <div class="mb-3">
-                <div class="post">
-                    <button class="btn btn-success" type="submit">Save</button>
+<div class="page">
+    <div class="d-flex flex-column">
+        <form action="/account/edit" method="post" enctype="multipart/form-data">
+            <!-- username -->
+            <div class="username">
+                <h3>{{ g.user.username }}</h3>
+            </div>
+            <!-- input for profile picture -->
+            <div class="picture_upload">
+                <div>
+                    <img class="profile_pic"
+                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_pfp.jpeg{% endif %}"
+                        alt="profile picture">
+                </div>
+                <div class="file-div">
+                    <div class="upload-btn-wrapper-first">
+                        <input name="profile_pic" type="file" id="myFileInput" style="display: none;">
+                        <button class="file-btn"
+                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                        </button>
+                        <span class="file-upload-label">Upload New Profile Picture</span>
+                    </div>
                 </div>
             </div>
+            <div class="set_input">
+                <!-- input for username -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="username">Username</label>
+                        <label for="email">Email</label>
+                    </div>
+                    <!-- input for email -->
+                    <div>
+                        <input class="first_label" type="text" name="username" placeholder="Username"
+                            value="{{ g.user.username }}">
+                        <input type="text" name="email" placeholder="Email"
+                            value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
+                    </div>
+                </div>
+                <!-- input for first name -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="first_name">First Name</label>
+                        <label for="last_name">Last Name</label>
+                    </div>
+                    <div>
+                        <input class="first_label" type="text" name="first_name"
+                            value="{% if g.user.first_name != None %}{{ g.user.first_name }}{% endif %}">
+                        <!-- input for last name -->
+                        <input type="text" name="last_name"
+                            value="{% if g.user.last_name != None %}{{ g.user.last_name }}{% endif %}">
+                    </div>
+                </div>
+                <!-- input for password -->
+                <div class="section">
+                    <div>
+                        <label class="first_label" for="new_pass">New Password</label>
+                        <label for="retype">Re-Type Password</label>
+                    </div>
+                    <div>
+                        <input class="first_label" type="text" name="password" minlength="6">
+                        <!-- input for confirm password -->
+                        <input type="text" name="confirm_password">
+                    </div>
+                </div>
+            </div>
+            <!-- text area for bio -->
+            <div class="input_bio">
+                <label for="about_me">About Me</label>
+                <textarea name="about_me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
+            </div>
+            <!-- input for banner picture -->
+            <div class="picture_upload">
+                <div>
+                    <img class="banner_pic"
+                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_banner2.png{% endif %}"
+                        alt="profile picture">
+                </div>
+                <div class="file-div">
+                    <div class="upload-btn-wrapper-last">
+                        <input name="banner_pic" type="file" id="myFileInput" style="display: none;">
+                        <button class="file-btn"
+                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                        </button>
+                        <span class="file-upload-label">Upload New Banner</span>
+                    </div>
+                </div>
+            </div>
+            <!-- private account check box -->
+            <div class="input_private">
+                <label class="checkbox-container">
+                    <input type="checkbox" name="private" value="1"{% if g.user.private %}checked{% endif %}>
+                    <span class="checkmark"></span>
+                    Set profile to private.
+                </label>
+            </div>
+
+            <!-- button for post -->
+            <div class="buttons">
+                <div class="post">
+                    <button class="button" type="submit">Save</button>
+                </div>
+        </form>
+        <form action="/account">
+            <button class="button" type="submit">Back</button>
+        </form>
+        <form action="/logout">
+            <button class="button" id="logout" type="submit">Logout</button>
         </form>
     </div>
+</div>
 </div>
 
 {% endblock %}

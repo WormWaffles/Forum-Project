@@ -1,64 +1,214 @@
-.page-title {
-    text-align: center;
-    padding-top: 15px;
+.my-container {
+    padding-bottom: 0 !important;
 }
 
-.mb-3 {
-    display: grid;
-    /*grid-template-columns: auto auto auto;*/
-    gap: 10px;
-    padding: 10px;
+.page {
+    background-color: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px 8rem;
 }
 
-.form-control {
-    width: 70%;
-    padding: 10px;
-    /*margin-top: 10px;*/
+.username {
+    color: #57A1BD;
+    font: normal normal 900 24px/33px Avenir;
+    padding-top: 10px;
+}
+
+.picture_upload {
+    display: flex;
+    margin-top: 5px;
+}
+
+.profile_pic {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.banner_pic {
+    width: 300px;
+    height: 100px;
     border-radius: 8px;
-    border: 1px solid #A6CAD8;
+}
+
+.set_input {
+    display: grid;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.set_input input {
+    width: 48%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 2px solid #A6CAD8;
     background-color: #A6CAD84B;
     font-size: 14px;
 }
 
-.container {
+.section {
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-gap: 1em;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
 
-    padding-left: 20px;
+.section label {
+    width: 48%;
+}
+
+.first_label {
+    margin-right: 17px;
+}
+
+.input_bio {
+    display: grid;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.input_bio textarea {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 2px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: #57A1BD;
+}
+
+.upload-btn-wrapper-first {
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.upload-btn-wrapper-last {
     padding-top: 30px;
-    padding-bottom: 65px;
-    
-    background-color: white;
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    
+    padding-left: 20px;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
 }
 
-.avatar img{
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    padding-bottom: 25px;
+.file-btn {
+    border: 2px solid #57A1BD;
+    color: #333;
+    background-color: #E3EFF5;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.image-container {
+.upload-img {
+    height: 15px;
+    width: 15px;
+    margin-bottom: 3px;
+    opacity: 0.5;
+}
+
+.file-upload-label {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #7F7F7F;
+    font: normal normal 900 14px/19px Avenir;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
     width: 150px;
-    height: 150px;
-}
-  
-.image-container img {
-    width:100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #EFEFEF;
+    color: #57A1BD;
+    font: normal normal 900 20px/15px Poppins;
+    border: #57A1BD solid 2px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.banner img{
-    width: 100%;
-    height: auto;
-    object-fit:cover; 
-    object-position: bottom;   
-    overflow:hidden;
+.button:hover {
+    background-color: #57A1BD;
+    color: #EFEFEF;
+}
+
+.button#logout:hover {
+    background-color: #990f02;
+    border: 0px;
+    color: #EFEFEF;
+}
+
+.input_private {   
+    padding: 10px 0px;
+    height: 45px;
+    color: #7F7F7F;
+    font: normal normal 900 20px/25px Avenir;
+    width: 45%;
+}
+
+.checkbox-container {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #DEECF4;
+    border: #A6CAD8 solid 2px;
     border-radius: 5px;
+}
+
+.checkbox-container:hover input~.checkmark {
+    background-color: #A6CAD8;
+}
+
+.checkbox-container input:checked~.checkmark {
+    background-color: #57A1BD;
+    border: #57A1BD solid 2px;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
 }

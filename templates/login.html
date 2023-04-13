@@ -11,13 +11,14 @@
       <!-- title -->
       <h2>Login to Your Account</h2>
       <div class="social-login">
-        <span>Login to an account using your social networks</span>
         <!-- buttons for login API's -->
         <div class="social-buttons">
-          <a href="/googlelogin"><img class="google" src="/static/images/google_icon_1.webp" alt="google" width="55"
-              height="55"></a>
-          <a href="twitter.com"><img class="twitter" src="/static/images/twitter_icon_1.webp" alt="facebook" width="40"
-              height="40"></a>
+          <div class="social-buttons">
+            <a class="google" href="/googlelogin">
+              <img width="15px" style="margin-bottom:3px; margin-right:5px" alt="Google login" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+              Sign in with Google
+            </a>
+          </div>
         </div>
         <div class="or-line">
           <span class="or-span">
@@ -26,9 +27,9 @@
         </div>
       </div>
       <form action="/login" method="post">
-        <input type="text" id="email" name="email" placeholder="Email" value="{{ info['email'] }}" required>
+        <input type="email" id="email" name="email" placeholder="Email" value="{{ info['email'] }}" required autocomplete="on">
         <input type="password" id="password" name="password" placeholder="Password" value="{{ info['password'] }}"
-          required>
+          required autocomplete="on">
         <!-- error message handler -->
         <div class="message">
           {% if message %}

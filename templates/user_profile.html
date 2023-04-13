@@ -4,25 +4,15 @@
 <!-- user body -->
 
 <body>
-  <section class="">
-    <div class="container">
-        <div class="secondary-container">
-            <div class="header">
-                <div class="banner">
-                    <img src="/static/images/sample_banner2.png" alt="banner">
-                </div>
-                <div class="z-2 avatar">
-                    <img src="/static/images/sample_avatar1.jpg" alt="">
-                </div>
-                <div class="bottom">
-                    <div class="mid-container">
-                        <div class="profile-name">
-                            <h3 class="">{{ g.user.username }} </h3>
-                        </div>
-                        <div class="profile-links">
-                            <a href="/account/followers">{{ followers }} Followers</a>
-                            <button id="follow-btn" class="btn" type="submit">+ Follow</button>
-                        </div>
+    <section class="">
+        <div class="container">
+            <div class="secondary-container">
+                <div class="header">
+                    <div class="banner">
+                        <img src="/static/images/sample_banner2.png" alt="banner">
+                    </div>
+                    <div class="z-2 avatar">
+                        <img src="/static/images/sample_avatar1.jpg" alt="">
                     </div>
                     <div class="bottom">
                         <div class="mid-container">
@@ -30,11 +20,14 @@
                                 <h3 class="">{{ g.user.username }} </h3>
                             </div>
                             <div class="profile-links">
-                                <a href="/account">122 Followers</a>
-                                <button id="follow-btn" class="btn" type="submit">+ Follow</button>
+                                {% if followers %}
+                                <a href="/account/followers">{{ followers }} Followers</a>
+                                {% else %}
+                                <a href="/account/followers">0 Followers</a>
+                                {% endif %}
+                                <button id="follow-btn" class="btn" type="submit">Follow</button>
                             </div>
                         </div>
-
                         <div class="description">
                             {% if g.user.about_me %}
                             {{ g.user.about_me }}
@@ -50,15 +43,10 @@
                                 life has to offer.</p>
                             {% endif %}
                         </div>
+                        <div class="setting_button">
+                            <a href="/account/edit"><img src="/static/images/setting-gear.png" height="25" width="25"></a>
+                        </div>
                     </div>
-                </div>
-                <div class="posts">
-                    <form action="/logout">
-                        <button class="btn btn-danger" type="submit">Logout</button>
-                    </form>
-                    <form action="/account/edit">
-                        <button class="btn btn-warning" type="submit">Edit Account</button>
-                    </form>
                 </div>
             </div>
         </div>
