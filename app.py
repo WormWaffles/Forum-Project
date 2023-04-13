@@ -142,6 +142,8 @@ def edit_account():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if g.user:
+        return redirect(url_for('index'))
     info = {}
     if request.method == 'POST':
         session.pop('user_id',None)
@@ -167,6 +169,8 @@ def logout():
 # register page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if g.user:
+        return redirect(url_for('index'))
     info = {}
     if request.method == 'POST':
         global logged_in
