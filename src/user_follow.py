@@ -1,6 +1,7 @@
 from src.models import db, Follower, User
 
 class Follows:
+
     #just pay close attention to which user is following which
     def foo_followed_bar(self,follower_user_id,followed_user_id):
         follower = Follower(follower_user_id,followed_user_id)
@@ -22,3 +23,5 @@ class Follows:
     
     def get_followers_num(self):
         return Follower.query.count()
+    
+follows = Follows()
