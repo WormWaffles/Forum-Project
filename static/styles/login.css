@@ -123,20 +123,9 @@ input:focus {
     background-color: #f2f2f2;
 }
 
-.social-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-}
-
 .google {
-    margin-right: 10px;
-}
-
-.twitter {
-    margin-left: 10px;
+    text-decoration: none;
+    color: #7F7F7F;
 }
 
 .social-login {
