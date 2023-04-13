@@ -94,6 +94,11 @@ label {
     justify-content: space-between;
 }
 
+span {
+    font: normal normal 900 18px/25px Poppins;
+    color: #7F7F7F;
+}
+
 .post {
     display: flex;
     flex-direction: column;

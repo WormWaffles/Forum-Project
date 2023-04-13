@@ -26,9 +26,9 @@
         </div>
       </div>
       <form action="/login" method="post">
-        <input type="text" id="email" name="email" placeholder="Email" value="{{ info['email'] }}" required>
+        <input type="email" id="email" name="email" placeholder="Email" value="{{ info['email'] }}" required autocomplete="on">
         <input type="password" id="password" name="password" placeholder="Password" value="{{ info['password'] }}"
-          required>
+          required autocomplete="on">
         <!-- error message handler -->
         <div class="message">
           {% if message %}
