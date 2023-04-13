@@ -101,26 +101,27 @@
             </div>
             <!-- private account check box -->
             <div class="input_private">
-                <input class="checkbox" type="checkbox" name="private" value="1" {% if g.user.private==1 %} checked {%
-                    endif %}>
-                <label for="private">Set profile to private.</label>
+                <label class="checkbox-container">
+                    <input type="checkbox" name="private" value="1"{% if g.user.private %}checked{% endif %}>
+                    <span class="checkmark"></span>
+                    Set profile to private.
+                </label>
             </div>
-
 
             <!-- button for post -->
-            <div class="mb-3">
+            <div class="buttons">
                 <div class="post">
-                    <button class="btn btn-success" type="submit">Save</button>
+                    <button class="button" type="submit">Save</button>
                 </div>
-            </div>
         </form>
         <form action="/account">
-            <button class="btn btn-warning" type="submit">Back</button>
+            <button class="button" type="submit">Back</button>
         </form>
         <form action="/logout">
-            <button class="btn btn-danger" type="submit">Logout</button>
+            <button class="button" id="logout" type="submit">Logout</button>
         </form>
     </div>
+</div>
 </div>
 
 {% endblock %}

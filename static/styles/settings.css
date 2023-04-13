@@ -17,6 +17,7 @@
 
 .picture_upload {
     display: flex;
+    margin-top: 5px;
 }
 
 .profile_pic {
@@ -121,6 +122,97 @@ textarea:focus {
     color: #7F7F7F;
     font: normal normal 900 14px/19px Avenir;
 }
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    width: 150px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #EFEFEF;
+    color: #57A1BD;
+    font: normal normal 900 20px/15px Poppins;
+    border: #57A1BD solid 2px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #57A1BD;
+    color: #EFEFEF;
+}
+
+.button#logout:hover {
+    background-color: #990f02;
+    border: 0px;
+    color: #EFEFEF;
+}
+
+.input_private {   
+    padding: 10px 0px;
+    height: 45px;
+    color: #7F7F7F;
+    font: normal normal 900 20px/25px Avenir;
+    width: 45%;
+}
+
+.checkbox-container {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #DEECF4;
+    border: #A6CAD8 solid 2px;
+    border-radius: 5px;
+}
+
+.checkbox-container:hover input~.checkmark {
+    background-color: #A6CAD8;
+}
+
+.checkbox-container input:checked~.checkmark {
+    background-color: #57A1BD;
+    border: #57A1BD solid 2px;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
 
 
 /* 

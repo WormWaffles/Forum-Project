@@ -122,7 +122,7 @@ def edit_account():
     try:
         if password != "":
             message = ""
-            unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
+            unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, private=private)
             if password != confirm_password:
                 message = 'Passwords do not match.'
                 return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
@@ -135,6 +135,7 @@ def edit_account():
         
         return redirect(url_for('account'))
     except Exception as e: 
+        print(e)
         error_message = str(e)
         return render_template('error.html', error_message=error_message)
         
