@@ -126,6 +126,7 @@ def edit_account():
         private = request.form.get('private')
 
         # needs more error handling
+    try:
         if password != "":
             message = ""
             unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, profile_pic=profile_pic, banner_pic=banner_pic, private=private)
@@ -140,6 +141,10 @@ def edit_account():
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private)
         
         return redirect(url_for('account'))
+    except Exception as e: 
+        error_message = str(e)
+        return render_template('error.html', error_message=error_message)
+        
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -398,7 +403,11 @@ def callback():
 
 @app.route('/googlelogin')
 def googlelogin():
-    authorization_url, state = flow.authorization_url()
-    session["state"] = state
-    return redirect(authorization_url)
+    try:
+        authorization_url, state = flow.authorization_url()
+        session["state"] = state
+        return redirect(authorization_url)
+    except Exception as e:
+        #redirect to error page
+        return redirect('/error')
 # ********** GOOGLE LOGIN **********
