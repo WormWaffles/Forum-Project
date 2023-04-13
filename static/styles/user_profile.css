@@ -92,15 +92,13 @@
     text-align: center;
 }
 
-.posts form {
-    font-family: Poppins, sans-serif;
-    padding-top: 1.5em;
-    display: inline-block;
-}
-
 #follow-btn {
     font-family: Poppins, sans-serif;
     background-color: #57A1BD !important;
     color: white;
     margin-left: 3em;
+}
+
+.setting_button {
+    text-align: right;
 }
