@@ -34,7 +34,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False # set to True to see SQL queries
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024 # 50MB max upload size
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB max upload size
 
 db.init_app(app)
 
@@ -57,6 +57,7 @@ s3 = boto3.resource('s3',
 aws_access_key_id='AKIAY5EAJ7XAJ3GQ2AUH',
 aws_secret_access_key='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')
 bucket_name = 'barhive'
+
 
 # Check if user is logged in
 def logged_in():
