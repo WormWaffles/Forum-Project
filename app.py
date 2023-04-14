@@ -1,6 +1,5 @@
 import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
-from werkzeug.utils import secure_filename
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -18,7 +17,6 @@ from pip._vendor import cachecontrol
 import boto3
 from werkzeug.utils import secure_filename
 from flask_bcrypt import Bcrypt
-import uuid
 
 
 app = Flask(__name__)
@@ -56,10 +54,13 @@ flow = Flow.from_client_secrets_file(
 )
 
 # AWS S3 Connection
+aws_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret = os.getenv('AWS_SECRET_ACCESS_KEY')
+bucket_name = os.getenv('BUCKET_NAME')
 s3 = boto3.resource('s3',
-aws_access_key_id='AKIAY5EAJ7XAJ3GQ2AUH',
-aws_secret_access_key='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')
-bucket_name = 'barhive'
+aws_access_key_id=aws_id,
+aws_secret_access_key=aws_secret)
+bucket_name = bucket_name
 
 
 # Check if user is logged in
