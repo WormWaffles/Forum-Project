@@ -64,6 +64,14 @@
     color: #555555;
 }
 
+.image {
+    margin: 10px;
+    height: 150px;
+    width: auto;
+    border: 1px solid #ccc;
+    border-radius: 15%;
+}
+
 .date {
     /* push to the left */
     font: oblique normal normal 15px/20px Poppins;

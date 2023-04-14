@@ -40,9 +40,16 @@
             <h1 class="title" id="title">{{ post.title }}</h1>
         </a>
     </div>
+    {% if post.content %}
     <div class="content">
         <p id="content">"{{ post.content }}"</p>
     </div>
+    {% endif %}
+    {% if post.file %}
+    <div>
+        <img class="image" src="{{ post.file }}" alt="post_image">
+    </div>
+    {% endif %}
     <div class="post-card-container">
         <div class="date">
             <p>2 days ago</p>

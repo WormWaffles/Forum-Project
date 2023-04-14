@@ -49,8 +49,7 @@ label {
 }
 
 .file-div {
-    padding-bottom: 15px;
-
+    padding-top: 8%;
 }
 
 .upload-btn-wrapper {
@@ -77,6 +76,18 @@ label {
 .file-upload-label {
     margin-left: 10px;
     font-size: 16px;
+}
+
+.upload {
+    display: flex;
+}
+
+.myFile {
+    margin: 10px;
+    height: 100px;
+    width: auto;
+    border: 1px solid #ccc;
+    border-radius: 15%;
 }
 
 .content-div {

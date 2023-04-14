@@ -76,8 +76,11 @@
 }
 
 .image {
-    max-width: 100%;
-    height: auto;
+    margin: 10px;
+    height: 150px;
+    width: auto;
+    border: 1px solid #ccc;
+    border-radius: 15%;
 }
 
 .date {
