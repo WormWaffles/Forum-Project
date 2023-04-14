@@ -128,6 +128,10 @@ input:focus {
     color: #7F7F7F;
 }
 
+.social-button {
+    padding: 10px;
+}
+
 .social-login {
     margin-top: 10px;
     display: flex;
