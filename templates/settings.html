@@ -20,14 +20,14 @@
             <div class="picture_upload">
                 <div>
                     <img class="profile_pic"
-                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_pfp.jpeg{% endif %}"
+                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"
                         alt="profile picture">
                 </div>
                 <div class="file-div">
                     <div class="upload-btn-wrapper-first">
-                        <input name="profile_pic" type="file" id="myFileInput" style="display: none;">
+                        <input name="profile_pic" type="file" id="myFileInput1" accept="image/png, image/jpg, image/jpeg" style="display: none;">
                         <button class="file-btn"
-                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            onclick="document.getElementById('myFileInput1').click(); return false;">
                             <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
                         </button>
                         <span class="file-upload-label">Upload New Profile Picture</span>
@@ -85,14 +85,14 @@
             <div class="picture_upload">
                 <div>
                     <img class="banner_pic"
-                        src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}/static/images/sample_banner2.png{% endif %}"
-                        alt="profile picture">
+                        src="{% if g.user.banner_pic %}{{ g.user.banner_pic }}{% else %}{{url_for('static', filename='images/defualt_banner.png')}}{% endif %}"
+                        alt="banner picture">
                 </div>
                 <div class="file-div">
                     <div class="upload-btn-wrapper-last">
-                        <input name="banner_pic" type="file" id="myFileInput" style="display: none;">
+                        <input name="banner_pic" type="file" id="myFileInput2" accept="image/png, image/jpg, image/jpeg" style="display: none;">
                         <button class="file-btn"
-                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            onclick="document.getElementById('myFileInput2').click(); return false;">
                             <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
                         </button>
                         <span class="file-upload-label">Upload New Banner</span>

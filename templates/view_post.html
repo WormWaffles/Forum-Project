@@ -6,7 +6,8 @@
 <div class="post-card">
     <div class="user_profile">
         <div class="pfp">
-            <a href="/user/{{ post.user.user_id }}"><img class="user_picture" src="/static/images/sample_pfp.jpeg"
+            <a href="/user/{{ post.user.user_id }}"><img class="user_picture"
+                    src="{% if post.user.profile_pic %}{{ post.user.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"
                     alt="pfp"></a>
         </div>
         <div class="user_info">

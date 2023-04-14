@@ -75,6 +75,11 @@
     color: #555555;
 }
 
+.image {
+    max-width: 100%;
+    height: auto;
+}
+
 .date {
     /* push to the left */
     font: oblique normal normal 15px/20px Poppins;

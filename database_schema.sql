@@ -18,6 +18,9 @@ CREATE TABLE "user" (
     about_me VARCHAR(500),
     private BOOLEAN DEFAULT NULL,
     PRIMARY KEY (user_id),
+    -- picture paths (aws)
+    profile_pic VARCHAR(255),
+    banner_pic VARCHAR(255),
 
     -- business stuff
     is_business BOOLEAN NOT NULL,
@@ -34,6 +37,7 @@ CREATE TABLE post (
     user_id INTEGER NOT NULL,
     title VARCHAR(80) NOT NULL,
     content VARCHAR(500) NOT NULL,
+    file VARCHAR(255),
     likes INTEGER NOT NULL,
     PRIMARY KEY (post_id)
 );

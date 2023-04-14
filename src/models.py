@@ -13,6 +13,10 @@ class User(db.Model):
     about_me = db.Column(db.String(80), nullable=True)
     private = db.Column(db.Boolean, nullable=False)
 
+    # picture paths
+    profile_pic = db.Column(db.String(255), nullable=True)
+    banner_pic = db.Column(db.String(255), nullable=True)
+
     # Business
     is_business = db.Column(db.Boolean, nullable=False)
     address = db.Column(db.String(80), nullable=True)
@@ -29,6 +33,7 @@ class Post(db.Model):
     user = db.relationship('User', backref='users', lazy=True)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(80), nullable=False)
+    file = db.Column(db.String(255), nullable=True)
     likes = db.Column(db.Integer, nullable=False)
     # comments need to be implemented
 

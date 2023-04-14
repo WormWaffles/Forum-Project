@@ -9,10 +9,10 @@
             <div class="secondary-container">
                 <div class="header">
                     <div class="banner">
-                        <img src="/static/images/sample_banner1.jpg" alt="banner">
+                        <img src="{% if g.user.banner_pic %}{{ g.user.banner_pic }}{% else %}{{url_for('static', filename='images/defualt_banner.png')}}{% endif %}" alt="banner_pic">
                     </div>
                     <div class="z-2 rounded-3 avatar">
-                        <img src="/static/images/barhops_logo.png" alt="">
+                        <img src="{% if g.user.profile_pic %}{{ g.user.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}" alt="profile_pic">
                     </div>
                     <div class="bottom">
                         <div class="links">
