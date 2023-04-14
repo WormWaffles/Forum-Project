@@ -24,7 +24,7 @@ class PostFeed:
         '''Returns post by id'''
         return Post.query.get(post_id)
     
-    def create_post(self, user_id, title, content, likes):
+    def create_post(self, user_id, title, content, file, likes):
         '''Creates a post'''
         # create uuid for post_id
         id = uuid.uuid1()
@@ -33,7 +33,7 @@ class PostFeed:
         id = str(id)
         id = id[:8]
         id = int(id)
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, likes=likes)
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes)
         db.session.add(post)
         db.session.commit()
         return post
@@ -43,7 +43,7 @@ class PostFeed:
         post = self.get_post_by_id(post_id)
         post.title = title
         post.content = content
-        self.set_file(post_id, file)
+        post.file = file
         db.session.commit()
         return post
     

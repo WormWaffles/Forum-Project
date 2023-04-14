@@ -1,6 +1,5 @@
 import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
-from werkzeug.utils import secure_filename
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -15,8 +14,9 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests
 from pip._vendor import cachecontrol
+import boto3
+from werkzeug.utils import secure_filename
 from flask_bcrypt import Bcrypt
-import uuid
 
 
 app = Flask(__name__)
@@ -34,6 +34,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] \
     = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False # set to True to see SQL queries
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB max upload size
 
 db.init_app(app)
 
@@ -51,6 +52,16 @@ flow = Flow.from_client_secrets_file(
     scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'openid'],
     redirect_uri='http://127.0.0.1:5000/callback'
 )
+
+# AWS S3 Connection
+aws_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret = os.getenv('AWS_SECRET_ACCESS_KEY')
+bucket_name = os.getenv('BUCKET_NAME')
+s3 = boto3.resource('s3',
+aws_access_key_id=aws_id,
+aws_secret_access_key=aws_secret)
+bucket_name = bucket_name
+
 
 # Check if user is logged in
 def logged_in():
@@ -122,8 +133,56 @@ def edit_account():
         banner_pic = request.files['banner_pic']
         private = request.form.get('private')
 
-        # needs more error handling
+        # upload files
+        try:
+            # set old profile pic paths
+            profile_pic_path = g.user.profile_pic
+            banner_pic_path = g.user.banner_pic
+            if profile_pic:
+                # check if file is an image
+                if not profile_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Profile picture must be a .jpg, .jpeg, or .png file.')
+                new_profile_filename = f'{user_id}_{secure_filename(profile_pic.filename)}'
+
+                # remove old profile pic from s3
+                user = users.get_user_by_id(user_id)
+                if user.profile_pic != None:
+                    print(g.user.profile_pic.split('/')[-1])
+                    s3.Object(bucket_name, g.user.profile_pic.split('/')[-1]).delete()
+
+                # upload new profile pic to s3
+                s3.Bucket(bucket_name).upload_fileobj(
+                    profile_pic,
+                    new_profile_filename
+                )
+
+                # add filepath to database
+                profile_pic_path = f'https://barhive.s3.amazonaws.com/{new_profile_filename}'
+            if banner_pic:
+                # check if file is a picture
+                if not banner_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_banner_filename = f'{user_id}_{secure_filename(banner_pic.filename)}'
+
+                # remove old banner pic from s3
+                user = users.get_user_by_id(user_id)
+                if user.banner_pic != None:
+                    print(g.user.banner_pic.split('/')[-1])
+                    s3.Object(bucket_name, g.user.banner_pic.split('/')[-1]).delete()
+
+                # upload new banner pic to s3
+                s3.Bucket(bucket_name).upload_fileobj(
+                    banner_pic,
+                    new_banner_filename
+                )
+
+                # add filepath to database
+                banner_pic_path = f'https://barhive.s3.amazonaws.com/{new_banner_filename}'
+        except Exception as e:
+            print(f"Error uploading files to s3: " + str(e))
+
     try:
+        # needs more error handling
         if password != "":
             message = ""
             unsaved_user = User(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, private=private)
@@ -136,7 +195,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
-        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private)
+        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
         
         return redirect(url_for('account'))
     except Exception as e: 
@@ -242,11 +301,30 @@ def create():
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        if not file:
-            file = ""
+        if title == "":
+            abort(400)
+        post_path = None
+        if file:
+            try:
+                # make sure file is an image
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
+                new_post_filename = f'{title}_{secure_filename(file.filename)}'
+
+                # upload file to s3
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_post_filename
+                )
+
+                # add filepath to database
+                post_path = f'https://barhive.s3.amazonaws.com/{new_post_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
         # get user id
         user_id = session['user_id']
-        post_feed.create_post(user_id, title, content, 0)
+        post_feed.create_post(user_id, title, content, post_path, 0)
         return redirect('/feed')
     
 
@@ -257,6 +335,11 @@ def delete_post(post_id):
         return redirect(url_for('login'))
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
+    post = post_feed.get_post_by_id(post_id)
+    if post.file:
+        # delete file from s3
+        post = post_feed.get_post_by_id(post_id)
+        s3.Object(bucket_name, post.file.split('/')[-1]).delete()
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
@@ -306,9 +389,33 @@ def edit(post_id):
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        if not file:
-            file = ""
-        post_feed.update_post(post_id, title, content, file)
+        file_path = None
+        if file:
+            try:
+                s3 = boto3.resource('s3',
+                aws_access_key_id='AKIAY5EAJ7XAJ3GQ2AUH',
+                aws_secret_access_key='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')
+                bucket_name = 'barhive'
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_filename = f'{title}_{secure_filename(file.filename)}'
+
+                # remove old banner pic from s3
+                post = post_feed.get_post_by_id(post_id)
+                if post.file != None:
+                    s3.Object(bucket_name, post.file.split('/')[-1]).delete()
+
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_filename
+                )
+
+                # add filepath to database
+                file_path = f'https://barhive.s3.amazonaws.com/{new_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
+        post_feed.update_post(post_id, title, content, file=file_path)
         return redirect('/feed')
 
 
