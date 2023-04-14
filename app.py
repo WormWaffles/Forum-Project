@@ -283,6 +283,7 @@ def create():
         file = request.files['file']
         if title == "":
             abort(400)
+        post_path = None
         if file:
             try:
                 # make sure file is an image
