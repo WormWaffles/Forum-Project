@@ -3,6 +3,8 @@
 {% block body %}
 
 <link rel="stylesheet" href="/static/styles/create.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <!-- edit post title content or file -->
 <div class="create-card">
     <div>
@@ -22,13 +24,24 @@
                     rows="4">{{ post.content }}</textarea>
             </div>
             <!-- input for single file attachment -->
-            <div class="file-div">
-                <div class="file-upload-btn-wrapper">
-                    <input name="file" type="file" id="myFileInput" accept="image/png, image/jpg, image/jpeg" style="display: none;">
-                    <button class="file-btn" onclick="document.getElementById('myFileInput').click(); return false;">
-                        <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
-                    </button>
-                    <span class="upload-label">Upload Image</span>
+            <div class="upload">
+                {% if post.file %}
+                <img class="myFile" id="myFile" src="{{post.file}}"
+                    alt="your image">
+                {% else %}
+                <img class="myFile" id="myFile" src="{{url_for('static', filename='images/default_pfp.png')}}"
+                    alt="your image">
+                {% endif %}
+                <div class="file-div">
+                    <div class="file-upload-btn-wrapper">
+                        <input name="file" type="file" id="myFileInput" accept="image/png, image/jpg, image/jpeg"
+                            style="display: none;">
+                        <button class="file-btn"
+                            onclick="document.getElementById('myFileInput').click(); return false;">
+                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                        </button>
+                        <span class="upload-label">Upload Image</span>
+                    </div>
                 </div>
             </div>
             <!-- button for post -->
@@ -38,5 +51,22 @@
         </form>
     </div>
 </div>
+<script>
+    $("#myFileInput").change(function (e) {
+
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            var img = document.getElementById("myFile");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+            $("myFileInput").after(img);
+        }
+    });
+</script>
 
 {% endblock %}
