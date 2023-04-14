@@ -1,4 +1,5 @@
 from src.models import db, User
+import uuid
 
 class Users:
 
@@ -20,10 +21,17 @@ class Users:
     
     def create_user(self, username, email, password, is_business=False):
         '''Creates a user'''
+        # create uuid for user_id
+        id = uuid.uuid1()
+        id = id.int
+        # make the id 12 digits
+        id = str(id)
+        id = id[:8]
+        id = int(id)
         if is_business:
-            user = User(username=username, email=email, password=password, private=False, is_business=True)
+            user = User(user_id=id, username=username, email=email, password=password, private=False, is_business=True)
         else:
-            user = User(username=username, email=email, password=password, private=False, is_business=False)
+            user = User(user_id=id, username=username, email=email, password=password, private=False, is_business=False)
         db.session.add(user)
         db.session.commit()
         return user

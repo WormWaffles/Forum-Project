@@ -1,5 +1,6 @@
 from src.models import db, Post
 from src.likes import likes
+import uuid
 
 class PostFeed:
 
@@ -25,7 +26,14 @@ class PostFeed:
     
     def create_post(self, user_id, title, content, file, likes):
         '''Creates a post'''
-        post = Post(user_id=user_id, title=title, content=content, file=file, likes=likes)
+        # create uuid for post_id
+        id = uuid.uuid1()
+        id = id.int
+        # make the id 12 digits
+        id = str(id)
+        id = id[:8]
+        id = int(id)
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes)
         db.session.add(post)
         db.session.commit()
         return post

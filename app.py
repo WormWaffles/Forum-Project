@@ -1,5 +1,6 @@
 import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
+from werkzeug.utils import secure_filename
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -16,7 +17,8 @@ import google.auth.transport.requests
 from pip._vendor import cachecontrol
 import boto3
 from werkzeug.utils import secure_filename
-
+from flask_bcrypt import Bcrypt
+import uuid
 
 
 app = Flask(__name__)
@@ -39,8 +41,9 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB max upload size
 db.init_app(app)
 
 # vars
-app.secret_key='SecretKey'
+app.secret_key = os.getenv('SECRET_KEY')
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+bcrypt = Bcrypt(app)
 
 # Google Auth
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
@@ -188,6 +191,7 @@ def edit_account():
             if len(password) < 6:
                 message = 'Password must be at least 6 characters.'
                 return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
@@ -212,7 +216,7 @@ def login():
         if password is None:
             abort(400)
         user = users.get_user_by_email(email)
-        if user and user.password == password:
+        if user and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
         else:
@@ -240,29 +244,44 @@ def register():
         confirm_password = request.form['confirm-password']
 
         info = {'username': username, 'email': email, 'password': password, 'confirm_password': confirm_password}
+
+        # if 'profile' not in request.files: #this
+        #     abort(400)
+
+        #     #check is empty
+        #     profile_pic = request.files['profile']
+        #     profile_pic.filename.rsplit('.', 1)[1] not in ['jpg', 'jpeg', 'png']
+
+        #     filename = f'{username}_{secure_filename(profile_pic.filename)}'
+
+        #     profile_pic.save(os.path.join('static', 'profile_pics', filename))
+
+        #     # save filename
         
-        if username != "" and email != "" and password != "" and confirm_password != "":
-            if not (re.fullmatch(regex, email)):
-                message = 'Email is not valid.'
-                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
-            if password != confirm_password:
-                message = 'Passwords do not match.'
-                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
-            if len(password) < 6:
-                message = 'Password must be at least 6 characters.'
-                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
-            
-            existing_user = users.get_user_by_username(username)
-            if existing_user:
-                message = 'Username already exists.'
-                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
-            
-            existing_email = users.get_user_by_email(email)
-            if existing_email:
-                message = 'email'
-                return render_template('register.html', message=message, logged_in=logged_in(), register="active", username=username, info=info)
+        # error handling
+        if username == "" or email == "" or password == "" or confirm_password == "":
+            message = 'All fields are required.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if not (re.fullmatch(regex, email)):
+            message = 'Email is not valid.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if password != confirm_password:
+            message = 'Passwords do not match.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if len(password) < 6:
+            message = 'Password must be at least 6 characters.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        existing_user = users.get_user_by_username(username)
+        if existing_user:
+            message = 'Username already exists.'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        existing_email = users.get_user_by_email(email)
+        if existing_email:
+            message = 'email'
+            return render_template('register.html', message=message, logged_in=logged_in(), register="active", info=info)
         
-        new_user = users.create_user(username, email, password)
+        hashed_password = bcrypt.generate_password_hash(password).decode()
+        new_user = users.create_user(username, email, hashed_password)
         session['user_id'] = new_user.user_id
 
         return redirect(url_for('account'))
@@ -436,28 +455,31 @@ def business():
 
         info = {'business_name': business_name, 'business_email': business_email, 'password': password, 'confirm_password': confirm_password}
         
-        if business_name != "" and business_email != "" and password != "" and confirm_password != "":
-            if not (re.fullmatch(regex, business_email)):
-                message = 'Email is not valid.'
-                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
-            if password != confirm_password:
-                message = 'Passwords do not match.'
-                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
-            if len(password) < 6:
-                message = 'Password must be at least 6 characters.'
-                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
-            
-            existing_user = users.get_user_by_username(business_name)
-            if existing_user:
-                message = 'Username already exists.'
-                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
-            
-            existing_email = users.get_user_by_email(business_email)
-            if existing_email:
-                message = 'email'
-                return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if business_name == "" or business_email == "" or password == "" or confirm_password == "":
+            message = 'All fields are required.'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if not (re.fullmatch(regex, business_email)):
+            message = 'Email is not valid.'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if password != confirm_password:
+            message = 'Passwords do not match.'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        if len(password) < 6:
+            message = 'Password must be at least 6 characters.'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
         
-        new_user = users.create_user(username=business_name, email=business_email, password=password, is_business=True)
+        existing_user = users.get_user_by_username(business_name)
+        if existing_user:
+            message = 'Username already exists.'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        
+        existing_email = users.get_user_by_email(business_email)
+        if existing_email:
+            message = 'email'
+            return render_template('business_register.html', message=message, logged_in=logged_in(), register="active", info=info)
+        
+        hashed_password = bcrypt.generate_password_hash(password).decode()
+        new_user = users.create_user(username=business_name, email=business_email, password=hashed_password, is_business=True)
         session['user_id'] = new_user.user_id
 
         return redirect(url_for('account'))

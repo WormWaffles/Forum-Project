@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS ratings;
 -- WAIT TO ADD TABLES UNTIL AFTER THE DATABASE IS CREATED
 
 CREATE TABLE "user" (
-    user_id SERIAL NOT NULL,
+    user_id INTEGER NOT NULL,
     username VARCHAR(80) NOT NULL,
     password VARCHAR(80),
     first_name VARCHAR(80),
@@ -33,7 +33,7 @@ CREATE TABLE "user" (
 );
 
 CREATE TABLE post (
-    post_id SERIAL NOT NULL,
+    post_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     title VARCHAR(80) NOT NULL,
     content VARCHAR(500) NOT NULL,
