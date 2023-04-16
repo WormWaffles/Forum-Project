@@ -94,7 +94,8 @@ def account():
         return redirect(url_for('login'))
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
-    return render_template('account.html', account="active", rating=star)
+    followers_num = Follows.get_followers_num(g.user, g.user.user_id)
+    return render_template('account.html', account="active", rating=star,followers_num=followers_num)
 
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
@@ -313,8 +314,12 @@ def view_user(user_id):
 
     user = users.get_user_by_id(user_id)
     if user:
-        return render_template('account.html', user=user)
+        followers_num = Follows.get_followers_num(user, user_id)
+        return render_template('account.html', user=user,followers_num=followers_num)
     return redirect('/error')
+
+@app.get('/user/<user_id>')
+def view_user_follows(user_id):
 
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])

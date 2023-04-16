@@ -21,7 +21,10 @@ class Follows:
     def get_all_following(self,follower_user_id):
         return Follower.query.filter_by(follower_user_id=follower_user_id).all()
     
-    def get_followers_num(self):
-        return Follower.query.count()
+    def get_followers_num(self,followed_user_id):
+        
+        num_followers = Follower.query.filter_by(followed_user_id=followed_user_id).count()
+        return num_followers
+        #return Follower.query.count()
     
 follows = Follows()
