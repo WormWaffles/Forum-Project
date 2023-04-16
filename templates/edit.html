@@ -49,25 +49,15 @@
             <div class="business_input">
                 <div class="input_event">
                     <label class="checkbox-container">
-                        <input type="checkbox" name="event" value="1" {% if post.event %}checked{% endif %}>
+                        <input id="event_check" type="checkbox" name="event" value="1" {% if post.event %}checked{% endif %}>
                         <span class="checkmark"></span>
                         This is an Event
                     </label>
                 </div>
                 <div class="section">
                     <label for="date">Choose From Date</label>
-                    <select class="date" id="date1" name="from_date">
-                        <option value="
-                        {% if post.from_date %}
-                        {{ post.from_date }}
-                        {% else %}
-                        {% endif %}
-                        ">
-                            {% if post.from_date %}
-                            {{ post.from_date }}
-                            {% else %}
-                            {% endif %}
-                        </option>
+                    <select class="date" id="date1" name="from_date" {% if post.event %}style="background-color: #A6CAD84B;"{% else %}disabled{% endif %}>
+                        <option value="{% if post.from_date %}{{ post.from_date }}{% else %}{% endif %}">{% if post.from_date %}{{ post.from_date }}{% else %}{% endif %}</option>
                         <script>
                             // get current date
                             var currentDate = new Date();
@@ -89,18 +79,8 @@
                 </div>
                 <div class="section" id="sec2">
                     <label for="date">Choose To Date</label>
-                    <select class="date" id="date2" name="to_date">
-                        <option value="
-                        {% if post.to_date %}
-                        {{ post.to_date }}
-                        {% else %}
-                        {% endif %}
-                        ">
-                            {% if post.to_date %}
-                            {{ post.to_date }}
-                            {% else %}
-                            {% endif %}
-                        </option>
+                    <select class="date" id="date2" name="to_date" {% if post.event %}style="background-color: #A6CAD84B;"{% else %}disabled{% endif %}>
+                        <option value="{% if post.to_date %}{{ post.to_date }}{% else %}{% endif %}">{% if post.to_date %}{{ post.to_date }}{% else %}{% endif %}</option>
                         <script>
                             // get current date
                             var currentDate = new Date();
@@ -145,6 +125,24 @@
             reader.readAsDataURL(file);
             $("myFileInput").after(img);
         }
+    });
+    $(function () {
+        $('#event_check').change(function () {
+            if ($(this).is(':checked')) {
+                // disable the dropdown:
+                $('#date1').removeAttr('disabled');
+                $('#date2').removeAttr('disabled');
+                // change background color:
+                $('#date1').css('background-color', '#A6CAD84B');
+                $('#date2').css('background-color', '#A6CAD84B');
+            } else {
+                $('#date1').attr('disabled', 'disabled');
+                $('#date2').attr('disabled', 'disabled');
+                // change background color:
+                $('#date1').css('background-color', '#4c595e4b');
+                $('#date2').css('background-color', '#4c595e4b');
+            }
+        });
     });
 </script>
 

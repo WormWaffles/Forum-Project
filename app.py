@@ -293,17 +293,19 @@ def create():
             event = request.form.get('event')
             from_date = request.form.get('from_date')
             to_date = request.form.get('to_date')
-            print(event, from_date, to_date)
-            if event == 1:
+            if event == "1":
                 event = True
             else:
                 event = False
-            if from_date == "":
+            if event:
+                if from_date != None:
+                    from_date = from_date.replace(" ", "")
+                if to_date != None:
+                    to_date = to_date.replace(" ", "")
+            else:
                 from_date = None
-            if to_date == "":
                 to_date = None
         else:
-            event = None
             from_date = None
             to_date = None
         if title == "":
@@ -399,17 +401,19 @@ def edit(post_id):
             event = request.form.get('event')
             from_date = request.form.get('from_date')
             to_date = request.form.get('to_date')
-            print(event, from_date, to_date)
-            if event == 1:
+            if event == "1":
                 event = True
             else:
                 event = False
-            if from_date == "":
+            if event:
+                if from_date != None:
+                    from_date = from_date.replace(" ", "")
+                if to_date != None:
+                    to_date = to_date.replace(" ", "")
+            else:
                 from_date = None
-            if to_date == "":
                 to_date = None
         else:
-            event = None
             from_date = None
             to_date = None
         file_path = None

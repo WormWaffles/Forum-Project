@@ -40,8 +40,8 @@ CREATE TABLE post (
     file VARCHAR(255),
     likes INTEGER NOT NULL,
     event BOOLEAN DEFAULT NULL,
-    from_date VARCHAR(55),
-    to_date VARCHAR(55),
+    from_date VARCHAR(10),
+    to_date VARCHAR(10),
     PRIMARY KEY (post_id)
 );
 

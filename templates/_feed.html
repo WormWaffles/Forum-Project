@@ -58,6 +58,11 @@
                             <img class="image" src="{{ post.file }}" alt="post_image">
                         </div>
                         {% endif %}
+                        {% if post.event %}
+                        <div class="event">
+                            <p>From the {{ post.from_date.split("-")[2] }}th to the {{ post.to_date.split("-")[2] }}th</p>
+                        </div>
+                        {% endif %}
                         <div class="post-card-container">
                             <div class="date">
                                 <p>2 days ago</p>

@@ -83,6 +83,13 @@
     border-radius: 15%;
 }
 
+.event {
+    /* push to the left */
+    font: normal normal 15px/20px Poppins;
+    color: #555555;
+    padding-top: 2px;
+}
+
 .date {
     /* push to the left */
     font: oblique normal normal 15px/20px Poppins;
