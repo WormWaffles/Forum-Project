@@ -16,8 +16,9 @@ class Follows:
         return follower
     
     def get_all_followers(self):
-        return Follower.query.filter_by(followed_user_id=self).all()
-    
+        follow_list = User.query.join(Follower, User.user_id==Follower.follower_user_id).add_columns(User.user_id,User.username).filter_by(followed_user_id=self).all()
+        return follow_list
+
     def get_all_following(self,follower_user_id):
         return Follower.query.filter_by(follower_user_id=follower_user_id).all()
     
@@ -25,6 +26,8 @@ class Follows:
         
         num_followers = Follower.query.filter_by(followed_user_id=followed_user_id).count()
         return num_followers
-        #return Follower.query.count()
+    
+    def get_user_by_follower_id(self,follower_user_id):
+        return User.query.get(follower_user_id)
     
 follows = Follows()

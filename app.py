@@ -97,6 +97,12 @@ def account():
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
     return render_template('account.html', account="active", rating=star,followers_num=followers_num)
 
+#followers page
+@app.route('/account/followers')
+def account_followers():
+    followers = Follows.get_all_followers(g.user.user_id)
+    return render_template('followers.html',followers=followers)
+
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
     if request.method == 'GET':
@@ -311,16 +317,16 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-
     user = users.get_user_by_id(user_id)
     if user:
         followers_num = Follows.get_followers_num(user, user_id)
-        return render_template('account.html', user=user,followers_num=followers_num)
+        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id)
     return redirect('/error')
 
-@app.get('/user/<user_id>')
-def view_user_follows(user_id):
-
+@app.get('/user/<user_id>/followers')
+def view_user_followers(user_id):
+    followers = Follows.get_all_followers(user_id)
+    return render_template('followers.html',followers=followers)
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
