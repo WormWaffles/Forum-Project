@@ -306,6 +306,7 @@ def create():
                 from_date = None
                 to_date = None
         else:
+            event = None
             from_date = None
             to_date = None
         if title == "":
@@ -349,6 +350,7 @@ def delete_post(post_id):
         post = post_feed.get_post_by_id(post_id)
         s3.Object(bucket_name, post.file.split('/')[-1]).delete()
     post_feed.delete_post(post_id)
+    likes.delete_likes_by_post_id(post_id)
     return redirect('/feed')
 
 

@@ -28,6 +28,13 @@ class Likes:
         db.session.commit()
         return like
     
+    def delete_likes_by_post_id(self, post_id):
+        '''Deletes likes by post id'''
+        likes = self.get_like_by_post_id(post_id)
+        for like in likes:
+            db.session.delete(like)
+        db.session.commit()
+    
     def clear(self):
         '''Clears all likes'''
         UserLikes.query.delete()
