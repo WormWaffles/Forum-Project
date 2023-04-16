@@ -111,6 +111,7 @@ def account():
         star = rating.get_rating_average(g.user.user_id)
     return render_template('account.html', account="active", rating=star)
 
+
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
     if request.method == 'GET':
@@ -245,19 +246,6 @@ def register():
         confirm_password = request.form['confirm-password']
 
         info = {'username': username, 'email': email, 'password': password, 'confirm_password': confirm_password}
-
-        # if 'profile' not in request.files: #this
-        #     abort(400)
-
-        #     #check is empty
-        #     profile_pic = request.files['profile']
-        #     profile_pic.filename.rsplit('.', 1)[1] not in ['jpg', 'jpeg', 'png']
-
-        #     filename = f'{username}_{secure_filename(profile_pic.filename)}'
-
-        #     profile_pic.save(os.path.join('static', 'profile_pics', filename))
-
-        #     # save filename
         
         # error handling
         if username == "" or email == "" or password == "" or confirm_password == "":
@@ -301,6 +289,23 @@ def create():
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
+        if g.user.is_business:
+            event = request.form.get('event')
+            from_date = request.form.get('from_date')
+            to_date = request.form.get('to_date')
+            print(event, from_date, to_date)
+            if event == 1:
+                event = True
+            else:
+                event = False
+            if from_date == "":
+                from_date = None
+            if to_date == "":
+                to_date = None
+        else:
+            event = None
+            from_date = None
+            to_date = None
         if title == "":
             abort(400)
         post_path = None
@@ -309,7 +314,8 @@ def create():
                 # make sure file is an image
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
-                new_post_filename = f'{title}_{secure_filename(file.filename)}'
+                file_title = title.replace(" ", "_")
+                new_post_filename = f'{file_title}_{secure_filename(file.filename)}'
 
                 # upload file to s3
                 s3.Bucket(bucket_name).upload_fileobj(
@@ -324,7 +330,7 @@ def create():
 
         # get user id
         user_id = session['user_id']
-        post_feed.create_post(user_id, title, content, post_path, 0)
+        post_feed.create_post(user_id, title, content, post_path, 0, event, from_date, to_date)
         return redirect('/feed')
     
 
@@ -389,6 +395,23 @@ def edit(post_id):
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
+        if g.user.is_business:
+            event = request.form.get('event')
+            from_date = request.form.get('from_date')
+            to_date = request.form.get('to_date')
+            print(event, from_date, to_date)
+            if event == 1:
+                event = True
+            else:
+                event = False
+            if from_date == "":
+                from_date = None
+            if to_date == "":
+                to_date = None
+        else:
+            event = None
+            from_date = None
+            to_date = None
         file_path = None
         if file:
             try:
@@ -415,7 +438,7 @@ def edit(post_id):
             except Exception as e:
                 print(f"Error uploading files to s3: " + str(e))
 
-        post_feed.update_post(post_id, title, content, file=file_path)
+        post_feed.update_post(post_id, title, content, file=file_path, event=event, from_date=from_date, to_date=to_date)
         return redirect('/feed')
 
 
