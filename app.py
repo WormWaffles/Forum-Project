@@ -109,7 +109,14 @@ def account():
         return redirect(url_for('login'))
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
-    return render_template('account.html', account="active", rating=star)
+    followers_num = Follows.get_followers_num(g.user, g.user.user_id)
+    return render_template('account.html', account="active", rating=star,followers_num=followers_num)
+
+#followers page
+@app.route('/account/followers')
+def account_followers():
+    followers = Follows.get_all_followers(g.user.user_id)
+    return render_template('followers.html',followers=followers)
 
 @app.route('/account/edit', methods=['GET', 'POST'])
 def edit_account():
@@ -437,12 +444,26 @@ def view_user(user_id):
     if g.user:
         if int(g.user.user_id) == int(user_id):
             return redirect('/account')
-
     user = users.get_user_by_id(user_id)
     if user:
-        return render_template('account.html', user=user)
+        followers_num = Follows.get_followers_num(user, user_id)
+        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id)
     return redirect('/error')
 
+#view a other users followers
+@app.get('/user/<user_id>/followers')
+def view_user_followers(user_id):
+    followers = Follows.get_all_followers(user_id)
+    return render_template('followers.html',followers=followers)
+
+#follow method
+@app.route('/follow/<user_id>', methods=['POST'])
+def follow(user_id):
+    #infinitely incrememnts
+    #cant unfollow
+    Follows.foo_followed_bar(g.user,g.user.user_id,user_id)
+    return redirect(url_for('view_user',user_id=user_id))
+    
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():

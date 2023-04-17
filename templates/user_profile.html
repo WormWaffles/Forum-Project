@@ -22,12 +22,10 @@
                                 <h3 class="">{{ g.user.username }} </h3>
                             </div>
                             <div class="profile-links">
-                                {% if followers %}
-                                <a href="/account/followers">{{ followers }} Followers</a>
-                                {% else %}
-                                <a href="/account/followers">0 Followers</a>
-                                {% endif %}
-                                <button id="follow-btn" class="btn" type="submit">Follow</button>
+
+                                <a href="/account/followers">{{ followers_num }} Followers</a>
+                                
+                                
                             </div>
                         </div>
                         <div class="description">
