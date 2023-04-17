@@ -1,4 +1,5 @@
 from src.models import db, User
+import uuid
 
 class Users:
 
@@ -20,15 +21,22 @@ class Users:
     
     def create_user(self, username, email, password, is_business=False):
         '''Creates a user'''
+        # create uuid for user_id
+        id = uuid.uuid1()
+        id = id.int
+        # make the id 12 digits
+        id = str(id)
+        id = id[:8]
+        id = int(id)
         if is_business:
-            user = User(username=username, email=email, password=password, private=False, is_business=True)
+            user = User(user_id=id, username=username, email=email, password=password, private=False, is_business=True)
         else:
-            user = User(username=username, email=email, password=password, private=False, is_business=False)
+            user = User(user_id=id, username=username, email=email, password=password, private=False, is_business=False)
         db.session.add(user)
         db.session.commit()
         return user
 
-    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
+    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private, profile_pic, banner_pic, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
@@ -41,6 +49,9 @@ class Users:
             user.private = True
         else:
             user.private = False
+
+        user.profile_pic = profile_pic
+        user.banner_pic = banner_pic
 
         # Business
         if is_business != None:

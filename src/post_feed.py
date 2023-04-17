@@ -1,5 +1,6 @@
 from src.models import db, Post
 from src.likes import likes
+import uuid
 
 class PostFeed:
 
@@ -23,25 +24,26 @@ class PostFeed:
         '''Returns post by id'''
         return Post.query.get(post_id)
     
-    def create_post(self, user_id, title, content, likes):
+    def create_post(self, user_id, title, content, file, likes):
         '''Creates a post'''
-        post = Post(user_id=user_id, title=title, content=content, likes=likes)
-        # self.set_file(post.post_id, file)
+        # create uuid for post_id
+        id = uuid.uuid1()
+        id = id.int
+        # make the id 12 digits
+        id = str(id)
+        id = id[:8]
+        id = int(id)
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes)
         db.session.add(post)
         db.session.commit()
         return post
-    
-    def set_file(self, post_id, file):
-        '''Sets the file for a post'''
-        # TODO: implement
-        pass
     
     def update_post(self, post_id, title, content, file):
         '''Updates a post'''
         post = self.get_post_by_id(post_id)
         post.title = title
         post.content = content
-        self.set_file(post_id, file)
+        post.file = file
         db.session.commit()
         return post
     
