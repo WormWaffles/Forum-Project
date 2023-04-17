@@ -2,9 +2,9 @@
 
 {% block body %}
 <p>Followers Page</p>
-{% for follower in followers_list %}
-<a class="username" href="/user/{{ follower.follower_user_id }}">
-    <p class="username" id="user">{{ follower.follower_user_id }}</p>
+{% for follower in followers %}
+<a class="username" href="/user/{{ follower.user_id }}">
+    <p class="username" id="user">{{ follower.username }}</p>
 </a>
 {% endfor %}
 {% endblock %}
