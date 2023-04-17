@@ -46,12 +46,7 @@ class Rating(db.Model):
     # user = db.relationship('User', backref='users', lazy=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
     # post = db.relationship('Post', backref='post_id', lazy=True)
-
-class Follower(db.Model):
-    follower_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
-    followed_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
         
-
     def __init__(self, rating, business_id, post_id):
         self.rating = rating
         self.business_id = business_id
@@ -59,3 +54,7 @@ class Follower(db.Model):
 
     def __repr__(self):
         return f'{self.rating}-star rating created for {self.business_id} by {self.post_id}'
+    
+class Follower(db.Model):
+    follower_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    followed_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)

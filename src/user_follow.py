@@ -4,13 +4,15 @@ class Follows:
 
     #just pay close attention to which user is following which
     def foo_followed_bar(self,follower_user_id,followed_user_id):
-        follower = Follower(follower_user_id,followed_user_id)
+        #need to change to only allow one!
+        follower = Follower(follower_user_id=follower_user_id,followed_user_id=followed_user_id)
         db.session.add(follower)
         db.session.commit()
-        return follower
+        return 1
     
     def foo_unfollowed_bar(self,follower_user_id,followed_user_id):
-        follower = Follower(follower_user_id,followed_user_id)
+        #implement
+        follower = Follower(follower_user_id=follower_user_id,followed_user_id=followed_user_id)
         db.session.delete(follower)
         db.session.commit()
         return follower

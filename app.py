@@ -323,10 +323,20 @@ def view_user(user_id):
         return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id)
     return redirect('/error')
 
+#view a other users followers
 @app.get('/user/<user_id>/followers')
 def view_user_followers(user_id):
     followers = Follows.get_all_followers(user_id)
     return render_template('followers.html',followers=followers)
+
+#follow method
+@app.route('/follow/<user_id>', methods=['POST'])
+def follow(user_id):
+    #infinitely incrememnts
+    #cant unfollow
+    Follows.foo_followed_bar(g.user,g.user.user_id,user_id)
+    return redirect(url_for('view_user',user_id=user_id))
+    
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
