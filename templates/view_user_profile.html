@@ -21,10 +21,18 @@
                             <div class="profile-name">
                                 <h3 class="">{{ user.username }} </h3>
                             </div>
-                            <form class="profile-links" action='/follow/{{ user.user_id}}' method="POST">
-                            <a href="/user/{{ user.user_id }}/followers">{{ followers_num }} Followers</a>
-                            <button id="follow-btn" class="btn" type="submit">+ Follow</button>
-                            </form>
+                            {% if is_Following == True %}
+                                <form class="profile-links1" action='/unfollow/{{ user.user_id}}' method="POST">
+                                <a href="/user/{{ user.user_id }}/followers">{{ followers_num }} Followers</a>
+                                <button id="follow-btn" class="btn" type="submit">Following</button>
+                                </form>
+                            {% else %}
+                                <form class="profile-links" action='/follow/{{ user.user_id}}' method="POST">
+                                <a href="/user/{{ user.user_id }}/followers">{{ followers_num }} Followers</a>
+                                <button id="follow-btn" class="btn" type="submit">+ Follow Meo1</button>
+                                </form>
+                            {% endif %}
+                            
                         </div>
 
                         <div class="description">

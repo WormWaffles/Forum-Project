@@ -100,6 +100,13 @@
     margin-left: 3em;
 }
 
+#unfollow-btn {
+    font-family: Poppins, sans-serif;
+    background-color: #57A1BD !important;
+    color: white;
+    margin-left: 3em;
+}
+
 .setting_button {
     text-align: right;
 }

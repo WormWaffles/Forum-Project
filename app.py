@@ -447,7 +447,8 @@ def view_user(user_id):
     user = users.get_user_by_id(user_id)
     if user:
         followers_num = Follows.get_followers_num(user, user_id)
-        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id)
+        is_Following=Follows.is_Foo_Following_Bar(g.user.user_id,user_id)
+        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id,is_Following=is_Following)
     return redirect('/error')
 
 #view a other users followers
@@ -459,11 +460,19 @@ def view_user_followers(user_id):
 #follow method
 @app.route('/follow/<user_id>', methods=['POST'])
 def follow(user_id):
-    #infinitely incrememnts
-    #cant unfollow
+    #is_Following = True
     Follows.foo_followed_bar(g.user,g.user.user_id,user_id)
-    return redirect(url_for('view_user',user_id=user_id))
-    
+    is_Following = True
+    return redirect(url_for('view_user',user_id=user_id,is_Following=is_Following))
+
+#unfollow method
+@app.route('/unfollow/<user_id>', methods=['POST'])
+def unfollow(user_id):
+    #is_Following = False
+    Follows.foo_unfollowed_bar(g.user.user_id,user_id)
+    is_Following = False
+    return redirect(url_for('view_user',user_id=user_id,is_Following=is_Following))
+
 # business page
 @app.route('/business/register', methods=['GET', 'POST'])
 def business():
