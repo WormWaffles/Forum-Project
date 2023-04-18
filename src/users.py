@@ -65,6 +65,13 @@ class Users:
         db.session.commit()
         return user
     
+    def search_user(self, search):
+        '''Query user names and emails ignore case'''
+        user = User.query.filter(User.username.ilike(f'%{search}%')).first()
+        if user:
+            return user
+        return None
+    
     def delete_user(self, user_id):
         '''Deletes a user'''
         user = self.get_user_by_id(user_id)

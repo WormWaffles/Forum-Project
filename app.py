@@ -546,6 +546,17 @@ def business():
     
     return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
+# search page
+@app.get('/search')
+def search():
+    if not g.user:
+        return redirect(url_for('login'))
+    query = request.args.get('query')
+    if query:
+        posts = post_feed.search_posts(query)
+        return render_template('search.html', posts=posts, query=query)
+    return redirect('/error')
+
 
 # comment on post
 @app.route('/feed/<post_id>/comment', methods=['GET', 'POST'])
