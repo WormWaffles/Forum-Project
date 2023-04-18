@@ -102,6 +102,7 @@
                     </div>
                 </div>
             </div>
+            {% if not g.user.is_business %}
             <!-- private account check box -->
             <div class="input_private">
                 <label class="checkbox-container">
@@ -110,6 +111,7 @@
                     Set profile to private.
                 </label>
             </div>
+            {% endif %}
 
             <!-- button for post -->
             <div class="buttons">

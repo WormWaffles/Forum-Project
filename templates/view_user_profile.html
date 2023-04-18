@@ -34,7 +34,11 @@
                             {% endif %}
                             
                         </div>
-
+                        {% if user.private %}
+                        <div class="description">
+                            <p>This account is private.</p>
+                        </div>
+                        {% else %}
                         <div class="description">
                             {% if user.about_me %}
                             {{ user.about_me }}
@@ -50,6 +54,7 @@
                                 life has to offer.</p>
                             {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
