@@ -24,7 +24,7 @@ class PostFeed:
         '''Returns post by id'''
         return Post.query.get(post_id)
     
-    def create_post(self, user_id, title, content, file, likes):
+    def create_post(self, user_id, title, content, file, likes, event, from_date, to_date):
         '''Creates a post'''
         # create uuid for post_id
         id = uuid.uuid1()
@@ -33,17 +33,20 @@ class PostFeed:
         id = str(id)
         id = id[:8]
         id = int(id)
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes)
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes, event=event, from_date=from_date, to_date=to_date)
         db.session.add(post)
         db.session.commit()
         return post
     
-    def update_post(self, post_id, title, content, file):
+    def update_post(self, post_id, title, content, file, event, from_date, to_date):
         '''Updates a post'''
         post = self.get_post_by_id(post_id)
         post.title = title
         post.content = content
         post.file = file
+        post.event = event
+        post.from_date = from_date
+        post.to_date = to_date
         db.session.commit()
         return post
     

@@ -35,6 +35,9 @@ class Post(db.Model):
     content = db.Column(db.String(80), nullable=False)
     file = db.Column(db.String(255), nullable=True)
     likes = db.Column(db.Integer, nullable=False)
+    event = db.Column(db.Boolean, nullable=True)
+    from_date = db.Column(db.String(10), nullable=True)
+    to_date = db.Column(db.String(10), nullable=True)
     # comments need to be implemented
 
 # Likes Model

@@ -2,54 +2,113 @@
 
 {% block body %}
 
+{% if g.user.is_business %}
+<link rel="stylesheet" href="/static/styles/bcreate.css">
+{% else %}
 <link rel="stylesheet" href="/static/styles/create.css">
+{% endif %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!-- edit post title content or file -->
+<!-- form  -->
 <div class="create-card">
-    <div>
-        <h1 class="page-title">Edit Post</h1>
-    </div>
-    <div class="create-container">
-        <form action="/feed/edit/{{ post.post_id }}" method="post" enctype="multipart/form-data">
-            <!-- input for title of post -->
-            <div class="title-div">
-                <label>Title your post</label>
-                <input class="form-control" type="text" name="title" placeholder="Title" value="{{ post.title }}">
-            </div>
-            <!-- input for post content -->
-            <div class="content-div">
-                <label>Write something...</label>
-                <textarea class="form-control" name="content" placeholder="Content"
-                    rows="4">{{ post.content }}</textarea>
-            </div>
-            <!-- input for single file attachment -->
-            <div class="upload">
-                {% if post.file %}
-                <img class="myFile" id="myFile" src="{{post.file}}"
-                    alt="your image">
-                {% else %}
-                <img class="myFile" id="myFile" src="{{url_for('static', filename='images/default_pfp.png')}}"
-                    alt="your image">
-                {% endif %}
-                <div class="file-div">
-                    <div class="file-upload-btn-wrapper">
-                        <input name="file" type="file" id="myFileInput" accept="image/png, image/jpg, image/jpeg"
-                            style="display: none;">
-                        <button class="file-btn"
-                            onclick="document.getElementById('myFileInput').click(); return false;">
-                            <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
-                        </button>
-                        <span class="upload-label">Upload Image</span>
+    <form action="/feed/edit/{{ post.post_id }}" method="post" enctype="multipart/form-data">
+        <div class="form">
+            <div class="create-container">
+                <div>
+                    <h1 class="page-title">Create a Post</h1>
+                </div>
+                <!-- input for title of post -->
+                <div class="title-div">
+                    <label>Title your post</label>
+                    <input class="title" type="text" name="title" value="{{ post.title }}" required>
+                </div>
+                <!-- input for post content -->
+                <div class="content-div">
+                    <label>Write something...</label>
+                    <textarea class="content" name="content" rows="4">{{ post.content }}</textarea>
+                </div>
+                <!-- input for single file attachment -->
+                <div class="upload">
+                    <img class="myFile" id="myFile"
+                        src="{% if post.file %}{{ post.file }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"
+                        alt="your image">
+                    <div class="file-div">
+                        <div class="file-upload-btn-wrapper">
+                            <input name="file" type="file" id="myFileInput" accept="image/png, image/jpg, image/jpeg"
+                                style="display: none;">
+                            <button class="file-btn"
+                                onclick="document.getElementById('myFileInput').click(); return false;">
+                                <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                            </button>
+                            <span class="upload-label">Upload Image</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- button for post -->
-            <div class="post">
-                <button class="post-btn" type="submit">Save</button>
+            {% if g.user.is_business %}
+            <div class="business_input">
+                <div class="input_event">
+                    <label class="checkbox-container">
+                        <input id="event_check" type="checkbox" name="event" value="1" {% if post.event %}checked{% endif %}>
+                        <span class="checkmark"></span>
+                        This is an Event
+                    </label>
+                </div>
+                <div class="section">
+                    <label for="date">Choose From Date</label>
+                    <select class="date" id="date1" name="from_date" {% if post.event %}style="background-color: #A6CAD84B;"{% else %}disabled{% endif %}>
+                        <option value="{% if post.from_date %}{{ post.from_date }}{% else %}{% endif %}">{% if post.from_date %}{{ post.from_date }}{% else %}{% endif %}</option>
+                        <script>
+                            // get current date
+                            var currentDate = new Date();
+                            // loop through the next 30 days and generate options
+                            for (var i = 0; i < 30; i++) {
+                                // create a new date for each day
+                                var date = new Date(currentDate.getTime() + (i * 24 * 60 * 60 * 1000));
+                                // format the date as yyyy-mm-dd
+                                var formattedDate = date.toISOString().slice(0, 10);
+                                // create an option element with the formatted date
+                                var option = document.createElement("option");
+                                option.value = formattedDate;
+                                option.text = date.toLocaleDateString();
+                                // add the option to the select element
+                                document.getElementById("date1").add(option);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div class="section" id="sec2">
+                    <label for="date">Choose To Date</label>
+                    <select class="date" id="date2" name="to_date" {% if post.event %}style="background-color: #A6CAD84B;"{% else %}disabled{% endif %}>
+                        <option value="{% if post.to_date %}{{ post.to_date }}{% else %}{% endif %}">{% if post.to_date %}{{ post.to_date }}{% else %}{% endif %}</option>
+                        <script>
+                            // get current date
+                            var currentDate = new Date();
+                            // loop through the next 30 days and generate options
+                            for (var i = 0; i < 30; i++) {
+                                // create a new date for each day
+                                var date = new Date(currentDate.getTime() + (i * 24 * 60 * 60 * 1000));
+                                // format the date as yyyy-mm-dd
+                                var formattedDate = date.toISOString().slice(0, 10);
+                                // create an option element with the formatted date
+                                var option = document.createElement("option");
+                                option.value = formattedDate;
+                                option.text = date.toLocaleDateString();
+                                // add the option to the select element
+                                document.getElementById("date2").add(option);
+                            }
+                        </script>
+                    </select>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+        {% endif %}
+        <!-- button for post -->
+        <div class="post">
+            <button class="post-btn" type="submit">Post</button>
+        </div>
+    </form>
+</div>
 </div>
 <script>
     $("#myFileInput").change(function (e) {
@@ -66,6 +125,24 @@
             reader.readAsDataURL(file);
             $("myFileInput").after(img);
         }
+    });
+    $(function () {
+        $('#event_check').change(function () {
+            if ($(this).is(':checked')) {
+                // disable the dropdown:
+                $('#date1').removeAttr('disabled');
+                $('#date2').removeAttr('disabled');
+                // change background color:
+                $('#date1').css('background-color', '#A6CAD84B');
+                $('#date2').css('background-color', '#A6CAD84B');
+            } else {
+                $('#date1').attr('disabled', 'disabled');
+                $('#date2').attr('disabled', 'disabled');
+                // change background color:
+                $('#date1').css('background-color', '#4c595e4b');
+                $('#date2').css('background-color', '#4c595e4b');
+            }
+        });
     });
 </script>
 
