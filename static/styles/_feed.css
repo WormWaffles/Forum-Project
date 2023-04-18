@@ -1,8 +1,9 @@
 .container-main {
     display: grid;
     grid-template-columns: 3fr 1fr;
-    margin: 1.5em auto;
-    max-width: 1200px;
+    margin-right: 15%;
+    margin-left: 15%;
+    margin-top: 1.5rem;
 }
 
 .post-card {
@@ -16,6 +17,12 @@
     margin-left: auto;
     margin-right: 2em;
     margin-bottom: 1rem;
+}
+
+.list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .post-card-container {

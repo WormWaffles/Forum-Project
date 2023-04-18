@@ -21,10 +21,10 @@
 
 
 .sidebar-container {
-    width: 350px;
+    width: 300px;
     background-color: white;
     border-radius: 15px;
-    border: 3px solid #57A1BD;
+    border: 2px solid #57A1BD;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     padding: 2em;
 }
@@ -115,5 +115,5 @@
 }
 
 #map {
-    height: 300px;
+    height: 225px;
 }
