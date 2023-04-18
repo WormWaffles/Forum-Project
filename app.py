@@ -150,7 +150,7 @@ def edit_account():
                 # check if file is an image
                 if not profile_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Profile picture must be a .jpg, .jpeg, or .png file.')
-                new_profile_filename = f'{user_id}_{secure_filename(profile_pic.filename)}'
+                new_profile_filename = f'{user_id}_{secure_filename(profile_pic.filename)}'.replace(' ', '_')
 
                 # remove old profile pic from s3
                 user = users.get_user_by_id(user_id)
@@ -170,7 +170,7 @@ def edit_account():
                 # check if file is a picture
                 if not banner_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_banner_filename = f'{user_id}_{secure_filename(banner_pic.filename)}'
+                new_banner_filename = f'{user_id}_{secure_filename(banner_pic.filename)}'.replace(' ', '_')
 
                 # remove old banner pic from s3
                 user = users.get_user_by_id(user_id)
@@ -325,7 +325,7 @@ def create():
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
                 file_title = title.replace(" ", "_")
-                new_post_filename = f'{file_title}_{secure_filename(file.filename)}'
+                new_post_filename = f'{file_title}_{secure_filename(file.filename)}'.replace(' ', '_')
 
                 # upload file to s3
                 s3.Bucket(bucket_name).upload_fileobj(
@@ -434,7 +434,7 @@ def edit(post_id):
                 bucket_name = 'barhive'
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_filename = f'{title}_{secure_filename(file.filename)}'
+                new_filename = f'{title}_{secure_filename(file.filename)}'.replace(' ', '_')
 
                 # remove old banner pic from s3
                 post = post_feed.get_post_by_id(post_id)
