@@ -8,6 +8,16 @@
     color: #57A1BD;
 }
 
+.profile-links1 a:link {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.profile-links1 a:visited {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
 .banner img {
     width: 100%;
     height: 300px;
@@ -58,6 +68,13 @@
 }
 
 .profile-links {
+    font-family: Poppins, sans-serif;
+    color: #57A1BD;
+    grid-area: links;
+    justify-self: space-evenly;
+}
+
+.profile-links1 {
     font-family: Poppins, sans-serif;
     color: #57A1BD;
     grid-area: links;
