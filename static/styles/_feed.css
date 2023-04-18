@@ -52,6 +52,10 @@
     text-decoration: none;
 }
 
+.username:hover {
+    color: #36A3C0;
+}
+
 .checked {
     font: normal normal normal 20px/27px Poppins;
     color: #535353;
@@ -63,11 +67,20 @@
     text-decoration: none;
 }
 
+.post_title {
+    display: flex;
+}
+
 .title {
+    width: auto;
     font: normal normal 900 24px/33px Poppins;
     color: #535353;
     text-decoration: none;
     padding-top: 5px;
+}
+
+.title h1:hover {
+    color: #36A3C0;
 }
 
 .content {
