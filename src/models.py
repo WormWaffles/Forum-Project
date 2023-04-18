@@ -70,6 +70,7 @@ class Follower(db.Model):
 class Comment(db.Model):
     comment_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    user = db.relationship('User', backref='comment_users', lazy=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
     content = db.Column(db.String(80), nullable=False)
     likes = db.Column(db.Integer, nullable=False)

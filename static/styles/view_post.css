@@ -160,3 +160,20 @@ p {
 .username:hover {
     color: #36A3C0;
 }
+
+.comment_title {
+    max-width: 700px;
+    height: auto;
+    padding: 25px 40px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    margin: 1.5rem auto;
+    margin-bottom: 1rem;
+    font: normal normal 900 24px/33px Poppins;
+    color: #707070;
+}
+
+.comment_content {
+    margin-top: 1rem;
+}

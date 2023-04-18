@@ -7,6 +7,7 @@ from src.likes import likes
 from src.rating import rating
 from src.user_follow import Follows
 from src.models import db, User, Rating
+from src.comments import comments
 from dotenv import load_dotenv
 import os
 import re
@@ -462,7 +463,7 @@ def view_post(post_id):
         return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
-        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
+        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), comments=comments.get_comments_by_post_id(post_id))
     return redirect('/error')
 
 # view user
@@ -561,10 +562,11 @@ def search():
 # comment on post
 @app.route('/feed/<post_id>/comment', methods=['POST'])
 def comment(post_id):
+    print(g.user.user_id)
     comment = request.form['content']
     print(comment)
     post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment)
-    return redirect(url_for('view_post', post_id=post_id))
+    return redirect(url_for('view_post', post_id=post_id, comments=comments.get_comments_by_post_id(post_id)))
 
 # error page
 @app.errorhandler(404)

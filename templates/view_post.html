@@ -1,6 +1,7 @@
 {% extends '_layout.html' %}
 
 {% block body %}
+
 <link rel="stylesheet" href="/static/styles/view_post.css">
 
 <div class="post-card">
@@ -103,70 +104,12 @@
                     </div>
                 </div>
             </div>
-            {% if g.user.is_business %}
-            <div class="business_input">
-                <div class="input_event">
-                    <label class="checkbox-container">
-                        <input id="event_check" type="checkbox" name="event" value="1">
-                        <span class="checkmark"></span>
-                        This is an Event
-                    </label>
-                </div>
-                <div class="section">
-                    <label for="date">Choose From Date</label>
-                    <select class="date" id="date1" name="from_date" disabled>
-                        <option value="0"></option>
-                        <script>
-                            // get current date
-                            var currentDate = new Date();
-                            // loop through the next 30 days and generate options
-                            for (var i = 0; i < 30; i++) {
-                                // create a new date for each day
-                                var date = new Date(currentDate.getTime() + (i * 24 * 60 * 60 * 1000));
-                                // format the date as yyyy-mm-dd
-                                var formattedDate = date.toISOString().slice(0, 10);
-                                // create an option element with the formatted date
-                                var option = document.createElement("option");
-                                option.value = formattedDate;
-                                option.text = date.toLocaleDateString();
-                                // add the option to the select element
-                                document.getElementById("date1").add(option);
-                            }
-                        </script>
-                    </select>
-                </div>
-                <div class="section" id="sec2">
-                    <label for="date">Choose To Date</label>
-                    <select class="date" id="date2" name="to_date" disabled>
-                        <option value="0"></option>
-                        <script>
-                            // get current date
-                            var currentDate = new Date();
-                            // loop through the next 30 days and generate options
-                            for (var i = 0; i < 30; i++) {
-                                // create a new date for each day
-                                var date = new Date(currentDate.getTime() + (i * 24 * 60 * 60 * 1000));
-                                // format the date as yyyy-mm-dd
-                                var formattedDate = date.toISOString().slice(0, 10);
-                                // create an option element with the formatted date
-                                var option = document.createElement("option");
-                                option.value = formattedDate;
-                                option.text = date.toLocaleDateString();
-                                // add the option to the select element
-                                document.getElementById("date2").add(option);
-                            }
-                        </script>
-                    </select>
-                </div>
-            </div>
         </div>
-        {% endif %}
         <!-- button for post -->
         <div class="post">
             <button class="post-btn" type="submit">Comment</button>
         </div>
     </form>
-</div>
 </div>
 <script>
     $("#myFileInput").change(function (e) {
@@ -206,5 +149,58 @@
 
 
 <script src="/static/javascript/feed_func.js"></script>
+
+<h1 class="comment_title">Comments</h1>
+
+{% for comment in comments %}
+<div class="post-card">
+    <div class="user_profile">
+        <div class="pfp">
+            <a href="/user/{{ comment.user.user_id }}"><img class="user_picture"
+                    src="{% if comment.user.profile_pic %}{{ comment.user.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"
+                    alt="pfp"></a>
+        </div>
+        <div class="user_info">
+            <a class="username" href="/user/{{ comment.user.user_id }}">
+                <p class="username" id="user">{{ comment.user.username }}</p>
+            </a>
+        </div>
+        {% if comment.user_id == g.user.user_id %}
+        <div class="settings-container">
+            <!-- options to edit or delete -->
+            <img src="/static/images/setting_icon.png" id="{{ comment.comment_id }}" for="settings" alt="Settings"
+                class="settings-icon" width="25" height="25">
+            <div class="settings-options" for="so{{ post.post_id }}">
+                <a href="/feed/edit/{{ comment.comment_id }}" class="settings-option">Edit</a>
+                <a href="/feed/delete/{{ comment.comment_id }}" class="settings-option">Delete</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="comment_content">
+        <p id="content">"{{ comment.content }}"</p>
+    </div>
+    {% if comment.file %}
+    <div>
+        <img class="image" src="{{ comment.file }}" alt="post_image">
+    </div>
+    {% endif %}
+    <div class="post-card-container">
+        <div class="date">
+            <p>2 days ago</p>
+        </div>
+        <!-- like button, dont even ask bruh -->
+        <div class="like">
+            <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
+            <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img" {% set
+                    like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for like in likes if
+                    like.post_id==post.post_id and like.user_id==g.user.user_id %} {% if like.like_type==1 %} {% set
+                    _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif like.like_type==-1
+                    %} {% set _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif %} {%
+                    endfor %} {{ like_icon.src }}></a>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 {% endblock %}
