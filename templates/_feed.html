@@ -94,9 +94,11 @@
             {% endif %}
         </div>
     </div>
+    {% if not noSidebar %}
     <div class="container-sidebar">
         {% include 'sidebar.html' %}
     </div>
+    {% endif %}
 </div>
 
 <script src="/static/javascript/feed_func.js"></script>

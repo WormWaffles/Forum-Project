@@ -547,6 +547,16 @@ def business():
     return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
 
+# comment on post
+@app.route('/feed/<post_id>/comment', methods=['GET', 'POST'])
+def comment(post_id):
+    if request.method == 'POST':
+        comment = request.form['comment']
+        post_feed.comment_on_post(g.user.user_id, post_id, comment)
+        return redirect(url_for('view_post', post_id=post_id))
+    posts = [post_feed.get_post_by_id(post_id)]
+    return render_template('create_comment.html', posts=posts, noSidebar=True)
+
 # error page
 @app.errorhandler(404)
 def page_not_found(e):

@@ -2,12 +2,11 @@
 
 {% block body %}
 
-{% if g.user.is_business %}
-<link rel="stylesheet" href="/static/styles/bcreate.css">
-{% else %}
 <link rel="stylesheet" href="/static/styles/create.css">
-{% endif %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- display original post -->
+{% include '_feed.html' %}
 
 <!-- form  -->
 <div class="create-card">
@@ -15,12 +14,7 @@
         <div class="form">
             <div class="create-container">
                 <div>
-                    <h1 class="page-title">Create a Post</h1>
-                </div>
-                <!-- input for title of post -->
-                <div class="title-div">
-                    <label>Title your post</label>
-                    <input class="create_title" type="text" name="title" required>
+                    <h1 class="page-title">Create a Comment</h1>
                 </div>
                 <!-- input for post content -->
                 <div class="content-div">
@@ -104,7 +98,7 @@
         {% endif %}
         <!-- button for post -->
         <div class="post">
-            <button class="post-btn" type="submit">Post</button>
+            <button class="post-btn" type="submit">Comment</button>
         </div>
     </form>
 </div>

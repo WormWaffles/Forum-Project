@@ -36,9 +36,7 @@
         {% endif %}
     </div>
     <div class="post_title">
-        <a class="title" href="/feed/{{ post.post_id }}">
-            <h1 class="title" id="title">{{ post.title }}</h1>
-        </a>
+        <h1 class="title" id="title">{{ post.title }}</h1>
     </div>
     {% if post.content %}
     <div class="content">
@@ -72,6 +70,7 @@
                     endfor %} {{ like_icon.src }}></a>
         </div>
     </div>
+    <a href="/feed/{{ post.post_id }}/comment"><button class="comment">Comment</button></a>
 </div>
 
 

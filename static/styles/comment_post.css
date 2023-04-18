@@ -1,3 +1,10 @@
+.container-main {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    margin: 1.5em auto;
+    max-width: 1200px;
+}
+
 .post-card {
     /*work with width*/
     max-width: 700px;
@@ -6,12 +13,14 @@
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
-    margin: 3rem auto;
+    /* margin-left: auto; */
+    margin-right: 2em;
     margin-bottom: 1rem;
 }
 
 .post-card-container {
     display: flex;
+    /* justify-content: end; */
     padding: 5px;
 }
 
@@ -21,6 +30,8 @@
 }
 
 .pfp {
+    /* width: 100px;
+    height: 100px; */
     border-radius: 50%;
 }
 
@@ -41,6 +52,10 @@
     text-decoration: none;
 }
 
+.username:hover {
+    color: #36A3C0;
+}
+
 .checked {
     font: normal normal normal 20px/27px Poppins;
     color: #535353;
@@ -52,11 +67,20 @@
     text-decoration: none;
 }
 
+.post_title {
+    display: flex;
+}
+
 .title {
+    width: auto;
     font: normal normal 900 24px/33px Poppins;
     color: #535353;
     text-decoration: none;
     padding-top: 5px;
+}
+
+.title h1:hover {
+    color: #36A3C0;
 }
 
 .content {
@@ -70,6 +94,13 @@
     width: auto;
     border: 1px solid #ccc;
     border-radius: 15%;
+}
+
+.event {
+    /* push to the left */
+    font: normal normal 15px/20px Poppins;
+    color: #555555;
+    padding-top: 2px;
 }
 
 .date {
@@ -155,8 +186,4 @@ p {
 .settings-option:hover {
     background-color: gray;
     color: white;
-}
-
-.username:hover {
-    color: #36A3C0;
 }

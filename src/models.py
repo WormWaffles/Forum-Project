@@ -38,7 +38,7 @@ class Post(db.Model):
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
-    # comments need to be implemented
+    comments = db.Column(db.Integer, nullable=False)
 
 # Likes Model
 class UserLikes(db.Model):
@@ -66,3 +66,10 @@ class Rating(db.Model):
 class Follower(db.Model):
     follower_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     followed_user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+
+class Comment(db.Model):
+    comment_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
+    content = db.Column(db.String(80), nullable=False)
+    likes = db.Column(db.Integer, nullable=False)

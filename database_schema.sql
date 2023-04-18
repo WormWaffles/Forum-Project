@@ -43,6 +43,7 @@ CREATE TABLE post (
     event BOOLEAN DEFAULT NULL,
     from_date VARCHAR(10),
     to_date VARCHAR(10),
+    comments INTEGER NOT NULL,
     PRIMARY KEY (post_id)
 );
 
@@ -63,6 +64,14 @@ CREATE TABLE rating (
 CREATE TABLE follower (
     follower_user_id INTEGER NOT NULL REFERENCES "user"(user_id),
     followed_user_id INTEGER NOT NULL REFERENCES "user"(user_id)
+);
+
+CREATE TABLE comment (
+    comment_id SERIAL NOT NULL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    post_id INTEGER NOT NULL REFERENCES post(post_id),
+    content VARCHAR(500) NOT NULL,
+    likes INTEGER NOT NULL
 );
 -- post has poster_id which connects to user, business, or admin
 -- rating has business_id which connects to user and post_id which connects to post and then to the author
