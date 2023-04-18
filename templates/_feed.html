@@ -71,7 +71,7 @@
                             <a href="/feed/{{ post.post_id }}">
                                 <div class="comments">
                                     <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
-                                    <p class="comment">0 comments</p>
+                                    <p class="comment">{{ post.comments }} comments</p>
                                 </div>
                             </a>
                             <!-- like button, dont even ask bruh -->
@@ -94,11 +94,9 @@
             {% endif %}
         </div>
     </div>
-    {% if not noSidebar %}
     <div class="container-sidebar">
         {% include 'sidebar.html' %}
     </div>
-    {% endif %}
 </div>
 
 <script src="/static/javascript/feed_func.js"></script>

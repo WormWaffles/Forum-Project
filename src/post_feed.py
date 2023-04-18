@@ -1,6 +1,7 @@
 from src.models import db, Post
 from src.likes import likes
 from src.users import users
+from src.comments import comments
 import uuid
 
 class PostFeed:
@@ -137,6 +138,14 @@ class PostFeed:
         else:
             return # if this happens, the user is trying to remove a like they don't have (aka inspect element)
         # add and commit everything
+        db.session.add(post)
+        db.session.commit()
+
+    def comment_on_post(self, post_id, user_id, comment):
+        '''Comments on a post'''
+        post = self.get_post_by_id(post_id)
+        post.comments += 1
+        comments.create_comment(user_id, post_id, comment)
         db.session.add(post)
         db.session.commit()
 

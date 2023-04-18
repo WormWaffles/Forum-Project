@@ -559,14 +559,12 @@ def search():
 
 
 # comment on post
-@app.route('/feed/<post_id>/comment', methods=['GET', 'POST'])
+@app.route('/feed/<post_id>/comment', methods=['POST'])
 def comment(post_id):
-    if request.method == 'POST':
-        comment = request.form['comment']
-        post_feed.comment_on_post(g.user.user_id, post_id, comment)
-        return redirect(url_for('view_post', post_id=post_id))
-    posts = [post_feed.get_post_by_id(post_id)]
-    return render_template('create_comment.html', posts=posts, noSidebar=True)
+    comment = request.form['content']
+    print(comment)
+    post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment)
+    return redirect(url_for('view_post', post_id=post_id))
 
 # error page
 @app.errorhandler(404)
