@@ -14,7 +14,7 @@ for (let settingsIcon of document.querySelectorAll('img[alt="Settings"]')) {
     });
 }
 // for each button with for as like
-for (let button of document.querySelectorAll('a[for^="like"]')) {
+for (let button of document.querySelectorAll('a[for^="clike"]')) {
     let button_id = button.getAttribute('id')
     let timer
     button.addEventListener('click', event => {
@@ -26,21 +26,21 @@ for (let button of document.querySelectorAll('a[for^="like"]')) {
                     document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png';
                     document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) - 1 + " Likes"
                     var request = new XMLHttpRequest()
-                    request.open("GET", "/feed/remove_like/" + button_id, true)
+                    request.open("GET", "/feed/comment/remove_like/" + button_id, true)
                     request.send()
                 } // if the button is red, make it white and change the text to increment the likes
                 else if (document.getElementById(button_id + "img").src.includes('/static/images/likeButton_grey.png')) {
                     document.getElementById(button_id + "img").src = '/static/images/likeButton_default.png';
                     document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) + 1 + " Likes"
                     var request = new XMLHttpRequest()
-                    request.open("GET", "/feed/like/" + button_id, true)
+                    request.open("GET", "/feed/comment/like/" + button_id, true)
                     request.send()
                 } // if the button is white, make it green and change the text to increment the likes
                 else {
                     document.getElementById(button_id + "img").src = '/static/images/likeButton_red.png';
                     document.getElementById(button_id + "t").innerHTML = parseInt(document.getElementById(button_id + "t").innerHTML) + 1 + " Likes"
                     var request = new XMLHttpRequest()
-                    request.open("GET", "/feed/like/" + button_id, true)
+                    request.open("GET", "/feed/comment/like/" + button_id, true)
                     request.send()
                 }
             }, 200)
@@ -58,7 +58,7 @@ for (let button of document.querySelectorAll('a[for^="like"]')) {
         } // if red, do nothing
         document.getElementById(button_id + "img").src = '/static/images/likeButton_grey.png';
         var request = new XMLHttpRequest()
-        request.open("GET", "/feed/dislike/" + button_id, true)
+        request.open("GET", "/feed/comment/dislike/" + button_id, true)
         request.send()
     })
 }

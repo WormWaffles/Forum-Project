@@ -76,6 +76,7 @@ def logged_in():
 @app.before_request
 def before_request():
     '''Checks if user is logged in'''
+    # comments.clear()
     # post_feed.clear()
     # likes.clear()
     # users.clear()
@@ -424,6 +425,7 @@ def edit(post_id):
                 from_date = None
                 to_date = None
         else:
+            event = None
             from_date = None
             to_date = None
         file_path = None
@@ -562,21 +564,56 @@ def search():
 # comment on post
 @app.route('/feed/<post_id>/comment', methods=['POST'])
 def comment(post_id):
-    print(g.user.user_id)
     comment = request.form['content']
-    print(comment)
     post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment)
-    return redirect(url_for('view_post', post_id=post_id, comments=comments.get_comments_by_post_id(post_id)))
+    return redirect(url_for('view_post', post_id=post_id))
 
 # edit comment
 @app.route('/feed/<post_id>/comment/<comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(post_id, comment_id):
     if request.method == 'POST':
         comment = request.form['content']
-        comments.edit_comment(comment_id, comment)
-        return redirect(url_for('view_post', post_id=post_id, comments=comments.get_comments_by_post_id(post_id)), likes=likes.get_all_likes())
+        comments.update_comment(comment_id, comment)
+        return redirect(url_for('view_post', post_id=post_id))
     comment = comments.get_comment_by_id(comment_id)
-    return render_template('edit_comment.html', comment=comment)
+    return render_template('edit_comment.html', comment=comment, post_id=post_id)
+
+# delete comment
+@app.route('/feed/<post_id>/comment/<comment_id>/delete')
+def delete_comment(post_id, comment_id):
+    post_feed.delete_comment(comment_id)
+    return redirect(url_for('view_post', post_id=post_id))
+
+# like post
+@app.get('/feed/comment/like/<int:comment_id>')
+def like_comment(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.like_post(comment_id, user_id)
+    return "nothing"
+
+# dislike post
+@app.get('/feed/comment/dislike/<int:comment_id>')
+def dislike_comment(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.dislike_post(comment_id, user_id)
+    return "nothing"
+
+# remove like or dislike
+@app.get('/feed/comment/remove_like/<int:comment_id>')
+def remove_comment_like(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.remove_like(comment_id, user_id)
+    return "nothing"
+
 
 # error page
 @app.errorhandler(404)
