@@ -361,6 +361,7 @@ def delete_post(post_id):
         if comment.file:
             s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
         comments.delete_comment(comment.comment_id)
+        likes.delete_likes_by_post_id(comment.comment_id)
     if post.file:
         # delete file from s3
         post = post_feed.get_post_by_id(post_id)
