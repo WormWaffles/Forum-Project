@@ -3,6 +3,7 @@
 {% block body %}
 
 <link rel="stylesheet" href="/static/styles/view_post.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <div class="post-card">
     <div class="user_profile">
@@ -115,6 +116,24 @@
 
 <h1 class="comment_title">Comments</h1>
 
+<script>
+    $("#myFileInput").change(function (e) {
+
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            var img = document.getElementById("myFile");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+            $("myFileInput").after(img);
+        }
+    });
+</script>
+
 {% for comment in comments %}
 
 <div class="post-card">
@@ -135,8 +154,10 @@
             <img src="/static/images/setting_icon.png" id="{{ comment.comment_id }}" for="settings" alt="Settings"
                 class="settings-icon" width="25" height="25">
             <div class="settings-options" for="so{{ comment.comment_id }}">
-                <a href="/feed/{{ post.post_id }}/comment/{{ comment.comment_id }}/edit" class="settings-option">Edit</a>
-                <a href="/feed/{{ post.post_id }}/comment/{{ comment.comment_id }}/delete" class="settings-option">Delete</a>
+                <a href="/feed/{{ post.post_id }}/comment/{{ comment.comment_id }}/edit"
+                    class="settings-option">Edit</a>
+                <a href="/feed/{{ post.post_id }}/comment/{{ comment.comment_id }}/delete"
+                    class="settings-option">Delete</a>
             </div>
         </div>
         {% endif %}
@@ -158,10 +179,10 @@
             <p class="likes" id="{{ comment.comment_id }}t">{{ comment.likes }} Likes</p>
             <a for="clike" id="{{ comment.comment_id }}"><img class="like_icon" id="{{ comment.comment_id }}img" {% set
                     like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for like in likes if
-                    like.post_id==comment.comment_id and like.user_id==g.user.user_id %} {% if like.like_type==1 %} {% set
-                    _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif like.like_type==-1
-                    %} {% set _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif %} {%
-                    endfor %} {{ like_icon.src }}></a>
+                    like.post_id==comment.comment_id and like.user_id==g.user.user_id %} {% if like.like_type==1 %} {%
+                    set _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif
+                    like.like_type==-1 %} {% set _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' })
+                    %} {% endif %} {% endfor %} {{ like_icon.src }}></a>
         </div>
     </div>
 </div>

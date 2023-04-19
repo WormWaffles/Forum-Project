@@ -45,5 +45,23 @@
     </form>
 </div>
 
+<script>
+    $("#myFileInput").change(function (e) {
+
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            var img = document.getElementById("myFile");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+            $("myFileInput").after(img);
+        }
+    });
+</script>
+
 
 {% endblock %}

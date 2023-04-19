@@ -16,17 +16,18 @@ class CommentFeed:
         '''Returns comment by id'''
         return Comment.query.get(comment_id)
     
-    def create_comment(self, post_id, user_id, content):
+    def create_comment(self, post_id, user_id, content, file):
         '''Creates a comment'''
-        comment = Comment(post_id=post_id, user_id=user_id, content=content, likes=0)
+        comment = Comment(post_id=post_id, user_id=user_id, content=content, file=file, likes=0)
         db.session.add(comment)
         db.session.commit()
         return comment
     
-    def update_comment(self, comment_id, content):
+    def update_comment(self, comment_id, content, file):
         '''Updates a comment'''
         comment = self.get_comment_by_id(comment_id)
         comment.content = content
+        comment.file = file
         db.session.commit()
         return comment
     

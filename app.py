@@ -18,6 +18,7 @@ from pip._vendor import cachecontrol
 import boto3
 from werkzeug.utils import secure_filename
 from flask_bcrypt import Bcrypt
+import uuid
 
 
 app = Flask(__name__)
@@ -152,7 +153,7 @@ def edit_account():
                 # check if file is an image
                 if not profile_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Profile picture must be a .jpg, .jpeg, or .png file.')
-                new_profile_filename = f'{user_id}_{secure_filename(profile_pic.filename)}'
+                new_profile_filename = f'{uuid.uuid4()}_{secure_filename(profile_pic.filename)}'
 
                 # remove old profile pic from s3
                 user = users.get_user_by_id(user_id)
@@ -172,7 +173,7 @@ def edit_account():
                 # check if file is a picture
                 if not banner_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_banner_filename = f'{user_id}_{secure_filename(banner_pic.filename)}'
+                new_banner_filename = f'{uuid.uuid4()}_{secure_filename(banner_pic.filename)}'
 
                 # remove old banner pic from s3
                 user = users.get_user_by_id(user_id)
@@ -326,8 +327,7 @@ def create():
                 # make sure file is an image
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
-                file_title = title.replace(" ", "_")
-                new_post_filename = f'{file_title}_{secure_filename(file.filename)}'
+                new_post_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
 
                 # upload file to s3
                 s3.Bucket(bucket_name).upload_fileobj(
@@ -344,7 +344,7 @@ def create():
         user_id = session['user_id']
         post_feed.create_post(user_id, title, content, post_path, 0, event, from_date, to_date)
         return redirect('/feed')
-    
+
 
 # delete post
 @app.get('/feed/delete/<post_id>')
@@ -354,6 +354,13 @@ def delete_post(post_id):
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
     post = post_feed.get_post_by_id(post_id)
+    # delete all comments with post id
+    post_comments = comments.get_comments_by_post_id(post_id)
+    for comment in post_comments:
+        # if comment has a file, delete it
+        if comment.file:
+            s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+        comments.delete_comment(comment.comment_id)
     if post.file:
         # delete file from s3
         post = post_feed.get_post_by_id(post_id)
@@ -431,13 +438,9 @@ def edit(post_id):
         file_path = None
         if file:
             try:
-                s3 = boto3.resource('s3',
-                aws_access_key_id='AKIAY5EAJ7XAJ3GQ2AUH',
-                aws_secret_access_key='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')
-                bucket_name = 'barhive'
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_filename = f'{title}_{secure_filename(file.filename)}'
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
 
                 # remove old banner pic from s3
                 post = post_feed.get_post_by_id(post_id)
@@ -564,16 +567,58 @@ def search():
 # comment on post
 @app.route('/feed/<post_id>/comment', methods=['POST'])
 def comment(post_id):
-    comment = request.form['content']
-    post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment)
+    comment = request.form.get('content')
+    file = request.files['file']
+    file_path = None
+    if file:
+            try:
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
+
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_filename
+                )
+
+                # add filepath to database
+                file_path = f'https://barhive.s3.amazonaws.com/{new_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
+    post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment, file=file_path)
     return redirect(url_for('view_post', post_id=post_id))
 
 # edit comment
 @app.route('/feed/<post_id>/comment/<comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(post_id, comment_id):
     if request.method == 'POST':
-        comment = request.form['content']
-        comments.update_comment(comment_id, comment)
+        comment_data = request.form.get('content')
+        file = request.files['file']
+        file_path = None
+        if file:
+            try:
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
+
+                # remove old banner pic from s3
+                comment = comments.get_comment_by_id(comment_id)
+                if comment.file != None:
+                    s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_filename
+                )
+
+                # add filepath to database
+                file_path = f'https://barhive.s3.amazonaws.com/{new_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
+        file = file_path
+        comments.update_comment(comment_id, comment_data, file)
         return redirect(url_for('view_post', post_id=post_id))
     comment = comments.get_comment_by_id(comment_id)
     return render_template('edit_comment.html', comment=comment, post_id=post_id)
@@ -581,6 +626,10 @@ def edit_comment(post_id, comment_id):
 # delete comment
 @app.route('/feed/<post_id>/comment/<comment_id>/delete')
 def delete_comment(post_id, comment_id):
+    comment = comments.get_comment_by_id(comment_id)
+    if comment.file:
+        # delete file from s3
+        s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
     post_feed.delete_comment(comment_id)
     return redirect(url_for('view_post', post_id=post_id))
 

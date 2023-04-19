@@ -71,6 +71,7 @@ CREATE TABLE comment (
     user_id INTEGER NOT NULL REFERENCES "user"(user_id),
     post_id INTEGER NOT NULL REFERENCES post(post_id),
     content VARCHAR(500) NOT NULL,
+    file VARCHAR(255),
     likes INTEGER NOT NULL
 );
 -- post has poster_id which connects to user, business, or admin

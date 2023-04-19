@@ -73,4 +73,5 @@ class Comment(db.Model):
     user = db.relationship('User', backref='comment_users', lazy=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
     content = db.Column(db.String(80), nullable=False)
+    file = db.Column(db.String(255), nullable=True)
     likes = db.Column(db.Integer, nullable=False)

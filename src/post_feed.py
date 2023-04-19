@@ -141,11 +141,11 @@ class PostFeed:
         db.session.add(post)
         db.session.commit()
 
-    def comment_on_post(self, user_id, post_id, comment):
+    def comment_on_post(self, user_id, post_id, comment, file):
         '''Comments on a post'''
         post = self.get_post_by_id(post_id)
         post.comments += 1
-        comments.create_comment(post_id, user_id, comment)
+        comments.create_comment(post_id, user_id, comment, file)
         db.session.add(post)
         db.session.commit()
 
