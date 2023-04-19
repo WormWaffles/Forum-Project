@@ -463,7 +463,7 @@ def view_post(post_id):
         return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
-        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), comments=comments.get_comments_by_post_id(post_id))
+        return render_template('view_post.html', post=post, likes=likes.get_all_likes(), comments=comments.get_comments_by_post_id(post_id))
     return redirect('/error')
 
 # view user
@@ -567,6 +567,16 @@ def comment(post_id):
     print(comment)
     post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment)
     return redirect(url_for('view_post', post_id=post_id, comments=comments.get_comments_by_post_id(post_id)))
+
+# edit comment
+@app.route('/feed/<post_id>/comment/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(post_id, comment_id):
+    if request.method == 'POST':
+        comment = request.form['content']
+        comments.edit_comment(comment_id, comment)
+        return redirect(url_for('view_post', post_id=post_id, comments=comments.get_comments_by_post_id(post_id)), likes=likes.get_all_likes())
+    comment = comments.get_comment_by_id(comment_id)
+    return render_template('edit_comment.html', comment=comment)
 
 # error page
 @app.errorhandler(404)

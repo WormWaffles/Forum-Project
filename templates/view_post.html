@@ -111,44 +111,6 @@
         </div>
     </form>
 </div>
-<script>
-    $("#myFileInput").change(function (e) {
-
-        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-
-            var file = e.originalEvent.srcElement.files[i];
-
-            var img = document.getElementById("myFile");
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                img.src = reader.result;
-            }
-            reader.readAsDataURL(file);
-            $("myFileInput").after(img);
-        }
-    });
-    $(function () {
-        $('#event_check').change(function () {
-            if ($(this).is(':checked')) {
-                // disable the dropdown:
-                $('#date1').removeAttr('disabled');
-                $('#date2').removeAttr('disabled');
-                // change background color:
-                $('#date1').css('background-color', '#A6CAD84B');
-                $('#date2').css('background-color', '#A6CAD84B');
-            } else {
-                $('#date1').attr('disabled', 'disabled');
-                $('#date2').attr('disabled', 'disabled');
-                // change background color:
-                $('#date1').css('background-color', '#4c595e4b');
-                $('#date2').css('background-color', '#4c595e4b');
-            }
-        });
-    });
-</script>
-
-
-<script src="/static/javascript/feed_func.js"></script>
 
 <h1 class="comment_title">Comments</h1>
 
@@ -201,6 +163,9 @@
         </div>
     </div>
 </div>
+
+<script src="/static/javascript/feed_func.js"></script>
+
 {% endfor %}
 
 {% endblock %}

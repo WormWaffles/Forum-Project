@@ -149,6 +149,15 @@ class PostFeed:
         db.session.add(post)
         db.session.commit()
 
+    def delete_comment(self, comment_id):
+        '''Deletes a comment'''
+        comment = comments.get_comment_by_id(comment_id)
+        post = self.get_post_by_id(comment.post_id)
+        post.comments -= 1
+        comments.delete_comment(comment_id)
+        db.session.add(post)
+        db.session.commit()
+
     def clear(self):
         '''Clears all posts'''
         Post.query.delete()
