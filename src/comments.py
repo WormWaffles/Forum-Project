@@ -1,6 +1,7 @@
 from src.models import db, Comment
 from src.users import users
 from src.likes import likes
+import datetime
 
 class CommentFeed:
     
@@ -18,7 +19,9 @@ class CommentFeed:
     
     def create_comment(self, post_id, user_id, content, file):
         '''Creates a comment'''
-        comment = Comment(post_id=post_id, user_id=user_id, content=content, file=file, likes=0)
+        # get current date
+        date = datetime.datetime.now()
+        comment = Comment(post_id=post_id, user_id=user_id, content=content, file=file, post_date=date, likes=0)
         db.session.add(comment)
         db.session.commit()
         return comment
