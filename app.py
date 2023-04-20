@@ -46,13 +46,14 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 bcrypt = Bcrypt(app)
 
 # Google Auth
+url = os.getenv('URL')
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secret_file,
     scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'openid'],
-    redirect_uri='http://127.0.0.1:5000/callback'
+    redirect_uri=f'{url}/callback'
 )
 
 # AWS S3 Connection
