@@ -594,14 +594,15 @@ def comment(post_id):
 # edit comment
 @app.route('/feed/<post_id>/comment/<comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(post_id, comment_id):
+    comment = comments.get_comment_by_id(comment_id)
     if request.method == 'POST':
         comment_data = request.form.get('content')
         file = request.files['file']
-        file_path = None
+        file_path = comment.file or None
         if file:
             try:
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                    return render_template('edit_comment.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
                 new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
 
                 # remove old banner pic from s3
@@ -622,7 +623,6 @@ def edit_comment(post_id, comment_id):
         file = file_path
         comments.update_comment(comment_id, comment_data, file)
         return redirect(url_for('view_post', post_id=post_id))
-    comment = comments.get_comment_by_id(comment_id)
     return render_template('edit_comment.html', comment=comment, post_id=post_id)
 
 # delete comment
