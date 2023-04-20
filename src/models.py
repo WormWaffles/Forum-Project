@@ -34,6 +34,7 @@ class Post(db.Model):
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.String(80), nullable=False)
     file = db.Column(db.String(255), nullable=True)
+    post_date = db.Column(db.DateTime, nullable=False)
     likes = db.Column(db.Integer, nullable=False)
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)

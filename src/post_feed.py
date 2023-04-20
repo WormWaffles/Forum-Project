@@ -3,6 +3,7 @@ from src.likes import likes
 from src.users import users
 from src.comments import comments
 import uuid
+import datetime
 
 class PostFeed:
 
@@ -20,7 +21,7 @@ class PostFeed:
     
     def get_all_posts_ordered_by_date(self):
         '''Returns all posts ordered by date'''
-        return Post.query.order_by(Post.post_id.desc()).all()
+        return Post.query.order_by(Post.post_date.desc()).all()
     
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
@@ -35,7 +36,10 @@ class PostFeed:
         id = str(id)
         id = id[:8]
         id = int(id)
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes, event=event, from_date=from_date, to_date=to_date, comments=0)
+        # get current date
+        date = datetime.datetime.now()
+        print(date)
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, comments=0)
         db.session.add(post)
         db.session.commit()
         return post
