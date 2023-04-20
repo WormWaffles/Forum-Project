@@ -65,7 +65,7 @@
                         {% endif %}
                         <div class="post-card-container">
                             <div class="date">
-                                <p>2 days ago</p>
+                                <p>{{ post.post_date.split(' ')[0] }}</p>
                             </div>
                             <!-- comments -->
                             <a href="/feed/{{ post.post_id }}">
