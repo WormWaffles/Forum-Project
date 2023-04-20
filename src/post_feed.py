@@ -1,5 +1,6 @@
 from src.models import db, Post
 from src.likes import likes
+from src.users import users
 import uuid
 
 class PostFeed:
@@ -50,6 +51,22 @@ class PostFeed:
         db.session.commit()
         return post
     
+    def search_posts(self, search):
+        '''Query post titles, content, and usernames ignore case'''
+        user = users.search_user(search)
+        user_id = 0
+        if user:
+            user_id = user.user_id
+        posts = Post.query.filter(Post.title.ilike(f'%{search}%') | Post.content.ilike(f'%{search}%')).all()
+        user_posts = Post.query.filter(Post.user_id == user_id).all()
+        all_return_posts = posts + user_posts
+        # remove duplicates
+        return_posts = []
+        for post in all_return_posts:
+            if post not in return_posts:
+                return_posts.append(post)
+        return return_posts
+
     def delete_post(self, post_id):
         '''Deletes a post'''
         post = self.get_post_by_id(post_id)
