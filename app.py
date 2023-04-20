@@ -674,7 +674,6 @@ def page_not_found(e):
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')
 def callback():
-    print("callback")
     flow.fetch_token(authorization_response=request.url)
 
     if not session["state"] == request.args["state"]:
