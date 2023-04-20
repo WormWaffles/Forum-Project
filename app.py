@@ -328,7 +328,6 @@ def create():
                 # make sure file is an image
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
-                file_title = title.replace(" ", "_")
                 new_post_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'.replace(' ', '_')
 
                 # upload file to s3
