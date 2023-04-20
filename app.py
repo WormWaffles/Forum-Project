@@ -6,7 +6,7 @@ from src.users import users
 from src.likes import likes
 from src.rating import rating
 from src.user_follow import Follows
-from src.models import db, User, Rating
+from src.models import db, User, Rating, Post
 from src.comments import comments
 from dotenv import load_dotenv
 import os
@@ -90,19 +90,38 @@ def before_request():
         else:
             g.user = user
 
+POSTS_PER_PAGE = 10
 
 @app.route('/')
 def index():
-    if g.user:
-        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
-    return render_template('index.html', logged_in=False, home="active")
+    page = int(request.args.get('page', 1))
+    offset = (page - 1) * POSTS_PER_PAGE
+    # session = Session()
+    posts = Post.query.order_by(Post.likes.desc()).limit(POSTS_PER_PAGE).offset(offset).all()
+    total_posts = Post.query.count()
+    total_pages = (total_posts + POSTS_PER_PAGE - 1) // POSTS_PER_PAGE
+    return render_template('index.html', posts=posts, page=page, total_pages=total_pages, logged_in=True, home="active")
+
+@app.route('/posts')
+def posts():
+    page = int(request.args.get('page', 1))
+    offset = (page - 1) * POSTS_PER_PAGE
+    # session = Session()
+    posts = Post.query.order_by(Post.likes.desc()).limit(POSTS_PER_PAGE).offset(offset).all()
+    return render_template('posts.html', posts=posts)
+
+# @app.route('/')
+# def index():
+#     if g.user:
+#         return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_posts_ordered_by_likes(), likes=likes.get_all_likes())
+#     return render_template('index.html', logged_in=False, home="active")
 
 
 @app.route('/feed')
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_posts_ordered_by_date(), likes=likes.get_all_likes())
 
 
 # account page

@@ -15,13 +15,17 @@ class PostFeed:
         '''Returns all posts by user id'''
         return Post.query.filter_by(user_id=user_id).all()
     
-    def get_all_posts_ordered_by_likes(self):
-        '''Returns all posts ordered by likes'''
-        return Post.query.order_by(Post.likes.desc()).all()
+    def get_posts_ordered_by_likes(self):
+        '''Returns 10 posts ordered by likes'''
+        # limit 10
+        return Post.query.order_by(Post.likes.desc()).limit(10).all()
+        # return Post.query.order_by(Post.likes.desc()).all()
     
-    def get_all_posts_ordered_by_date(self):
-        '''Returns all posts ordered by date'''
-        return Post.query.order_by(Post.post_date.desc()).all()
+    def get_posts_ordered_by_date(self):
+        '''Returns 10 posts ordered by date'''
+        # limit 10
+        return Post.query.order_by(Post.post_date.desc()).limit(10).all()
+        # return Post.query.order_by(Post.post_date.desc()).all()
     
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
