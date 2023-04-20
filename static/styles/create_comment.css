@@ -1,30 +1,17 @@
 .create-card {
-    max-width: 600px;
-    margin: 3rem auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    text-align: left;
-    background-color: white;
+    max-width: 700px;
+    height: auto;
+    padding: 25px 40px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    margin: 0rem auto;
+    margin-bottom: 1rem;
 }
 
 .page-title {
-    font: normal normal 900 50px/68px Poppins;
+    font: normal normal 900 30px/48px Poppins;
     color: #555555;
-}
-
-.title-div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font: normal normal 900 18px/25px Poppins;
-    color: #7F7F7F;
-    padding-bottom: 15px;
-}
-
-label {
-    padding: 5px;
 }
 
 .create-container textarea:not(.file),
@@ -34,13 +21,8 @@ label {
     border-radius: 8px;
 }
 
-.create_title {
-    height: 2rem;
-}
-
-.create_title:focus {
-    outline: none !important;
-    border-color: #57A1BD !important;
+label {
+    padding: 5px;
 }
 
 .content:focus {

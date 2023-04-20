@@ -1,7 +1,9 @@
 from src.models import db, Post
 from src.likes import likes
 from src.users import users
+from src.comments import comments
 import uuid
+import datetime
 
 class PostFeed:
 
@@ -19,7 +21,7 @@ class PostFeed:
     
     def get_all_posts_ordered_by_date(self):
         '''Returns all posts ordered by date'''
-        return Post.query.order_by(Post.post_id.desc()).all()
+        return Post.query.order_by(Post.post_date.desc()).all()
     
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
@@ -34,7 +36,9 @@ class PostFeed:
         id = str(id)
         id = id[:8]
         id = int(id)
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes, event=event, from_date=from_date, to_date=to_date)
+        # get current date
+        date = datetime.datetime.now()
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, comments=0)
         db.session.add(post)
         db.session.commit()
         return post
@@ -137,6 +141,23 @@ class PostFeed:
         else:
             return # if this happens, the user is trying to remove a like they don't have (aka inspect element)
         # add and commit everything
+        db.session.add(post)
+        db.session.commit()
+
+    def comment_on_post(self, user_id, post_id, comment, file):
+        '''Comments on a post'''
+        post = self.get_post_by_id(post_id)
+        post.comments += 1
+        comments.create_comment(post_id, user_id, comment, file)
+        db.session.add(post)
+        db.session.commit()
+
+    def delete_comment(self, comment_id):
+        '''Deletes a comment'''
+        comment = comments.get_comment_by_id(comment_id)
+        post = self.get_post_by_id(comment.post_id)
+        post.comments -= 1
+        comments.delete_comment(comment_id)
         db.session.add(post)
         db.session.commit()
 

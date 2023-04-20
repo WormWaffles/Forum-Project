@@ -60,18 +60,19 @@
                         {% endif %}
                         {% if post.event %}
                         <div class="event">
-                            <p>From the {{ post.from_date.split("-")[2] }}th to the {{ post.to_date.split("-")[2] }}th</p>
+                            <p>From the {{ post.from_date.split("-")[2] }}th to the {{ post.to_date.split("-")[2] }}th
+                            </p>
                         </div>
                         {% endif %}
                         <div class="post-card-container">
                             <div class="date">
-                                <p>2 days ago</p>
+                                <p>{{ post.post_date.split(' ')[0] }}</p>
                             </div>
                             <!-- comments -->
                             <a href="/feed/{{ post.post_id }}">
                                 <div class="comments">
                                     <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
-                                    <p class="comment">0 comments</p>
+                                    <p class="comment">{{ post.comments }} comments</p>
                                 </div>
                             </a>
                             <!-- like button, dont even ask bruh -->
