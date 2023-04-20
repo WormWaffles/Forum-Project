@@ -38,7 +38,6 @@ class PostFeed:
         id = int(id)
         # get current date
         date = datetime.datetime.now()
-        print(date)
         post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, comments=0)
         db.session.add(post)
         db.session.commit()
