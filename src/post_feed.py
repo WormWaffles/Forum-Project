@@ -17,11 +17,11 @@ class PostFeed:
     
     def get_all_posts_ordered_by_likes(self):
         '''Returns all posts ordered by likes'''
-        return Post.query.order_by(Post.likes.desc()).all()
+        return Post.query.order_by(Post.likes.desc()).limit(15).all()
     
     def get_all_posts_ordered_by_date(self):
         '''Returns all posts ordered by date'''
-        return Post.query.order_by(Post.post_date.desc()).all()
+        return Post.query.order_by(Post.post_date.desc()).limit(15).all()
     
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
