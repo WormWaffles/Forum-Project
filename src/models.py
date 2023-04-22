@@ -75,4 +75,5 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
     content = db.Column(db.String(80), nullable=False)
     file = db.Column(db.String(255), nullable=True)
+    post_date = db.Column(db.DateTime, nullable=False)
     likes = db.Column(db.Integer, nullable=False)
