@@ -39,8 +39,6 @@ class Post(db.Model):
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
     check_in = db.Column(db.Boolean, nullable=True)
-    # rating_id = db.Column(db.Integer, db.ForeignKey('rating.rating_id'), nullable=True)
-    # rating = db.relationship('Rating', backref='rating', lazy=True)
     # comments need to be implemented
 
 # Likes Model
