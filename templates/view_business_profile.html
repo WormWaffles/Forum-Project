@@ -19,11 +19,12 @@
                             <a href="/account">REVIEWS</a>
                             <a href="/account">EVENTS</a>
                             <span id="rating">
+                                {% for r in range(rating) %}
                                 <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
-                                <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
-                                <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
-                                <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
+                                {% endfor %}
+                                {% for r in range(5-rating) %}
                                 <img src="/static/images/empty-star_blue.png" alt="star" width="25" height="25">
+                                {% endfor %}
                             </span>
                             <a href="/account">FEATURES</a>
                             <a href="/account">MENU</a>
