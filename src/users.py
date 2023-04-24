@@ -7,6 +7,10 @@ class Users:
         '''Returns all users'''
         return User.query.all()
     
+    def get_all_businesses(self):
+        '''Returns all businesses'''
+        return User.query.filter_by(is_business=True).all()
+    
     def get_user_by_id(self, user_id):
         '''Returns user by id'''
         return User.query.get(user_id)
