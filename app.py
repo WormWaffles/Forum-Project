@@ -93,12 +93,11 @@ def index():
         return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
     return render_template('index.html', logged_in=False, home="active")
 
-
 @app.route('/feed')
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
 
 # account page
@@ -111,6 +110,7 @@ def account():
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
     return render_template('account.html', account="active", rating=star,followers_num=followers_num)
+
 
 #followers page
 @app.route('/account/followers')
@@ -212,7 +212,6 @@ def edit_account():
         return render_template('error.html', error_message=error_message)
         
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if g.user:
@@ -291,11 +290,16 @@ def create():
     if not g.user:
         return redirect(url_for('login'))
     if request.method == 'GET':
-        return render_template('create.html')
+        return render_template('create.html', businesses=users.get_all_businesses())
     else:
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
+        check_in = bool(request.form.get('check_in'))
+        # print(f"****** DID YOU CHECK IN? ****** " + {check_in})
+        if check_in:
+            business_id = request.form.get('business')
+            stars = request.form.get('rating')
         if g.user.is_business:
             event = request.form.get('event')
             from_date = request.form.get('from_date')
@@ -340,7 +344,9 @@ def create():
 
         # get user id
         user_id = session['user_id']
-        post_feed.create_post(user_id, title, content, post_path, 0, event, from_date, to_date)
+        post = post_feed.create_post(user_id, title, content, post_path, 0, event, from_date, to_date, check_in)
+        if check_in: 
+            rating.create_rating(stars, business_id, post.post_id)
         return redirect('/feed')
     
 
@@ -451,7 +457,7 @@ def edit(post_id):
             except Exception as e:
                 print(f"Error uploading files to s3: " + str(e))
 
-        post_feed.update_post(post_id, title, content, file=file_path, event=event, from_date=from_date, to_date=to_date)
+        post_feed.update_post(post_id, title, content, file=file_path, event=event, from_date=from_date, to_date=to_date, check_in=check_in)
         return redirect('/feed')
 
 
@@ -462,7 +468,8 @@ def view_post(post_id):
         return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
-        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id))
+        stars = rating.get_rating_by_post_id(post_id)
+        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), rating=stars)
     return redirect('/error')
 
 # view user
@@ -477,7 +484,8 @@ def view_user(user_id):
     if user:
         followers_num = Follows.get_followers_num(user, user_id)
         is_Following=Follows.is_Foo_Following_Bar(g.user.user_id,user_id)
-        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id,is_Following=is_Following)
+        star = rating.get_rating_average(user.user_id)
+        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id,is_Following=is_Following, rating=star)
     return redirect('/error')
 
 #view a other users followers
