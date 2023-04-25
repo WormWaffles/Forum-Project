@@ -50,8 +50,8 @@ CREATE TABLE post (
 );
 
 CREATE TABLE user_likes (
-    user_id INTEGER NOT NULL,
-    post_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    post_id INTEGER NOT NULL REFERENCES "post"(post_id),
     like_type INTEGER NOT NULL,
     PRIMARY KEY (user_id, post_id)
 );
