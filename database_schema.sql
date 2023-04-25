@@ -47,7 +47,6 @@ CREATE TABLE post (
     to_date VARCHAR(10),
     comments INTEGER NOT NULL,
     check_in BOOLEAN DEFAULT NULL,
-
     PRIMARY KEY (post_id)
 );
 
