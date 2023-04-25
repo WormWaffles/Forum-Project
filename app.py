@@ -101,7 +101,7 @@ def index():
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings(), users=users.get_all_users())
 
 
 # account page
@@ -300,7 +300,6 @@ def create():
         content = request.form.get('content')
         file = request.files['file']
         check_in = bool(request.form.get('check_in'))
-        # print(f"****** DID YOU CHECK IN? ****** " + {check_in})
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
