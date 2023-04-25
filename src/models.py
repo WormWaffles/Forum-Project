@@ -39,7 +39,10 @@ class Post(db.Model):
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
-    comments = db.Column(db.Integer, nullable=False)
+
+    check_in = db.Column(db.Boolean, nullable=True)
+    # comments need to be implemented
+
 
 # Likes Model
 class UserLikes(db.Model):
@@ -52,9 +55,7 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.SmallInteger, nullable=False)
     business_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    # user = db.relationship('User', backref='users', lazy=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
-    # post = db.relationship('Post', backref='post_id', lazy=True)
         
     def __init__(self, rating, business_id, post_id):
         self.rating = rating

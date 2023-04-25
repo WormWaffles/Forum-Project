@@ -16,14 +16,19 @@
             <a class="username" href="/user/{{ post.user.user_id }}">
                 <p class="username" id="user">{{ post.user.username }}</p>
             </a>
+            {% if post.check_in%}
             <p class="checked">checked into <a class="location" href="/StBarhops">St. Barhops</a></p>
             <div class="rating">
-                <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
-                <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
-                <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
-                <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
-                <img src="/static/images/filled-star.png" alt="star" width="20" height="20">
+                <span id="rating">
+                    {% for r in range(rating) %}
+                    <img src="/static/images/filled-star_yellow.png" alt="star" width="25" height="25">
+                    {% endfor %}
+                    {% for r in range(5-rating) %}
+                    <img src="/static/images/empty-star_yellow.png" alt="star" width="25" height="25">
+                    {% endfor %}
+                </span>
             </div>
+            {% endif %}
         </div>
         {% if post.user_id == g.user.user_id %}
         <div class="settings-container">

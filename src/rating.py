@@ -7,6 +7,11 @@ class Ratings:
         '''Returns all ratings'''
         return Rating.query.all()
     
+    def get_rating_by_post_id(self, post_id):
+        '''Returns rating by post id'''
+        rating = Rating.query.filter_by(post_id=post_id).scalar()
+        return rating.rating
+    
     def get_rating_average(self, user_id):
         '''Returns average rating'''
         if db.session.query(func.avg(Rating.rating)).filter(Rating.business_id == user_id).scalar() is None:
