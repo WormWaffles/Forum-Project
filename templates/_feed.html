@@ -5,7 +5,19 @@
     <div class="container-feed">
         <div class="feed">
             {% if not posts %}
-            <p>Nothing here...</p>
+
+            <div class="landing-msg">
+                <h1 class="congrats">Congrats!</h1>
+                <h2 class="text-center">
+                    Be the first to write a post. <br>
+                    To start things off,<br>
+                    click on 'Create Post' below.
+                </h2>
+                <div class="button-container">
+                  <a href="/create"><button class="home-button">Create Post</button></a>
+                </div>
+            </div>
+
             {% else %}
             <ul class="list">
                 {% for post in posts %}
@@ -95,9 +107,12 @@
             {% endif %}
         </div>
     </div>
+    <!--If post exist, sidebar will display-->
+    {% if posts %}
     <div class="container-sidebar">
         {% include 'sidebar.html' %}
     </div>
+    {% endif %}
 </div>
 
 <script src="/static/javascript/feed_func.js"></script>
