@@ -45,7 +45,7 @@ CREATE TABLE post (
     event BOOLEAN DEFAULT NULL,
     from_date VARCHAR(10),
     to_date VARCHAR(10),
-
+    comments INTEGER NOT NULL,
     check_in BOOLEAN DEFAULT NULL,
 
     PRIMARY KEY (post_id)
