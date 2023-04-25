@@ -7,7 +7,7 @@
             {% if not posts %}
 
             <div class="landing-msg">
-                <h1 class="congrats">Congrations!!!</h1>
+                <h1 class="congrats">Congrations!</h1>
                 <h2 class="text-center">
                     You are the first person to write a post. <br>
                     To start things off click on 'Create Post' below
@@ -106,9 +106,12 @@
             {% endif %}
         </div>
     </div>
+    <!--If post exist, sidebar will display-->
+    {% if posts %}
     <div class="container-sidebar">
         {% include 'sidebar.html' %}
     </div>
+    {% endif %}
 </div>
 
 <script src="/static/javascript/feed_func.js"></script>

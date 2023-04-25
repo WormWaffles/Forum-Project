@@ -196,7 +196,7 @@ p {
 }
 
 
-/*first post css (below)*/
+/*CSS for: if there are no post in feed.html*/
 .home-button {
     background-color: #57A1BD;
     color: white;
@@ -209,10 +209,12 @@ p {
     font: normal normal medium 30px/40px Poppins;
 }
 
+/*CSS for: if there are no post in feed.html*/
 .home-button:hover {
     background-color: #5592a8;
 }
 
+/*CSS for: if there are no post in feed.html*/
 .congrats{
     font-size: 5rem;
     font-weight: bold;
@@ -220,6 +222,7 @@ p {
     color: #A6CAD8;
 }
 
+/*CSS for: if there are no post in feed.html*/
 h2 {
     text-align: center;
     font: normal normal medium 30px/40px Poppins;
@@ -228,10 +231,12 @@ h2 {
     opacity: 1;
 }
 
+/*CSS for: if there are no post in feed.html*/
 .button-container {
     padding: 1rem;
 }
 
+/*CSS for: if there are no post in feed.html*/
 a {
     text-decoration: none;
 }
