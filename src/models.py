@@ -39,7 +39,7 @@ class Post(db.Model):
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
-
+    comments = db.Column(db.Integer, nullable=False)
     check_in = db.Column(db.Boolean, nullable=True)
     # comments need to be implemented
 
