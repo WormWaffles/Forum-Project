@@ -7,6 +7,7 @@ from src.likes import likes
 from src.rating import rating
 from src.user_follow import Follows
 from src.models import db, User, Rating
+from src.comments import comments
 from dotenv import load_dotenv
 import os
 import re
@@ -17,6 +18,7 @@ from pip._vendor import cachecontrol
 import boto3
 from werkzeug.utils import secure_filename
 from flask_bcrypt import Bcrypt
+import uuid
 
 
 app = Flask(__name__)
@@ -44,13 +46,14 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 bcrypt = Bcrypt(app)
 
 # Google Auth
+url = os.getenv('URL')
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secret_file,
     scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email', 'openid'],
-    redirect_uri='http://127.0.0.1:5000/callback'
+    redirect_uri=f'{url}/callback'
 )
 
 # AWS S3 Connection
@@ -75,6 +78,7 @@ def logged_in():
 @app.before_request
 def before_request():
     '''Checks if user is logged in'''
+    # comments.clear()
     # post_feed.clear()
     # likes.clear()
     # users.clear()
@@ -150,7 +154,7 @@ def edit_account():
                 # check if file is an image
                 if not profile_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Profile picture must be a .jpg, .jpeg, or .png file.')
-                new_profile_filename = f'{user_id}_{secure_filename(profile_pic.filename)}'
+                new_profile_filename = f'{uuid.uuid4()}_{secure_filename(profile_pic.filename)}'.replace(' ', '_')
 
                 # remove old profile pic from s3
                 user = users.get_user_by_id(user_id)
@@ -170,7 +174,7 @@ def edit_account():
                 # check if file is a picture
                 if not banner_pic.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_banner_filename = f'{user_id}_{secure_filename(banner_pic.filename)}'
+                new_banner_filename = f'{uuid.uuid4()}_{secure_filename(banner_pic.filename)}'.replace(' ', '_')
 
                 # remove old banner pic from s3
                 user = users.get_user_by_id(user_id)
@@ -328,8 +332,7 @@ def create():
                 # make sure file is an image
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
-                file_title = title.replace(" ", "_")
-                new_post_filename = f'{file_title}_{secure_filename(file.filename)}'
+                new_post_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'.replace(' ', '_')
 
                 # upload file to s3
                 s3.Bucket(bucket_name).upload_fileobj(
@@ -348,7 +351,7 @@ def create():
         if check_in: 
             rating.create_rating(stars, business_id, post.post_id)
         return redirect('/feed')
-    
+
 
 # delete post
 @app.get('/feed/delete/<post_id>')
@@ -358,6 +361,14 @@ def delete_post(post_id):
     if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
         return redirect('/error')
     post = post_feed.get_post_by_id(post_id)
+    # delete all comments with post id
+    post_comments = comments.get_comments_by_post_id(post_id)
+    for comment in post_comments:
+        # if comment has a file, delete it
+        if comment.file:
+            s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+        comments.delete_comment(comment.comment_id)
+        likes.delete_likes_by_post_id(comment.comment_id)
     if post.file:
         # delete file from s3
         post = post_feed.get_post_by_id(post_id)
@@ -429,18 +440,15 @@ def edit(post_id):
                 from_date = None
                 to_date = None
         else:
+            event = None
             from_date = None
             to_date = None
         file_path = None
         if file:
             try:
-                s3 = boto3.resource('s3',
-                aws_access_key_id='AKIAY5EAJ7XAJ3GQ2AUH',
-                aws_secret_access_key='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')
-                bucket_name = 'barhive'
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                     return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
-                new_filename = f'{title}_{secure_filename(file.filename)}'
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'.replace(' ', '_')
 
                 # remove old banner pic from s3
                 post = post_feed.get_post_by_id(post_id)
@@ -468,8 +476,10 @@ def view_post(post_id):
         return redirect(url_for('login'))
     post = post_feed.get_post_by_id(post_id)
     if post:
+
         stars = rating.get_rating_by_post_id(post_id)
         return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), rating=stars)
+
     return redirect('/error')
 
 # view user
@@ -554,6 +564,117 @@ def business():
     
     return render_template('business_register.html', logged_in=logged_in(), register="active", info=info)
 
+# search page
+@app.get('/search')
+def search():
+    if not g.user:
+        return redirect(url_for('login'))
+    query = request.args.get('query')
+    if query:
+        posts = post_feed.search_posts(query)
+        return render_template('search.html', posts=posts, query=query)
+    return redirect('/error')
+
+
+# comment on post
+@app.route('/feed/<post_id>/comment', methods=['POST'])
+def comment(post_id):
+    comment = request.form.get('content')
+    file = request.files['file']
+    file_path = None
+    if file:
+            try:
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('settings.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
+
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_filename
+                )
+
+                # add filepath to database
+                file_path = f'https://barhive.s3.amazonaws.com/{new_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
+    post_feed.comment_on_post(user_id=g.user.user_id, post_id=post_id, comment=comment, file=file_path)
+    return redirect(url_for('view_post', post_id=post_id))
+
+# edit comment
+@app.route('/feed/<post_id>/comment/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(post_id, comment_id):
+    comment = comments.get_comment_by_id(comment_id)
+    if request.method == 'POST':
+        comment_data = request.form.get('content')
+        file = request.files['file']
+        file_path = comment.file or None
+        if file:
+            try:
+                if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    return render_template('edit_comment.html', message='Banner picture must be a .jpg, .jpeg, or .png file.')
+                new_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'
+
+                # remove old banner pic from s3
+                comment = comments.get_comment_by_id(comment_id)
+                if comment.file != None:
+                    s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+
+                s3.Bucket(bucket_name).upload_fileobj(
+                    file,
+                    new_filename
+                )
+
+                # add filepath to database
+                file_path = f'https://barhive.s3.amazonaws.com/{new_filename}'
+            except Exception as e:
+                print(f"Error uploading files to s3: " + str(e))
+
+        file = file_path
+        comments.update_comment(comment_id, comment_data, file)
+        return redirect(url_for('view_post', post_id=post_id))
+    return render_template('edit_comment.html', comment=comment, post_id=post_id)
+
+# delete comment
+@app.route('/feed/<post_id>/comment/<comment_id>/delete')
+def delete_comment(post_id, comment_id):
+    comment = comments.get_comment_by_id(comment_id)
+    if comment.file:
+        # delete file from s3
+        s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+    post_feed.delete_comment(comment_id)
+    return redirect(url_for('view_post', post_id=post_id))
+
+# like post
+@app.get('/feed/comment/like/<int:comment_id>')
+def like_comment(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.like_post(comment_id, user_id)
+    return "nothing"
+
+# dislike post
+@app.get('/feed/comment/dislike/<int:comment_id>')
+def dislike_comment(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.dislike_post(comment_id, user_id)
+    return "nothing"
+
+# remove like or dislike
+@app.get('/feed/comment/remove_like/<int:comment_id>')
+def remove_comment_like(comment_id):
+    if g.user:
+        user_id = session['user_id']
+    else:
+        return redirect('/error')
+    comments.remove_like(comment_id, user_id)
+    return "nothing"
+
 
 # error page
 @app.errorhandler(404)
@@ -564,7 +685,6 @@ def page_not_found(e):
 # ********** GOOGLE LOGIN **********
 @app.route('/callback')
 def callback():
-    print("callback")
     flow.fetch_token(authorization_response=request.url)
 
     if not session["state"] == request.args["state"]:

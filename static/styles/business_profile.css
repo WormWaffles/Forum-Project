@@ -82,6 +82,8 @@
 
 .follow {
     text-align: center;
+    text-decoration: none;
+    color: #57A1BD;
 }
 
 #follow-btn {
@@ -93,3 +95,24 @@
 .setting_button {
     text-align: right;
 }
+
+.profile-links a:link {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.profile-links a:visited {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.profile-links1 a:link {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.profile-links1 a:visited {
+    text-decoration: none;
+    color: #57A1BD;
+}
+

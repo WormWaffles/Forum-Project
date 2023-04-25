@@ -35,24 +35,27 @@
                             </h1>
                         </div>
                         <div class="subtitle">
-                            <p>Elevate your spirits with our craft cocktails.</p>
+                            <p>Nothing here...</p>
                         </div>
                         <div class="description">
                             {% if user.about_me %}
                             {{ user.about_me }}
                             {% else %}
-                            <p>Welcome to our luxurious cocktail venue! We offer a unique and unforgettable experience
-                                for cocktail
-                                enthusiasts. Our expert mixologists have crafted a menu of exquisite cocktails made with
-                                premium
-                                spirits and fresh, high-quality ingredients. Relax, unwind and indulge in our signature
-                                cocktails in
-                                our cozy and elegant venue. Come join us and discover the art of mixology in our stylish
-                                cocktail haven.</p>
+                            <p>Nothing here...</p>
                             {% endif %}
                         </div>
                         <div class="follow">
-                            <button id="follow-btn" class="btn" type="submit">Follow</button>
+                            {% if is_Following == True %}
+                                <form class="profile-links1" action='/unfollow/{{ user.user_id}}' method="POST">
+                                <a href="/user/{{ user.user_id }}/followers">{{ followers_num }} Followers</a>
+                                <button id="follow-btn" class="btn" type="submit">Following</button>
+                                </form>
+                            {% else %}
+                                <form class="profile-links" action='/follow/{{ user.user_id}}' method="POST">
+                                <a href="/user/{{ user.user_id }}/followers">{{ followers_num }} Followers</a>
+                                <button id="follow-btn" class="btn" type="submit">+ Follow</button>
+                                </form>
+                            {% endif %}
                         </div>
 
                     </div>
