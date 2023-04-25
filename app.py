@@ -478,7 +478,7 @@ def view_post(post_id):
     if post:
 
         stars = rating.get_rating_by_post_id(post_id)
-        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), rating=stars)
+        return render_template('view_post.html', post=post, likes=likes.get_like_by_post_id(post_id), comments=comments.get_comments_by_post_id(post_id), rating=stars)
 
     return redirect('/error')
 
