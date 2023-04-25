@@ -23,6 +23,12 @@ class PostFeed:
         '''Returns all posts ordered by date'''
         return Post.query.order_by(Post.post_date.desc()).limit(15).all()
     
+    def get_all_posts_ordered_by_location(self, location):
+        '''Returns all posts ordered by location and date'''
+        date = datetime.datetime.now()
+        print(date)
+        
+    
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
         return Post.query.get(post_id)
@@ -36,8 +42,12 @@ class PostFeed:
         id = str(id)
         id = id[:8]
         id = int(id)
-
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, likes=likes, event=event, from_date=from_date, to_date=to_date, check_in=check_in)
+        # get current date
+        date = datetime.datetime.now()
+        user = users.get_user_by_id(user_id)
+        if user.location:
+            location = user.location
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, check_in=check_in, location=location)
 
         db.session.add(post)
         db.session.commit()

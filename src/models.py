@@ -11,6 +11,7 @@ class User(db.Model):
     last_name = db.Column(db.String(80), nullable=True)
     email = db.Column(db.String(80), nullable=False)
     about_me = db.Column(db.String(80), nullable=True)
+    location = db.Column(db.String(80), nullable=True)
     private = db.Column(db.Boolean, nullable=False)
 
     # picture paths
@@ -39,7 +40,7 @@ class Post(db.Model):
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
-
+    location = db.Column(db.String(80), nullable=True)
     check_in = db.Column(db.Boolean, nullable=True)
     # comments need to be implemented
 
