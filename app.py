@@ -120,7 +120,8 @@ def account():
 @app.route('/account/followers')
 def account_followers():
     followers = Follows.get_all_followers(g.user.user_id)
-    return render_template('followers.html',followers=followers)
+    followerBool = True
+    return render_template('account.html',followers=followers,followerBool=followerBool)
 
 
 @app.route('/account/edit', methods=['GET', 'POST'])

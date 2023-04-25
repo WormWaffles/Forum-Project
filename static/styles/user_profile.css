@@ -128,3 +128,11 @@
 .setting_button {
     text-align: right;
 }
+/* Style each follower*/
+/*Style the Container that holds the data */
+/* do this foor businesses and for viewing others profiles*/
+.follower-data {
+    display: inline-block;
+    color: black;
+    
+}
