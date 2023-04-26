@@ -5,19 +5,17 @@
     <div class="container-feed">
         <div class="feed">
             {% if not posts %}
-
+            
             <div class="landing-msg">
-                <h1 class="congrats">Congrats!</h1>
+                <h1 class="congrats">No posts here.</h1>
                 <h2 class="text-center">
-                    Be the first to write a post. <br>
-                    To start things off,<br>
-                    click on 'Create Post' below.
+                    Change your filter or create a post.
                 </h2>
                 <div class="button-container">
-                  <a href="/create"><button class="home-button">Create Post</button></a>
+                    <a href="/create"><button class="home-button">Create Post</button></a>
                 </div>
             </div>
-
+            
             {% else %}
             <ul class="list">
                 {% for post in posts %}
@@ -34,32 +32,35 @@
                                     <p class="username" id="user">{{ post.user.username }}</p>
                                 </a>
                                 {% if post.check_in %}
-                                    {%for rating in ratings%}
-                                        {% if rating.post_id == post.post_id %}
-                                        {% for user in users %}
-                                            {% if user.user_id == rating.business_id %}
-                                                {% set username = user.username %}
-                                <p class="checked">checked into <a class="location" href="/user/{{user.user_id}}">{{ username }}</a></p>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% endif %}
-                                    {% endfor %}
+                                {%for rating in ratings%}
+                                {% if rating.post_id == post.post_id %}
+                                {% for user in users %}
+                                {% if user.user_id == rating.business_id %}
+                                {% set username = user.username %}
+                                <p class="checked">checked into <a class="location" href="/user/{{user.user_id}}">{{
+                                        username }}</a></p>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
                                 {% endif %}
                                 </p>
                                 <div class="rating-container">
                                     <span id="rating">
                                         {% if post.check_in %}
-                                            {%for rating in ratings%}
-                                                {%if rating.post_id == post.post_id%}
-                                                    {% set stars = rating.rating %}
-                                                    {% for r in range(stars) %}
-                                                    <img src="/static/images/filled-star_yellow.png" alt="star" width="20" height="20">
-                                                    {% endfor %}
-                                                    {% for r in range(5-stars) %}
-                                                    <img src="/static/images/empty-star_yellow.png" alt="star" width="20" height="20">
-                                                    {% endfor %}
-                                                {%endif%}
-                                            {% endfor %}
+                                        {%for rating in ratings%}
+                                        {%if rating.post_id == post.post_id%}
+                                        {% set stars = rating.rating %}
+                                        {% for r in range(stars) %}
+                                        <img src="/static/images/filled-star_yellow.png" alt="star" width="20"
+                                            height="20">
+                                        {% endfor %}
+                                        {% for r in range(5-stars) %}
+                                        <img src="/static/images/empty-star_yellow.png" alt="star" width="20"
+                                            height="20">
+                                        {% endfor %}
+                                        {%endif%}
+                                        {% endfor %}
                                         {%endif%}
                                     </span>
                                 </div>
@@ -98,28 +99,39 @@
                         </div>
                         {% endif %}
                         <div class="post-card-container">
-                            <div class="date">
-                                <p>{{ post.post_date.split(' ')[0] }}</p>
+                            {% if post.distance %}
+                            {% set miles = post.distance %}
+                            {% if (miles < 1) %} <div class="date">
+                                <p>{{ post.post_date.split(' ')[0] }} | <1 mile away</p>
+                        </div>
+                        {% else %}
+                        <div class="date">
+                            <p>{{ post.post_date.split(' ')[0] }} | {{ miles|round }} miles away</p>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <div class="date">
+                            <p>{{ post.post_date.split(' ')[0] }}</p>
+                        </div>
+                        {% endif %}
+                        <!-- comments -->
+                        <a href="/feed/{{ post.post_id }}">
+                            <div class="comments">
+                                <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
+                                <p class="comment">{{ post.comments }} comments</p>
                             </div>
-                            <!-- comments -->
-                            <a href="/feed/{{ post.post_id }}">
-                                <div class="comments">
-                                    <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
-                                    <p class="comment">{{ post.comments }} comments</p>
-                                </div>
-                            </a>
-                            <!-- like button, dont even ask bruh -->
-                            <div class="like">
-                                <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
-                                <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img"
-                                        {% set like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for
-                                        like in likes if like.post_id==post.post_id and like.user_id==g.user.user_id %}
-                                        {% if like.like_type==1 %} {% set
-                                        _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif
-                                        like.like_type==-1 %} {% set
-                                        _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {%
-                                        endif %} {% endfor %} {{ like_icon.src }}></a>
-                            </div>
+                        </a>
+                        <!-- like button, dont even ask bruh -->
+                        <div class="like">
+                            <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
+                            <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img" {%
+                                    set like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for like
+                                    in likes if like.post_id==post.post_id and like.user_id==g.user.user_id %} {% if
+                                    like.like_type==1 %} {% set
+                                    _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif
+                                    like.like_type==-1 %} {% set
+                                    _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif
+                                    %} {% endfor %} {{ like_icon.src }}></a>
                         </div>
                     </div>
                 </li>
@@ -129,11 +141,9 @@
         </div>
     </div>
     <!--If post exist, sidebar will display-->
-    {% if posts %}
     <div class="container-sidebar">
         {% include 'sidebar.html' %}
     </div>
-    {% endif %}
 </div>
 
 <script src="/static/javascript/feed_func.js"></script>
