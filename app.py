@@ -104,9 +104,9 @@ def update_location():
 
 @app.route('/')
 def index():
-    if g.user:
-        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
-    return render_template('index.html', logged_in=False, home="active")
+    if not g.user:
+        return render_template('index.html', logged_in=False, home="active")
+    return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
 @app.route('/feed')
 def feed():
@@ -114,6 +114,28 @@ def feed():
         return redirect(url_for('login'))
     return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
+# filter feed
+@app.route('/feed/filter', methods=['POST'])
+def filter_feed():
+    filter = request.form.get('filter')
+    print(filter)
+    if not filter:
+        return redirect(url_for('feed'))
+    if not g.user:
+        return redirect(url_for('login'))
+    if filter == 'location':
+        posts = post_feed.get_all_posts_ordered_by_location(g.user.location)
+    elif filter == 'follow':
+        posts = post_feed.get_all_following_posts(g.user.user_id)
+    elif filter == 'venues':
+        posts = post_feed.get_all_posts_by_business()
+    elif filter == 'events':
+        posts = post_feed.get_all_posts_by_event()
+    else:
+        return redirect(url_for('feed'))
+    mylikes = likes.get_all_likes()
+    ratings = rating.get_all_ratings()
+    return render_template('feed.html', posts=posts, likes=mylikes, ratings=rating, selected=filter)
 
 # account page
 @app.route('/account')

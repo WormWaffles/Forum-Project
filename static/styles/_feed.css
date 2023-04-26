@@ -1,6 +1,6 @@
 .container-main {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 2.7fr 1.3fr;
     margin-right: 15%;
     margin-left: 15%;
     margin-top: 1.5rem;
