@@ -135,7 +135,7 @@ def filter_feed():
         return redirect(url_for('feed'))
     mylikes = likes.get_all_likes()
     ratings = rating.get_all_ratings()
-    return render_template('feed.html', posts=posts, likes=mylikes, ratings=rating, selected=filter)
+    return render_template('feed.html', posts=posts, likes=mylikes, ratings=ratings, selected=filter)
 
 # account page
 @app.route('/account')
