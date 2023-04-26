@@ -90,6 +90,17 @@ def before_request():
         else:
             g.user = user
 
+# update location and pass in pos from ajax
+@app.route('/update_location', methods=['POST'])
+def update_location():
+    if not g.user:
+        return redirect(url_for('login'))
+    request_data = request.get_json()
+    lat = round(request_data['lat'], 5)
+    lng = round(request_data['lng'], 5)
+    users.update_location(g.user.user_id, lat, lng)
+    return "nothing"
+
 
 @app.route('/')
 def index():
@@ -101,7 +112,7 @@ def index():
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings(), users=users.get_all_users())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_location(g.user.location), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
 
 # account page

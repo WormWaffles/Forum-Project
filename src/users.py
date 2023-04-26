@@ -69,6 +69,13 @@ class Users:
         db.session.commit()
         return user
     
+    def update_location(self, user_id, lat, lng):
+        '''Updates a user's location'''
+        user = self.get_user_by_id(user_id)
+        user.location = f'{lat},{lng}'
+        db.session.commit()
+        return user
+    
     def search_user(self, search):
         '''Query user names and emails ignore case'''
         user = User.query.filter(User.username.ilike(f'%{search}%')).first()
