@@ -63,6 +63,7 @@ CREATE TABLE rating (
     rating_id SERIAL NOT NULL PRIMARY KEY,
     rating SMALLINT NOT NULL,
     business_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    business_name VARCHAR(80) NOT NULL,
     post_id INTEGER NOT NULL REFERENCES post(post_id)
 );
 

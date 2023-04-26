@@ -50,11 +50,11 @@ label {
     padding: 15px;
 }
 
-.title {
+.create_title {
     height: 2rem;
 }
 
-.title:focus {
+.create_title:focus {
     outline: none !important;
     border-color: #57A1BD !important;
 }
