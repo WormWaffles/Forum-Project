@@ -1,6 +1,7 @@
 from src.models import db, Post, User
 from src.likes import likes
 from src.users import users
+from src.user_follow import follows
 from src.comments import comments
 import uuid
 import datetime
@@ -24,6 +25,7 @@ class PostFeed:
         '''Returns all posts ordered by date'''
         return Post.query.order_by(Post.post_date.desc()).limit(15).all()
     
+    # WILL USE THESE FOR FILTER FUNCTIONALITY ***
     def get_all_posts_ordered_by_location(self, location):
         '''Returns all posts ordered by closest location'''
         if not location:
@@ -31,11 +33,13 @@ class PostFeed:
         location = location.split(',')
         startlat = float(location[0])
         startlng = float(location[1])
+        print(startlat, startlng)
         # get 15 post ordered by closest location, post have location column that is string of "lat,lng"
         posts = db.session.execute(text(f"""
             SELECT
                 p.*,
-                u.*
+                u.*,
+                distance
             FROM post p
             JOIN (
                 SELECT
@@ -55,8 +59,33 @@ class PostFeed:
         post_objects = []
         for post in posts:
             post_object = Post(post_id=post[0], user_id=post[1], title=post[2], content=post[3], file=post[4], post_date=post[5], likes=post[6], event=post[7], from_date=post[8], to_date=post[9], location=post[10], comments=post[11], check_in=post[12], user=User(user_id=post[13], username=post[14], password=post[15], first_name=post[16], last_name=post[17], email=post[18], about_me=post[19], location=post[20], private=post[21], profile_pic=post[22], banner_pic=post[23], is_business=post[24], address=post[25], city=post[26], state=post[27], zip_code=post[28], phone=post[29], website=post[30]))
+            post_object.distance = post[31]
             post_objects.append(post_object)
         return post_objects
+    
+    def get_all_following_posts(self, user_id):
+        '''Returns all posts by users that the user is following ordered by date'''
+        user = users.get_user_by_id(user_id)
+        following = follows.get_all_following(user_id)
+        following_posts = []
+        for user in following:
+            posts = self.get_posts_by_user_id(user.user_id)
+            following_posts += posts
+            if following_posts > 15:
+                break
+        following_posts.sort(key=lambda x: x.post_date, reverse=True)
+        return following_posts
+    
+    def get_all_posts_by_business(self):
+        '''Returns all posts where user is a business'''
+        # get all posts by business ordered by date
+        return Post.query.join(User).filter(User.is_business==True).order_by(Post.post_date.desc()).limit(15).all()
+    
+    def get_all_posts_by_event(self):
+        '''Returns all posts that are events'''
+        # get all posts that are events ordered by date
+        return Post.query.filter(Post.event==True).order_by(Post.post_date.desc()).limit(15).all()
+    # ***
 
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
