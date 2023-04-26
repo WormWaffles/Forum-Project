@@ -55,11 +55,13 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.SmallInteger, nullable=False)
     business_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    business_name = db.Column(db.String(80), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
         
-    def __init__(self, rating, business_id, post_id):
+    def __init__(self, rating, business_id, business_name, post_id):
         self.rating = rating
         self.business_id = business_id
+        self.business_name = business_name
         self.post_id = post_id
 
     def __repr__(self):

@@ -32,15 +32,10 @@
                                     <p class="username" id="user">{{ post.user.username }}</p>
                                 </a>
                                 {% if post.check_in %}
-                                {%for rating in ratings%}
+                                {% for rating in ratings %}
                                 {% if rating.post_id == post.post_id %}
-                                {% for user in users %}
-                                {% if user.user_id == rating.business_id %}
-                                {% set username = user.username %}
-                                <p class="checked">checked into <a class="location" href="/user/{{user.user_id}}">{{
-                                        username }}</a></p>
-                                {% endif %}
-                                {% endfor %}
+                                <p class="checked">checked into <a class="location" href="/user/{{rating.business_id}}">{{
+                                        rating.business_name }}</a></p>
                                 {% endif %}
                                 {% endfor %}
                                 {% endif %}
@@ -48,8 +43,8 @@
                                 <div class="rating-container">
                                     <span id="rating">
                                         {% if post.check_in %}
-                                        {%for rating in ratings%}
-                                        {%if rating.post_id == post.post_id%}
+                                        {% for rating in ratings %}
+                                        {% if rating.post_id == post.post_id %}
                                         {% set stars = rating.rating %}
                                         {% for r in range(stars) %}
                                         <img src="/static/images/filled-star_yellow.png" alt="star" width="20"

@@ -405,8 +405,9 @@ def delete_post(post_id):
         # delete file from s3
         post = post_feed.get_post_by_id(post_id)
         s3.Object(bucket_name, post.file.split('/')[-1]).delete()
-    post_feed.delete_post(post_id)
+    rating.delete_rating_by_post_id(post_id)
     likes.delete_likes_by_post_id(post_id)
+    post_feed.delete_post(post_id)
     return redirect('/feed')
 
 
