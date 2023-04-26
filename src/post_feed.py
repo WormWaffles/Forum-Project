@@ -74,8 +74,8 @@ class PostFeed:
         user = users.get_user_by_id(user_id)
         if user.location:
             location = user.location
-        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, check_in=check_in, location=location)
-
+        post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, location=location, comments=0, check_in=check_in)
+        
         db.session.add(post)
         db.session.commit()
         return post

@@ -41,9 +41,8 @@ class Post(db.Model):
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
     location = db.Column(db.String(80), nullable=True)
+    comments = db.Column(db.Integer, nullable=False)
     check_in = db.Column(db.Boolean, nullable=True)
-    # comments need to be implemented
-
 
 # Likes Model
 class UserLikes(db.Model):
