@@ -114,6 +114,17 @@ def feed():
         return redirect(url_for('login'))
     return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_location(g.user.location), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
+# filter feed
+@app.route('/feed/<str:filter>', methods=['POST'])
+def filter_feed(filter):
+    if not filter:
+        return redirect(url_for('feed'))
+    if not g.user:
+        return redirect(url_for('login'))
+    if filter == 'location':
+        return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_location(g.user.location), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
+    elif filter == 'follow':
+        return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_follows(g.user.user_id), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
 # account page
 @app.route('/account')
