@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/static/styles/sidebar.css">
 
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script>
   let map, infoWindow;
@@ -19,6 +20,21 @@
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+
+          // call update_location function in app.py with pos as parameter
+          $.ajax({
+            type: "POST",
+            url: "/update_location",
+            data: JSON.stringify(pos),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+              console.log(data);
+            },
+            failure: function (errMsg) {
+              console.log(errMsg);
+            }
+          });
 
           infoWindow.setPosition(pos);
           infoWindow.setContent("Location found.");

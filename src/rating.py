@@ -10,6 +10,8 @@ class Ratings:
     def get_rating_by_post_id(self, post_id):
         '''Returns rating by post id'''
         rating = Rating.query.filter_by(post_id=post_id).scalar()
+        if rating == None:
+            return 0
         return rating.rating
     
     def get_rating_average(self, user_id):

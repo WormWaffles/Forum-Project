@@ -18,6 +18,7 @@ CREATE TABLE "user" (
     last_name VARCHAR(80),
     email VARCHAR(80) NOT NULL,
     about_me VARCHAR(500),
+    location VARCHAR(80),
     private BOOLEAN DEFAULT NULL,
     PRIMARY KEY (user_id),
     -- picture paths (aws)
@@ -45,9 +46,9 @@ CREATE TABLE post (
     event BOOLEAN DEFAULT NULL,
     from_date VARCHAR(10),
     to_date VARCHAR(10),
-
+    location VARCHAR(80),
+    comments INTEGER NOT NULL,
     check_in BOOLEAN DEFAULT NULL,
-
     PRIMARY KEY (post_id)
 );
 
