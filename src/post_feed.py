@@ -26,6 +26,8 @@ class PostFeed:
     
     def get_all_posts_ordered_by_location(self, location):
         '''Returns all posts ordered by closest location'''
+        if not location:
+            return []
         location = location.split(',')
         startlat = float(location[0])
         startlng = float(location[1])
@@ -52,6 +54,7 @@ class PostFeed:
         """))
         post_objects = []
         for post in posts:
+            print(post)
             post_object = Post(post_id=post[0], user_id=post[1], title=post[2], content=post[3], file=post[4], post_date=post[5], likes=post[6], event=post[7], from_date=post[8], to_date=post[9], check_in=post[10], location=post[11], user=User(user_id=post[12], username=post[13], password=post[14], first_name=post[15], last_name=post[16], email=post[17], about_me=post[18], location=post[19], private=post[20], profile_pic=post[21], banner_pic=post[22], is_business=post[23], address=post[24], city=post[25], state=post[26], zip_code=post[27], phone=post[28], website=post[29]))
             post_objects.append(post_object)
         return post_objects
@@ -74,6 +77,8 @@ class PostFeed:
         user = users.get_user_by_id(user_id)
         if user.location:
             location = user.location
+        else:
+            location = None
         post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, location=location, comments=0, check_in=check_in)
         
         db.session.add(post)
