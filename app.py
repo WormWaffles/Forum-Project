@@ -456,6 +456,10 @@ def edit(post_id):
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
+        check_in = bool(request.form.get('check_in'))
+        if check_in:
+            business_id = request.form.get('business')
+            stars = request.form.get('rating')
         if g.user.is_business:
             event = request.form.get('event')
             from_date = request.form.get('from_date')
