@@ -1,9 +1,10 @@
-from src.models import db, Post
+from src.models import db, Post, User
 from src.likes import likes
 from src.users import users
 from src.comments import comments
 import uuid
 import datetime
+from sqlalchemy import text
 
 class PostFeed:
 
@@ -24,11 +25,37 @@ class PostFeed:
         return Post.query.order_by(Post.post_date.desc()).limit(15).all()
     
     def get_all_posts_ordered_by_location(self, location):
-        '''Returns all posts ordered by location and date'''
-        date = datetime.datetime.now()
-        print(date)
-        
-    
+        '''Returns all posts ordered by closest location'''
+        location = location.split(',')
+        startlat = float(location[0])
+        startlng = float(location[1])
+        # get 15 post ordered by closest location, post have location column that is string of "lat,lng"
+        posts = db.session.execute(text(f"""
+            SELECT
+                p.*,
+                u.*
+            FROM post p
+            JOIN (
+                SELECT
+                    location,
+                    SQRT(
+                        POW(69.1 * (CAST(split_part(location, ',', 1) AS double precision) - {startlat}), 2) +
+                        POW(69.1 * ({startlng} - CAST(split_part(location, ',', 2) AS double precision)) * COS(CAST(split_part(location, ',', 1) AS double precision) / 57.3), 2)
+                    ) AS distance
+                FROM post
+            ) AS subquery
+            ON p.location = subquery.location
+            JOIN "user" u ON p.user_id = u.user_id
+            WHERE subquery.distance < 1
+            ORDER BY subquery.distance
+            LIMIT 15;
+        """))
+        post_objects = []
+        for post in posts:
+            post_object = Post(post_id=post[0], user_id=post[1], title=post[2], content=post[3], file=post[4], post_date=post[5], likes=post[6], event=post[7], from_date=post[8], to_date=post[9], check_in=post[10], location=post[11], user=User(user_id=post[12], username=post[13], password=post[14], first_name=post[15], last_name=post[16], email=post[17], about_me=post[18], location=post[19], private=post[20], profile_pic=post[21], banner_pic=post[22], is_business=post[23], address=post[24], city=post[25], state=post[26], zip_code=post[27], phone=post[28], website=post[29]))
+            post_objects.append(post_object)
+        return post_objects
+
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
         return Post.query.get(post_id)

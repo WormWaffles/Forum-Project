@@ -105,14 +105,14 @@ def update_location():
 @app.route('/')
 def index():
     if g.user:
-        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_location(g.user.location), likes=likes.get_all_likes())
+        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
     return render_template('index.html', logged_in=False, home="active")
 
 @app.route('/feed')
 def feed():
     if not g.user:
         return redirect(url_for('login'))
-    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
+    return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_location(g.user.location), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
 
 # account page
