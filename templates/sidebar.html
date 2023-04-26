@@ -72,13 +72,19 @@
     <div class="divider"></div>
     <div class="sidebar-item">
       <label class="filter_label" for="filter">Filter by:</label>
-
-      <select class="filter" name="filter" id="filter" onchange="myFunction()">
-        <option value="location">Near Me</option>
-        <option value="follow">Followers</option>
-        <option value="venues">Venues</option>
-        <option value="events">Event</option>
-      </select>
+      <form action="/feed/filter" method="post">
+        <select class="filter" name="filter" id="filter" onchange="this.form.submit()">
+          {% if home %}
+          <option value="">Likes</option>
+          {% else %}
+          <option value="">Date</option>
+          {% endif %}
+          <option value="location"{% if selected == "location" %}selected{% endif %}>Near Me</option>
+          <option value="follow"{% if selected == "follow" %}selected{% endif %}>Followers</option>
+          <option value="venues"{% if selected == "venues" %}selected{% endif %}>Venues</option>
+          <option value="events"{% if selected == "events" %}selected{% endif %}>Event</option>
+        </select>
+      </form>
       <div id="map"></div>
       <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFoKhJXjpdutYp5APDID5ZVG4fi--9PDg&callback=initMap&v=weekly"
@@ -93,12 +99,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  function myFunction() {
-    const selectElement = document.getElementById('filter');
-    const selectedValue = selectElement.value;
-    // Do something with the selected value
-    console.log(selectedValue)
-  }
-</script>

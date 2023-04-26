@@ -33,7 +33,6 @@ class PostFeed:
         location = location.split(',')
         startlat = float(location[0])
         startlng = float(location[1])
-        print(startlat, startlng)
         # get 15 post ordered by closest location, post have location column that is string of "lat,lng"
         posts = db.session.execute(text(f"""
             SELECT
