@@ -160,22 +160,38 @@ def edit_account():
     if request.method == 'GET':
         if not g.user:
             return redirect(url_for('login'))
+        if g.user.is_business:
+            return render_template('settings_business.html', account="active")
         return render_template('settings.html', account="active")
     else:
         if not g.user:
             return redirect(url_for('login'))
-            
-        user_id = session['user_id']
-        username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
-        about_me = request.form['about_me']
-        profile_pic = request.files['profile_pic']
-        banner_pic = request.files['banner_pic']
-        private = request.form.get('private')
+        
+        if g.user.is_business:    
+            user_id = session['user_id']
+            username = request.form['username']
+            email = request.form['email']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            about_me = request.form['about_me']
+            profile_pic = request.files['profile_pic']
+            banner_pic = request.files['banner_pic']
+            private = request.form.get('private')
+            city = request.form['city']
+            address = request.form['address']
+            state = request.form['state']
+        else:
+            user_id = session['user_id']
+            username = request.form['username']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            about_me = request.form['about_me']
+            profile_pic = request.files['profile_pic']
+            banner_pic = request.files['banner_pic']
+            private = request.form.get('private')
 
         # upload files
         try:
@@ -225,6 +241,22 @@ def edit_account():
         except Exception as e:
             print(f"Error uploading files to s3: " + str(e))
 
+    if g.user.is_business:
+                # needs more error handling
+        if password != "":
+            message = ""
+            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state)
+            if password != confirm_password:
+                message = 'Passwords do not match.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            if len(password) < 6:
+                message = 'Password must be at least 6 characters.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            password = bcrypt.generate_password_hash(password).decode()
+        else:
+            password = g.user.password
+        users.update_user(user_id, username, password, email, private, profile_pic_path, banner_pic_path, city, address, state)
+        return redirect(url_for('account'))
     try:
         # needs more error handling
         if password != "":
@@ -240,7 +272,6 @@ def edit_account():
         else:
             password = g.user.password
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
-        
         return redirect(url_for('account'))
     except Exception as e: 
         print(e)
