@@ -106,7 +106,7 @@ def update_location():
 def index():
     if not g.user:
         return render_template('index.html', logged_in=False, home="active")
-    return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
+    return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings(), event=post_feed.get_event(g.user.location))
 
 @app.route('/feed')
 def feed():

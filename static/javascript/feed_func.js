@@ -1,3 +1,9 @@
+// delete event announcement
+const closeIcon = document.querySelector('.close');
+  closeIcon.addEventListener('click', function() {
+    const announcementDiv = document.querySelector('.announcement');
+    announcementDiv.remove();
+  });
 for (let settingsIcon of document.querySelectorAll('img[alt="Settings"]')) {
     let the_id = settingsIcon.getAttribute('id')
     const settingsOptions = document.querySelector('div[for="so' + the_id + '"]');
