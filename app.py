@@ -501,8 +501,10 @@ def view_user(user_id):
 #view a other users followers
 @app.get('/user/<user_id>/followers')
 def view_user_followers(user_id):
+    user = users.get_user_by_id(user_id)
     followers = Follows.get_all_followers(user_id)
-    return render_template('followers.html',followers=followers)
+    followerBool = True
+    return render_template('account.html',user=user,followers=followers,followerBool=followerBool)
 
 #follow method
 @app.route('/follow/<user_id>', methods=['POST'])
