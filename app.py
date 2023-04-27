@@ -118,7 +118,6 @@ def feed():
 @app.route('/feed/filter', methods=['POST'])
 def filter_feed():
     filter = request.form.get('filter')
-    print(filter)
     if not filter:
         return redirect(url_for('feed'))
     if not g.user:
