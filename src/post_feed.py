@@ -86,6 +86,40 @@ class PostFeed:
         return Post.query.filter(Post.event==True).order_by(Post.post_date.desc()).limit(15).all()
     # ***
 
+    def get_event(self, location):
+        '''Return one post that is an event ordered by from_date and location'''
+        if not location:
+            return []
+        location = location.split(',')
+        startlat = float(location[0])
+        startlng = float(location[1])
+        # get 15 post ordered by closest location, post have location column that is string of "lat,lng"
+        posts = db.session.execute(text(f"""
+            SELECT
+                p.*,
+                u.*,
+                distance
+            FROM post p
+            JOIN (
+                SELECT
+                    location,
+                    SQRT(
+                        POW(69.1 * (CAST(split_part(location, ',', 1) AS double precision) - {startlat}), 2) +
+                        POW(69.1 * ({startlng} - CAST(split_part(location, ',', 2) AS double precision)) * COS(CAST(split_part(location, ',', 1) AS double precision) / 57.3), 2)
+                    ) AS distance
+                FROM post
+            ) AS subquery
+            ON p.location = subquery.location
+            JOIN "user" u ON p.user_id = u.user_id
+            WHERE subquery.distance < 1
+            ORDER BY subquery.distance
+            LIMIT 15;
+        """))
+        for post in posts:
+            if post.event:
+                return post
+        return None
+
     def get_post_by_id(self, post_id):
         '''Returns post by id'''
         return Post.query.get(post_id)

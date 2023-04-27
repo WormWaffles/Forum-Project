@@ -1,11 +1,26 @@
 <!-- feed -->
 <link rel="stylesheet" href="/static/styles/_feed.css">
 
+{% if event %}
+<div class="announcement">
+    <div>
+        <h1>Event nearby!</h1>
+        <p><a href="/{{ event.user_id }}">{{ event.username }}</a>: {{ event.content }}</p>
+    </div>
+    <div class="images">
+        <!-- x to close out of announcement -->
+        <a><img class="close" src="/static/images/x_icon.png" alt="close" height="20" width="20"></a>
+        {% if event.file %}
+        <img class="content" src="{{ event.file }}" alt="announcement" height="150" width="150">
+        {% endif %}
+    </div>
+</div>
+{% endif %}
 <div class="container-main">
     <div class="container-feed">
         <div class="feed">
             {% if not posts %}
-            
+
             <div class="landing-msg">
                 <h1 class="congrats">No posts here.</h1>
                 <h2 class="text-center">
@@ -15,7 +30,7 @@
                     <a href="/create"><button class="home-button">Create Post</button></a>
                 </div>
             </div>
-            
+
             {% else %}
             <ul class="list">
                 {% for post in posts %}
@@ -34,7 +49,8 @@
                                 {% if post.check_in %}
                                 {% for rating in ratings %}
                                 {% if rating.post_id == post.post_id %}
-                                <p class="checked">checked into <a class="location" href="/user/{{rating.business_id}}">{{
+                                <p class="checked">checked into <a class="location"
+                                        href="/user/{{rating.business_id}}">{{
                                         rating.business_name }}</a></p>
                                 {% endif %}
                                 {% endfor %}
