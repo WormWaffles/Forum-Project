@@ -69,6 +69,8 @@ Next, create the database by running the following command in postgres:
 CREATE DATABASE barhive;
 ```
 
+You will then need to create the tables from the database_schema.sql file.
+
 Finally, start the application:
 
 ```bash
