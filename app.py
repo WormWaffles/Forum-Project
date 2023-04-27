@@ -90,12 +90,23 @@ def before_request():
         else:
             g.user = user
 
+# update location and pass in pos from ajax
+@app.route('/update_location', methods=['POST'])
+def update_location():
+    if not g.user:
+        return redirect(url_for('login'))
+    request_data = request.get_json()
+    lat = round(request_data['lat'], 5)
+    lng = round(request_data['lng'], 5)
+    users.update_location(g.user.user_id, lat, lng)
+    return "nothing"
+
 
 @app.route('/')
 def index():
-    if g.user:
-        return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes())
-    return render_template('index.html', logged_in=False, home="active")
+    if not g.user:
+        return render_template('index.html', logged_in=False, home="active")
+    return render_template('index.html', logged_in=True, home="active", posts=post_feed.get_all_posts_ordered_by_likes(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings(), event=post_feed.get_event(g.user.location))
 
 @app.route('/feed')
 def feed():
@@ -103,6 +114,27 @@ def feed():
         return redirect(url_for('login'))
     return render_template('index.html', logged_in=True, feed="active", posts=post_feed.get_all_posts_ordered_by_date(), likes=likes.get_all_likes(), ratings=rating.get_all_ratings())
 
+# filter feed
+@app.route('/feed/filter', methods=['POST'])
+def filter_feed():
+    filter = request.form.get('filter')
+    if not filter:
+        return redirect(url_for('feed'))
+    if not g.user:
+        return redirect(url_for('login'))
+    if filter == 'location':
+        posts = post_feed.get_all_posts_ordered_by_location(g.user.location)
+    elif filter == 'follow':
+        posts = post_feed.get_all_following_posts(g.user.user_id)
+    elif filter == 'venues':
+        posts = post_feed.get_all_posts_by_business()
+    elif filter == 'events':
+        posts = post_feed.get_all_posts_by_event()
+    else:
+        return redirect(url_for('feed'))
+    mylikes = likes.get_all_likes()
+    ratings = rating.get_all_ratings()
+    return render_template('feed.html', posts=posts, likes=mylikes, ratings=ratings, selected=filter)
 
 # account page
 @app.route('/account')
@@ -129,22 +161,38 @@ def edit_account():
     if request.method == 'GET':
         if not g.user:
             return redirect(url_for('login'))
+        if g.user.is_business:
+            return render_template('settings_business.html', account="active")
         return render_template('settings.html', account="active")
     else:
         if not g.user:
             return redirect(url_for('login'))
-            
-        user_id = session['user_id']
-        username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
-        about_me = request.form['about_me']
-        profile_pic = request.files['profile_pic']
-        banner_pic = request.files['banner_pic']
-        private = request.form.get('private')
+        
+        if g.user.is_business:    
+            user_id = session['user_id']
+            username = request.form['username']
+            email = request.form['email']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            about_me = request.form['about_me']
+            profile_pic = request.files['profile_pic']
+            banner_pic = request.files['banner_pic']
+            private = request.form.get('private')
+            city = request.form['city']
+            address = request.form['address']
+            state = request.form['state']
+        else:
+            user_id = session['user_id']
+            username = request.form['username']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            about_me = request.form['about_me']
+            profile_pic = request.files['profile_pic']
+            banner_pic = request.files['banner_pic']
+            private = request.form.get('private')
 
         # upload files
         try:
@@ -194,6 +242,22 @@ def edit_account():
         except Exception as e:
             print(f"Error uploading files to s3: " + str(e))
 
+    if g.user.is_business:
+                # needs more error handling
+        if password != "":
+            message = ""
+            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state)
+            if password != confirm_password:
+                message = 'Passwords do not match.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            if len(password) < 6:
+                message = 'Password must be at least 6 characters.'
+                return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
+            password = bcrypt.generate_password_hash(password).decode()
+        else:
+            password = g.user.password
+        users.update_user(user_id, username, password, email, private, profile_pic_path, banner_pic_path, city, address, state)
+        return redirect(url_for('account'))
     try:
         # needs more error handling
         if password != "":
@@ -209,7 +273,6 @@ def edit_account():
         else:
             password = g.user.password
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
-        
         return redirect(url_for('account'))
     except Exception as e: 
         print(e)
@@ -301,7 +364,6 @@ def create():
         content = request.form.get('content')
         file = request.files['file']
         check_in = bool(request.form.get('check_in'))
-        # print(f"****** DID YOU CHECK IN? ****** " + {check_in})
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
@@ -374,8 +436,9 @@ def delete_post(post_id):
         # delete file from s3
         post = post_feed.get_post_by_id(post_id)
         s3.Object(bucket_name, post.file.split('/')[-1]).delete()
-    post_feed.delete_post(post_id)
+    rating.delete_rating_by_post_id(post_id)
     likes.delete_likes_by_post_id(post_id)
+    post_feed.delete_post(post_id)
     return redirect('/feed')
 
 
@@ -424,6 +487,10 @@ def edit(post_id):
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
+        check_in = bool(request.form.get('check_in'))
+        if check_in:
+            business_id = request.form.get('business')
+            stars = request.form.get('rating')
         if g.user.is_business:
             event = request.form.get('event')
             from_date = request.form.get('from_date')
@@ -478,7 +545,7 @@ def view_post(post_id):
     post = post_feed.get_post_by_id(post_id)
     if post:
         stars = rating.get_rating_by_post_id(post_id)
-        return render_template('view_post.html', post=post, likes=likes.get_all_likes(), comments=comments.get_comments_by_post_id(post_id), rating=stars)
+        return render_template('view_post.html', post=post, likes=likes.get_all_likes(), comments=comments.get_comments_by_post_id(post_id), rating=stars, ratings=rating.get_all_ratings(), users=users.get_all_users())
 
     return redirect('/error')
 

@@ -50,11 +50,11 @@ label {
     padding: 15px;
 }
 
-.title {
+.create_title {
     height: 2rem;
 }
 
-.title:focus {
+.create_title:focus {
     outline: none !important;
     border-color: #57A1BD !important;
 }
@@ -82,11 +82,14 @@ label {
     cursor: pointer;
 }
 
-.upload-img {
-    height: 15px;
-    width: 15px;
-    margin-bottom: 3px;
-    opacity: 0.5;
+.upload-btn {
+    padding: 7px;
+    border: none;
+    height: 25px;
+    width: 25px;
+    background-color: white;
+    background-image: url(/static/images/upload_icon.png);
+    background-size: cover;
 }
 
 .file-upload-label {

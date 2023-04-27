@@ -67,6 +67,7 @@ label {
 }
 
 .upload-btn {
+    padding: 7px;
     border: none;
     height: 25px;
     width: 25px;
@@ -74,6 +75,7 @@ label {
     background-image: url(/static/images/upload_icon.png);
     background-size: cover;
 }
+
 .checkin-btn {
     border: none;
     height: 25px;

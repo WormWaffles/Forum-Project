@@ -1,28 +1,100 @@
-# Forum-Project
+# Project Name
 
-# Setting up the Database
+BarHive - A social network application for bars and nightlife enthusiasts
 
-**NOTE: when the database_schema changes, it is probably better to delete your database and make a new one.**
+## Project Description
 
-This guide will help you set up a database on your local machine for use with your project.
+BarHive is a social networking platform for bars and people who love nightlife. It allows users to create profiles, connect with other users, and share posts related to their favorite bars and events. The application provides features such as creating posts, commenting, and liking posts. Users can also follow other users and view their profiles. The application also supports business profiles, which allows bar owners to create profiles for their bars and showcase their business.
 
-## Prerequisites
+## Technologies Used
 
-- [DataGrip](https://www.jetbrains.com/datagrip/) installed on your machine
-- Access to the `database_schema.sql` file
-- pip install -r requirements.txt 
+The application is built using the following technologies:
 
-## Steps
+- Python
+- Flask
+- PostgreSQL
+- AWS S3
+- HTML/CSS/JavaScript
 
-1. Open your console in DataGrip
-2. Paste the first line **ONLY THE FIRST LINE** of `database_schema.sql` into the console
-3. Run the command by pressing alt enter
-4. Change the dropdown in the top right of the console window (find the green play button and go right, its the second to last drop down) to the name of the database (e.g. barhive)
-5. Copy the two tables, one by one, from the `database_schema.sql` file and paste them into the console
-6. Run each command by pressing alt enter
-7. Enter the database credentials in the `.env.sample` file
-8. Change the file name to `.env`
+## Getting Started
 
-*NOTE: If you see the option to "introspect schema", click that*
+To run the application, first, clone the repository:
 
-Congratulations! You have now set up your database on your local machine.
+```bash
+git clone https://github.com/WormWaffles/Forum-Project
+```
+
+Then, navigate to the project directory:
+
+```bash
+cd barhive
+```
+
+Create a virtual environment:
+
+```bash
+python3 -m venv venv
+```
+
+Activate the virtual environment:
+
+```bash
+source venv/bin/activate
+```
+
+Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file and fill in following contents:
+
+```bash
+DB_USER=
+DB_PASS=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+SECRET_KEY=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+BUCKET_NAME=
+URL=
+```
+
+Next, create the database by running the following command in postgres:
+
+```bash
+CREATE DATABASE barhive;
+```
+
+You will then need to create the tables from the database_schema.sql file.
+
+Finally, start the application:
+
+```bash
+flask run
+```
+
+The application will be accessible at `http://127.0.0.1:5000` in your web browser.
+
+## Database Schema
+
+The application uses a PostgreSQL database with the following schema:
+
+- `user` - Stores user profile information, including their name, email, and profile picture path
+- `post` - Stores user posts, including their title, content, and associated image path
+- `user_likes` - Stores information about which users liked which posts
+- `rating` - Stores ratings given to business profiles by users
+- `follower` - Stores information about which users are following which other users
+- `comment` - Stores user comments on posts, including their content and associated image path
+
+## Future Work
+
+Future development of this application could include the following features:
+
+- Improved search functionality to help users find bars and events they are interested in
+- Integration with third-party APIs to provide more information about bars and events
+- Chat functionality to allow users to communicate with each other directly
+- Integration with a payment system to allow users to purchase tickets or make reservations for events.

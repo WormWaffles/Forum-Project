@@ -11,6 +11,7 @@ class User(db.Model):
     last_name = db.Column(db.String(80), nullable=True)
     email = db.Column(db.String(80), nullable=False)
     about_me = db.Column(db.String(80), nullable=True)
+    location = db.Column(db.String(80), nullable=True)
     private = db.Column(db.Boolean, nullable=False)
 
     # picture paths
@@ -39,6 +40,7 @@ class Post(db.Model):
     event = db.Column(db.Boolean, nullable=True)
     from_date = db.Column(db.String(10), nullable=True)
     to_date = db.Column(db.String(10), nullable=True)
+    location = db.Column(db.String(80), nullable=True)
     comments = db.Column(db.Integer, nullable=False)
     check_in = db.Column(db.Boolean, nullable=True)
 
@@ -53,11 +55,13 @@ class Rating(db.Model):
     rating_id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.SmallInteger, nullable=False)
     business_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    business_name = db.Column(db.String(80), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
         
-    def __init__(self, rating, business_id, post_id):
+    def __init__(self, rating, business_id, business_name, post_id):
         self.rating = rating
         self.business_id = business_id
+        self.business_name = business_name
         self.post_id = post_id
 
     def __repr__(self):

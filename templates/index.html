@@ -2,12 +2,12 @@
 
 {% block body %}
 
+{% if logged_in %}
+{% include '_feed.html' %}
+{% else %}
 <link rel="stylesheet" href="/static/styles/index.css">
 <main>
     <section>
-        {% if logged_in %}
-        {% include '_feed.html' %}
-        {% else %}
         <div class="landing-msg">
             <h1 class="welcome">Join the world’s fastest growing<br>social media platform that<br>focuses on what really
                 matters:<br>…gettin’ lit.</h1>
@@ -20,7 +20,7 @@
             more about BarHive business.</p>
         <a href="/business/register"><button class="business-btn">BUSINESS</button></a>
     </div>
-    {% endif %}
 </main>
+{% endif %}
 
 {% endblock %}

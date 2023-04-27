@@ -40,7 +40,7 @@ class Users:
         db.session.commit()
         return user
 
-    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private, profile_pic, banner_pic, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
+    def update_user(self, user_id, username, password, email, about_me, private, profile_pic, banner_pic, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None,first_name=None, last_name=None):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
@@ -66,6 +66,13 @@ class Users:
             user.phone = phone
             user.website = website
 
+        db.session.commit()
+        return user
+    
+    def update_location(self, user_id, lat, lng):
+        '''Updates a user's location'''
+        user = self.get_user_by_id(user_id)
+        user.location = f'{lat},{lng}'
         db.session.commit()
         return user
     

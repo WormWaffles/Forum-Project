@@ -43,15 +43,16 @@
                     </div>
                 </div>
                 {% if not g.user.is_business %}
-                <button class="checkin-btn" onclick="document.getElementById('myFileInput').click(); return false;"></button>
+                <button class="checkin-btn"
+                    onclick="document.getElementById('myFileInput').click(); return false;"></button>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="True" id="check_in" name="check_in">
                     <label class="form-check-label" for="check_in">
-                      Check-In
+                        Check-In
                     </label>
                 </div>
                 <div>
-                    <select class="form-select" id ="business" name="business">
+                    <select class="form-select" id="business" name="business">
                         <option selected>Open this select menu</option>
                         {%for business in businesses%}
                         <option value="{{business.user_id}}">{{business.username}}</option>
@@ -133,7 +134,6 @@
             <button class="post-btn" type="submit">Post</button>
         </div>
     </form>
-</div>
 </div>
 <script>
     $("#myFileInput").change(function (e) {
