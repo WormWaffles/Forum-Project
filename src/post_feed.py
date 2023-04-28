@@ -51,7 +51,7 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
+            WHERE subquery.distance < 25
             ORDER BY subquery.distance
             LIMIT 15;
         """))
@@ -111,7 +111,7 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
+            WHERE subquery.distance < 25
             ORDER BY subquery.distance
             LIMIT 15;
         """))
@@ -136,7 +136,7 @@ class PostFeed:
         # get current date
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
-        if user.location:
+        if user.location and check_in:
             location = user.location
         else:
             location = None
