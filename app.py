@@ -571,7 +571,10 @@ def view_user_followers(user_id):
     user = users.get_user_by_id(user_id)
     followers = Follows.get_all_followers(user_id)
     followerBool = True
-    return render_template('account.html',user=user,followers=followers,followerBool=followerBool)
+    star = rating.get_rating_average(user.user_id)
+    is_Following=Follows.is_Foo_Following_Bar(g.user.user_id,user_id)
+    followers_num = Follows.get_followers_num(user, user_id)
+    return render_template('account.html',user=user,followers=followers,followerBool=followerBool,followers_num=followers_num,is_Following=is_Following,rating=star)
 
 #follow method
 @app.route('/follow/<user_id>', methods=['POST'])
