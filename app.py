@@ -145,7 +145,7 @@ def account():
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
-    return render_template('account.html', account="active", rating=star,followers_num=followers_num)
+    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), rating=star, followers_num=followers_num)
 
 
 #followers page
@@ -271,6 +271,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
+        print(profile_pic_path)
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
@@ -439,6 +440,31 @@ def delete_post(post_id):
     likes.delete_likes_by_post_id(post_id)
     post_feed.delete_post(post_id)
     return redirect('/feed')
+
+# delete post
+@app.get('/account/post/<post_id>/delete')
+def delete_post_account(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
+    post = post_feed.get_post_by_id(post_id)
+    # delete all comments with post id
+    post_comments = comments.get_comments_by_post_id(post_id)
+    for comment in post_comments:
+        # if comment has a file, delete it
+        if comment.file:
+            s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+        comments.delete_comment(comment.comment_id)
+        likes.delete_likes_by_post_id(comment.comment_id)
+    if post.file:
+        # delete file from s3
+        post = post_feed.get_post_by_id(post_id)
+        s3.Object(bucket_name, post.file.split('/')[-1]).delete()
+    rating.delete_rating_by_post_id(post_id)
+    likes.delete_likes_by_post_id(post_id)
+    post_feed.delete_post(post_id)
+    return redirect('/account')
 
 
 # like post
