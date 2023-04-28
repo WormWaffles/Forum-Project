@@ -19,6 +19,7 @@ import boto3
 from werkzeug.utils import secure_filename
 from flask_bcrypt import Bcrypt
 import uuid
+from PIL import Image
 
 
 app = Flask(__name__)
@@ -396,9 +397,13 @@ def create():
                     return render_template('settings.html', message='Image must be a .jpg, .jpeg, or .png file.')
                 new_post_filename = f'{uuid.uuid4()}_{secure_filename(file.filename)}'.replace(' ', '_')
 
+                # downsize image THIS IS A TEST
+                image = Image.open(file)
+                image.thumbnail((500, 500))
+
                 # upload file to s3
                 s3.Bucket(bucket_name).upload_fileobj(
-                    file,
+                    image,
                     new_post_filename
                 )
 
