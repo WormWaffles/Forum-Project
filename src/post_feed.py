@@ -136,7 +136,7 @@ class PostFeed:
         # get current date
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
-        if user.location:
+        if user.location and check_in:
             location = user.location
         else:
             location = None
