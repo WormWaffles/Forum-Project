@@ -479,14 +479,14 @@ def edit(post_id):
     if request.method == 'GET':
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
-        return render_template('edit.html', post=post_feed.get_post_by_id(post_id))
+        return render_template('edit.html', post=post_feed.get_post_by_id(post_id), business=users.get_business_by_location(g.user.location), rating=rating.get_rating_by_post_id(post_id))
     else:
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        check_in = bool(request.form.get('check_in'))
+        check_in = bool(request.form.get('rating'))
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
@@ -533,6 +533,12 @@ def edit(post_id):
                 print(f"Error uploading files to s3: " + str(e))
 
         post_feed.update_post(post_id, title, content, file=file_path, event=event, from_date=from_date, to_date=to_date, check_in=check_in)
+        if check_in: 
+            existing_rating = rating.get_rate_object_by_post_id(post_id)
+            if existing_rating:
+                rating.update_rating(existing_rating.rating_id, stars)
+            else:
+                rating.add_rating(stars, post_id)
         return redirect('/feed')
 
 
