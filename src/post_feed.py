@@ -51,7 +51,7 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
+            WHERE subquery.distance < 25
             ORDER BY subquery.distance
             LIMIT 15;
         """))
@@ -111,7 +111,7 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
+            WHERE subquery.distance < 25
             ORDER BY subquery.distance
             LIMIT 15;
         """))

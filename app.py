@@ -357,12 +357,12 @@ def create():
     if not g.user:
         return redirect(url_for('login'))
     if request.method == 'GET':
-        return render_template('create.html', businesses=users.get_all_businesses())
+        return render_template('create.html', business=users.get_business_by_location(g.user.location))
     else:
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        check_in = bool(request.form.get('check_in'))
+        check_in = bool(request.form.get('rating'))
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
