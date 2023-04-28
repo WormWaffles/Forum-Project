@@ -41,35 +41,42 @@
                             <span class="upload-label">Upload Image</span>
                         </div>
                     </div>
+                    {% if not g.user.is_business %}
+                    <div class="checkin">
+                        <div class="form-checkin">
+                            <button class="checkin-btn" id="checkin" type="button"></button>
+                            <label class="form-check-label" for="check_in">
+                                Check-Into: {{ business.username }}
+                            </label>
+                            <input name="business" value="{{ business.user_id }}" hidden>
+                        </div>
+                        <div>
+                            <select class="form-select" id="rating" name="rating" disabled>
+                                <option value="None" selected>Select Rating</option>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    <script>
+                        // remove disabled from form-select when checkin-btn is clicked
+                        $("#checkin").click(function () {
+                            // if disabled, remove disabled
+                            if ($("#rating").attr("disabled")) {
+                                $("#rating").removeAttr("disabled");
+                            } else {
+                                // if not disabled, add disabled
+                                $("#rating").attr("disabled", "disabled");
+                                // set selected to option 1
+                                $("#rating").val("None");
+                            }
+                        });
+                    </script>
+                    {% endif %}
                 </div>
-                {% if not g.user.is_business %}
-                <button class="checkin-btn"
-                    onclick="document.getElementById('myFileInput').click(); return false;"></button>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="True" id="check_in" name="check_in">
-                    <label class="form-check-label" for="check_in">
-                        Check-In
-                    </label>
-                </div>
-                <div>
-                    <select class="form-select" id="business" name="business">
-                        <option selected>Open this select menu</option>
-                        {%for business in businesses%}
-                        <option value="{{business.user_id}}">{{business.username}}</option>
-                        {%endfor%}
-                    </select>
-                </div>
-                <div>
-                    <select class="form-select" id="rating" name="rating">
-                        <option selected value="">Select a rating</option>
-                        <option value="1">1 Star</option>
-                        <option value="2">2 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="5">5 Stars</option>
-                    </select>
-                </div>
-                {% endif %}
             </div>
             {% if g.user.is_business %}
             <div class="business_input">
