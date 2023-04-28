@@ -145,7 +145,7 @@ def account():
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
-    return render_template('account.html', account="active", rating=star,followers_num=followers_num)
+    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), rating=star, followers_num=followers_num)
 
 
 #followers page
@@ -271,6 +271,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
+        print(profile_pic_path)
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
