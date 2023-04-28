@@ -441,6 +441,31 @@ def delete_post(post_id):
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
+# delete post
+@app.get('/account/post/<post_id>/delete')
+def delete_post_account(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
+    post = post_feed.get_post_by_id(post_id)
+    # delete all comments with post id
+    post_comments = comments.get_comments_by_post_id(post_id)
+    for comment in post_comments:
+        # if comment has a file, delete it
+        if comment.file:
+            s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+        comments.delete_comment(comment.comment_id)
+        likes.delete_likes_by_post_id(comment.comment_id)
+    if post.file:
+        # delete file from s3
+        post = post_feed.get_post_by_id(post_id)
+        s3.Object(bucket_name, post.file.split('/')[-1]).delete()
+    rating.delete_rating_by_post_id(post_id)
+    likes.delete_likes_by_post_id(post_id)
+    post_feed.delete_post(post_id)
+    return redirect('/account')
+
 
 # like post
 @app.get('/feed/like/<int:post_id>')
