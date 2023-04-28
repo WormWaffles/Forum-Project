@@ -61,22 +61,22 @@
                             </select>
                         </div>
                     </div>
+                    <script>
+                        // remove disabled from form-select when checkin-btn is clicked
+                        $("#checkin").click(function () {
+                            // if disabled, remove disabled
+                            if ($("#rating").attr("disabled")) {
+                                $("#rating").removeAttr("disabled");
+                            } else {
+                                // if not disabled, add disabled
+                                $("#rating").attr("disabled", "disabled");
+                                // set selected to option 1
+                                $("#rating").val("None");
+                            }
+                        });
+                    </script>
+                    {% endif %}
                 </div>
-                <script>
-                    // remove disabled from form-select when checkin-btn is clicked
-                    $("#checkin").click(function () {
-                        // if disabled, remove disabled
-                        if ($("#rating").attr("disabled")) {
-                            $("#rating").removeAttr("disabled");
-                        } else {
-                            // if not disabled, add disabled
-                            $("#rating").attr("disabled", "disabled");
-                            // set selected to option 1
-                            $("#rating").val("None");
-                        }
-                    });
-                </script>
-                {% endif %}
             </div>
             {% if g.user.is_business %}
             <div class="business_input">
