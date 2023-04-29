@@ -8,12 +8,21 @@ class Ratings:
         '''Returns all ratings'''
         return Rating.query.all()
     
+    def get_rating_by_id(self, id):
+        '''Returns rating by id'''
+        return Rating.query.filter_by(rating_id=id).first()
+    
     def get_rating_by_post_id(self, post_id):
         '''Returns rating by post id'''
         rating = Rating.query.filter_by(post_id=post_id).scalar()
         if rating == None:
             return 0
         return rating.rating
+    
+    def get_rate_object_by_post_id(self, post_id):
+        '''Returns rating object by post id'''
+        rating = Rating.query.filter_by(post_id=post_id).first()
+        return rating
     
     def get_rating_average(self, user_id):
         '''Returns average rating'''
@@ -31,6 +40,12 @@ class Ratings:
         db.session.commit()
         return rating
     
+    def update_rating(self, rating_id, stars):
+        '''Updates a rating'''
+        rating = self.get_rating_by_id(rating_id)
+        rating.rating = stars
+        db.session.commit()
+
     def delete_rating_by_post_id(self, post_id):
         '''Deletes a rating by post id'''
         Rating.query.filter_by(post_id=post_id).delete()

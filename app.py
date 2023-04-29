@@ -145,7 +145,7 @@ def account():
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
-    return render_template('account.html', account="active", rating=star,followers_num=followers_num)
+    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), rating=star, followers_num=followers_num)
 
 
 #followers page
@@ -153,7 +153,11 @@ def account():
 def account_followers():
     followers = Follows.get_all_followers(g.user.user_id)
     followerBool = True
-    return render_template('account.html',followers=followers,followerBool=followerBool)
+    followers_num = Follows.get_followers_num(g.user, g.user.user_id)
+    star = 0
+    if g.user.is_business:
+        star = rating.get_rating_average(g.user.user_id)
+    return render_template('account.html',followers=followers,followerBool=followerBool,followers_num=followers_num,rating=star)
 
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -272,6 +276,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
+        print(profile_pic_path)
         users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
@@ -358,12 +363,12 @@ def create():
     if not g.user:
         return redirect(url_for('login'))
     if request.method == 'GET':
-        return render_template('create.html', businesses=users.get_all_businesses())
+        return render_template('create.html', business=users.get_business_by_location(g.user.location))
     else:
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        check_in = bool(request.form.get('check_in'))
+        check_in = bool(request.form.get('rating'))
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
@@ -441,6 +446,31 @@ def delete_post(post_id):
     post_feed.delete_post(post_id)
     return redirect('/feed')
 
+# delete post
+@app.get('/account/post/<post_id>/delete')
+def delete_post_account(post_id):
+    if not g.user:
+        return redirect(url_for('login'))
+    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+        return redirect('/error')
+    post = post_feed.get_post_by_id(post_id)
+    # delete all comments with post id
+    post_comments = comments.get_comments_by_post_id(post_id)
+    for comment in post_comments:
+        # if comment has a file, delete it
+        if comment.file:
+            s3.Object(bucket_name, comment.file.split('/')[-1]).delete()
+        comments.delete_comment(comment.comment_id)
+        likes.delete_likes_by_post_id(comment.comment_id)
+    if post.file:
+        # delete file from s3
+        post = post_feed.get_post_by_id(post_id)
+        s3.Object(bucket_name, post.file.split('/')[-1]).delete()
+    rating.delete_rating_by_post_id(post_id)
+    likes.delete_likes_by_post_id(post_id)
+    post_feed.delete_post(post_id)
+    return redirect('/account')
+
 
 # like post
 @app.get('/feed/like/<int:post_id>')
@@ -480,14 +510,14 @@ def edit(post_id):
     if request.method == 'GET':
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
-        return render_template('edit.html', post=post_feed.get_post_by_id(post_id))
+        return render_template('edit.html', post=post_feed.get_post_by_id(post_id), business=users.get_business_by_location(g.user.location), rating=rating.get_rating_by_post_id(post_id))
     else:
         if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
             return redirect('/error')
         title = request.form.get('title')
         content = request.form.get('content')
         file = request.files['file']
-        check_in = bool(request.form.get('check_in'))
+        check_in = bool(request.form.get('rating'))
         if check_in:
             business_id = request.form.get('business')
             stars = request.form.get('rating')
@@ -534,6 +564,12 @@ def edit(post_id):
                 print(f"Error uploading files to s3: " + str(e))
 
         post_feed.update_post(post_id, title, content, file=file_path, event=event, from_date=from_date, to_date=to_date, check_in=check_in)
+        if check_in: 
+            existing_rating = rating.get_rate_object_by_post_id(post_id)
+            if existing_rating:
+                rating.update_rating(existing_rating.rating_id, stars)
+            else:
+                rating.add_rating(stars, post_id)
         return redirect('/feed')
 
 
