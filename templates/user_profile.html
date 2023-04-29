@@ -45,11 +45,15 @@
 {% if followerBool %}
     <div class="follower-container">
         {% if followers_num > 0 %}
+        <ul class="followers-list">
             {% for follower in followers %}
-            <a class="follower-data" href="/user/{{ follower.user_id }}">
-                <img src="{% if g.user.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic">
-                <p class="username" id="user">{{ follower.username }}</p>
-            </a>
+            <li>
+                <a class="follower-data" href="/user/{{ follower.user_id }}">
+                    <img class='image-small'src="{% if g.user.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic">
+                    <p class="username" id="user">{{ follower.username }}</p>
+                </a>
+            </li>
+        </ul>
             {% endfor %}
         {% else %}
         <div class="landing-msg">

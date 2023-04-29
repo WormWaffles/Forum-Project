@@ -17,6 +17,14 @@
     text-decoration: none;
     color: #57A1BD;
 }
+.profile-links a:hover {
+    text-decoration: none;
+    color: #535353;
+}
+.profile-links1 a:hover {
+    text-decoration: none;
+    color: #535353;
+}
 
 .banner img {
     width: 100%;
@@ -370,7 +378,43 @@ a {
 /*Style the Container that holds the data */
 /* do this foor businesses and for viewing others profiles*/
 .follower-data {
-    display: inline-block;
-    color: black;
-    
+    margin:0;
+    padding: 1% 10%;
+    width:49%;
+    display:inline-block;
+}
+
+.follower-container
+{
+    background-color: white;
+    max-width: 976px;
+    height: auto;
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 5rem;
+    border-radius: 15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    padding-left:0;
+    padding-right:0;
+    overflow: hidden;
+}
+.image-small
+{
+    border-radius:50% 50% 50% 50%;
+    width:33px;
+    height:33px;
+
+}
+
+.follower-name
+{
+    font: normal normal 500 18px/24px Poppins;
+    color: #57A1BD;
+    /* color: #535353; */
+    text-decoration: none;
+}
+
+.follower-name:hover {
+    /* color: #36A3C0; */
+    color: #535353;
 }
