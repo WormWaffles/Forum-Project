@@ -145,7 +145,7 @@ def account():
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
-    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), likes=likes.get_all_likes(), rating=star, followers_num=followers_num)
+    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), likes=likes.get_all_likes(), ratings = rating.get_all_ratings(), rating=star, followers_num=followers_num)
 
 
 #followers page
