@@ -130,7 +130,7 @@
     max-width: 976px;
     height: auto;
     margin: auto;
-    margin-top: 0;
+    margin-top: 1rem;
     margin-bottom: 5rem;
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
