@@ -14,8 +14,8 @@ class PostFeed:
         return Post.query.all()
     
     def get_posts_by_user_id(self, user_id):
-        '''Returns all posts by user id'''
-        return Post.query.filter_by(user_id=user_id).all()
+        '''Returns all posts by user id order by date'''
+        return Post.query.filter_by(user_id=user_id).order_by(Post.post_date.desc()).limit(15).all()
     
     def get_all_posts_ordered_by_likes(self):
         '''Returns all posts ordered by likes'''
@@ -51,7 +51,7 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
+            WHERE subquery.distance < 25
             ORDER BY subquery.distance
             LIMIT 15;
         """))
@@ -93,7 +93,7 @@ class PostFeed:
         location = location.split(',')
         startlat = float(location[0])
         startlng = float(location[1])
-        # get 15 post ordered by closest location, post have location column that is string of "lat,lng"
+        # get post ordered by closest location, post have location column that is string of "lat,lng"
         posts = db.session.execute(text(f"""
             SELECT
                 p.*,
@@ -111,9 +111,8 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 1
-            ORDER BY subquery.distance
-            LIMIT 15;
+            WHERE subquery.distance < 25
+            ORDER BY subquery.distance;
         """))
         for post in posts:
             if post.event:
@@ -136,7 +135,7 @@ class PostFeed:
         # get current date
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
-        if user.location:
+        if user.location and check_in:
             location = user.location
         else:
             location = None
