@@ -148,11 +148,17 @@ def account():
     return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), likes=likes.get_all_likes(), ratings = rating.get_all_ratings(), rating=star, followers_num=followers_num)
 
 
+
 #followers page
 @app.route('/account/followers')
 def account_followers():
     followers = Follows.get_all_followers(g.user.user_id)
-    return render_template('followers.html',followers=followers)
+    followerBool = True
+    followers_num = Follows.get_followers_num(g.user, g.user.user_id)
+    star = 0
+    if g.user.is_business:
+        star = rating.get_rating_average(g.user.user_id)
+    return render_template('account.html',followers=followers,followerBool=followerBool,followers_num=followers_num,rating=star)
 
 
 @app.route('/account/edit', methods=['GET', 'POST'])
@@ -599,8 +605,13 @@ def view_user(user_id):
 #view a other users followers
 @app.get('/user/<user_id>/followers')
 def view_user_followers(user_id):
+    user = users.get_user_by_id(user_id)
     followers = Follows.get_all_followers(user_id)
-    return render_template('followers.html',followers=followers)
+    followerBool = True
+    star = rating.get_rating_average(user.user_id)
+    is_Following=Follows.is_Foo_Following_Bar(g.user.user_id,user_id)
+    followers_num = Follows.get_followers_num(user, user_id)
+    return render_template('account.html',user=user,followers=followers,followerBool=followerBool,followers_num=followers_num,is_Following=is_Following,rating=star)
 
 #follow method
 @app.route('/follow/<user_id>', methods=['POST'])

@@ -42,6 +42,28 @@
         </div>
     </section>
 </body>
+{% if followerBool %}
+    <div class="follower-container">
+        {% if followers_num > 0 %}
+        <div class="title-icon">
+        <h>Followers</h>
+        </div>
+        {% for follower in followers %}
+                <div class="follower-data">
+                    <a href="/user/{{ follower.user_id }}"><img class='image-small'src="{% if follower.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic"></a>
+                    <a href="/user/{{ follower.user_id }}" p class="follower-name" id="user">{{ follower.username }}</a>
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="landing-msg">
+                <h1 class="congrats">No Followers Yet</h1>
+                <h2 class="text-center">
+                    This User Has No Followers Yet, You Can Be The First!
+                </h2>
+        </div>
+    </div>
+    {% endif %}
+{% else %}
 <div class="feed">
     {% if not posts %}
     
@@ -173,6 +195,8 @@
     </ul>
     {% endif %}
 </div>
+{% endif %}
+
 
 <script src="/static/javascript/feed_func.js"></script>
 
