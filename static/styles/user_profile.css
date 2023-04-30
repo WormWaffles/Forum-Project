@@ -374,9 +374,8 @@ h2 {
 a {
     text-decoration: none;
 }
-/* Style each follower*/
-/*Style the Container that holds the data */
-/* do this foor businesses and for viewing others profiles*/
+
+/* followers tab*/
 .follower-data {
     margin:0;
     padding: 3% 11%;

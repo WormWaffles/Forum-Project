@@ -14,8 +14,8 @@ class PostFeed:
         return Post.query.all()
     
     def get_posts_by_user_id(self, user_id):
-        '''Returns all posts by user id'''
-        return Post.query.filter_by(user_id=user_id).all()
+        '''Returns all posts by user id order by date'''
+        return Post.query.filter_by(user_id=user_id).order_by(Post.post_date.desc()).limit(15).all()
     
     def get_all_posts_ordered_by_likes(self):
         '''Returns all posts ordered by likes'''

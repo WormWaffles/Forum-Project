@@ -145,7 +145,8 @@ def account():
     if g.user.is_business:
         star = rating.get_rating_average(g.user.user_id)
     followers_num = Follows.get_followers_num(g.user, g.user.user_id)
-    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), rating=star, followers_num=followers_num)
+    return render_template('account.html', account="active", posts=post_feed.get_posts_by_user_id(g.user.user_id), likes=likes.get_all_likes(), rating=star, followers_num=followers_num)
+
 
 
 #followers page
@@ -598,7 +599,7 @@ def view_user(user_id):
         followers_num = Follows.get_followers_num(user, user_id)
         is_Following=Follows.is_Foo_Following_Bar(g.user.user_id,user_id)
         star = rating.get_rating_average(user.user_id)
-        return render_template('account.html', user=user,followers_num=followers_num,user_id=user_id,is_Following=is_Following, rating=star)
+        return render_template('account.html', user=user, followers_num=followers_num, user_id=user_id, is_Following=is_Following, rating=star, posts=post_feed.get_posts_by_user_id(user_id), likes=likes.get_all_likes())
     return redirect('/error')
 
 #view a other users followers
