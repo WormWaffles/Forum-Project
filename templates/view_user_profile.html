@@ -54,13 +54,13 @@
 </body>
 {% if followerBool %}
     <div class="follower-container">
-    <div class="title-icon">
-    <h>Followers</h>
-    </div>
         {% if followers_num > 0 %}
-                {% for follower in followers %}
+        <div class="title-icon">
+        <h>Followers</h>
+        </div>
+        {% for follower in followers %}
                 <div class="follower-data">
-                    <a href="/user/{{ follower.user_id }}"><img class='image-small'src="{% if g.user.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic"></a>
+                    <a href="/user/{{ follower.user_id }}"><img class='image-small'src="{% if follower.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic"></a>
                     <a href="/user/{{ follower.user_id }}" p class="follower-name" id="user">{{ follower.username }}</a>
                 </div>
             {% endfor %}

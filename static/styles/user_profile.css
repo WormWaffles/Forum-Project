@@ -379,7 +379,7 @@ a {
 /* do this foor businesses and for viewing others profiles*/
 .follower-data {
     margin:0;
-    padding: 1% 10%;
+    padding: 3% 11%;
     width:49%;
     display:inline-block;
 }
@@ -396,19 +396,21 @@ a {
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     padding-left:0;
     padding-right:0;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
     overflow: hidden;
 }
 .image-small
 {
     border-radius:50% 50% 50% 50%;
-    width:33px;
-    height:33px;
+    width:60px;
+    height:60px;
 
 }
 
 .follower-name
 {
-    font: normal normal 500 18px/24px Poppins;
+    font: normal normal 700 18px/30px Poppins;
     color: #57A1BD;
     /* color: #535353; */
     text-decoration: none;
@@ -417,4 +419,14 @@ a {
 .follower-name:hover {
     /* color: #36A3C0; */
     color: #535353;
+}
+
+.title-icon{
+    margin:0;
+    padding: 1% 10%;
+    width:100%;
+    display:inline-block;
+    text-align: center;
+    font: normal normal 800 24px/36px Poppins;
+    color: #555555;
 }
