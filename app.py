@@ -298,7 +298,7 @@ def login():
         if password is None:
             abort(400)
         user = users.get_user_by_email(email)
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and user.password is not None and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
         else:
@@ -368,6 +368,8 @@ def create():
     else:
         title = request.form.get('title')
         content = request.form.get('content')
+        if len(title) > 80 or len(content) > 500:
+            abort(400)
         file = request.files['file']
         check_in = bool(request.form.get('rating'))
         if check_in:
@@ -517,6 +519,8 @@ def edit(post_id):
             return redirect('/error')
         title = request.form.get('title')
         content = request.form.get('content')
+        if len(title) > 80 or len(content) > 500:
+            abort(400)
         file = request.files['file']
         check_in = bool(request.form.get('rating'))
         if check_in:
