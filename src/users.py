@@ -62,6 +62,7 @@ class Users:
     
     def create_user(self, username, email, password, is_business=False):
         '''Creates a user'''
+        email = email.lower()
         # create uuid for user_id
         id = uuid.uuid1()
         id = id.int
@@ -84,7 +85,7 @@ class Users:
         user.password = password
         user.first_name = first_name
         user.last_name = last_name
-        user.email = email
+        user.email = email.lower()
         user.about_me = about_me
         if private == '1':
             user.private = True
