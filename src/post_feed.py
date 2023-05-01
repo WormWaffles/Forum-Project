@@ -111,11 +111,12 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 25
+            WHERE subquery.distance < 25 AND p.event = True
             ORDER BY subquery.distance;
         """))
+        date = str(datetime.datetime.now()).split(' ')[0]
         for post in posts:
-            if post.event:
+            if post.from_date <= str(date) and post.to_date >= str(date):
                 return post
         return None
 
