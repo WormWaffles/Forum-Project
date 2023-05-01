@@ -137,7 +137,30 @@ class PostFeed:
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
         if user.location and check_in:
-            location = user.location
+            location = user.location.split(',')
+            startlat = float(location[0])
+            startlng = float(location[1])
+            posts = db.session.execute(text(f"""
+                SELECT
+                    u.*,
+                    distance
+                FROM "user" u
+                JOIN (
+                    SELECT
+                        location,
+                        SQRT(
+                            POW(69.1 * (CAST(split_part(location, ',', 1) AS double precision) - {startlat}), 2) +
+                            POW(69.1 * ({startlng} - CAST(split_part(location, ',', 2) AS double precision)) * COS(CAST(split_part(location, ',', 1) AS double precision) / 57.3), 2)
+                        ) AS distance
+                    FROM "user"
+                ) AS subquery
+                ON u.location = subquery.location
+                WHERE subquery.distance < 25 AND u.is_business = True
+                ORDER BY subquery.distance;
+            """))
+            for post in posts:
+                location = post[7]
+                break
         else:
             location = None
         post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, location=location, comments=0, check_in=check_in)
