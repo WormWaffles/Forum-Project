@@ -1,5 +1,5 @@
-import pathlib
 from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
+import pathlib
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -838,3 +838,21 @@ def googlelogin():
         #redirect to error page
         return redirect('/error')
 # ********** GOOGLE LOGIN **********
+
+@app.get('/user/<user_id>/features')
+def view_business_features(user_id):
+    return render_template('features.html')
+
+
+@app.route('/user/<user_id>/events')
+def view_business_events(user_id):
+    return render_template('events.html')
+
+
+@app.route('/user/<user_id>/reviews')
+def view_business_reviews(user_id):
+    return render_template('reviews.html')
+
+@app.route('/user/<user_id>/menu')
+def view_business_menu(user_id):
+    return render_template('menu.html')
