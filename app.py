@@ -571,7 +571,7 @@ def edit(post_id):
             if existing_rating:
                 rating.update_rating(existing_rating.rating_id, stars)
             else:
-                rating.add_rating(stars, post_id)
+                rating.update_rating(stars, post_id)
         return redirect('/feed')
 
 
@@ -872,8 +872,8 @@ def view_business_reviews(user_id):
 @app.route('/user/<user_id>/menu')
 def view_business_menu(user_id):
     user = users.get_user_by_id(user_id)
-    menu_titles = business_items.get_all_menu_titles(user_id)
-    menus = business_items.get_all_menus(user_id)
+    menu_title = business_items.get_menu_title(user_id)
+    menu = business_items.get_menu(user_id)
     if user:
         star = rating.get_rating_average(user_id)
-    return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_titles=menu_titles, menus=menus)
+    return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_title=menu_title, menus=menu)
