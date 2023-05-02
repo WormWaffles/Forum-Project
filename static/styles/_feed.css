@@ -159,6 +159,10 @@
     padding-top: 2px;
 }
 
+.close {
+    cursor: pointer;
+}
+
 .date {
     /* push to the left */
     font: oblique normal normal 15px/20px Poppins;
