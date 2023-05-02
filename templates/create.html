@@ -41,7 +41,7 @@
                             <span class="upload-label">Upload Image</span>
                         </div>
                     </div>
-                    {% if not g.user.is_business %}
+                    {% if not g.user.is_business and business %}
                     <div class="checkin">
                         <div class="form-checkin">
                             <button class="checkin-btn" id="checkin" type="button"></button>

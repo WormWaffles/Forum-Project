@@ -79,8 +79,10 @@ def logged_in():
 def before_request():
     '''Checks if user is logged in'''
     # comments.clear()
-    # post_feed.clear()
     # likes.clear()
+    # rating.clear()
+    # Follows.clear()
+    # post_feed.clear()
     # users.clear()
     g.user = None
     if 'user_id' in session:
