@@ -48,7 +48,7 @@ bcrypt = Bcrypt(app)
 # Google Auth
 url = os.getenv('URL')
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # comment out for production ***
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secret_file,
@@ -79,8 +79,10 @@ def logged_in():
 def before_request():
     '''Checks if user is logged in'''
     # comments.clear()
-    # post_feed.clear()
     # likes.clear()
+    # rating.clear()
+    # Follows.clear()
+    # post_feed.clear()
     # users.clear()
     g.user = None
     if 'user_id' in session:
