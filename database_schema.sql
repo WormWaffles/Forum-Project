@@ -85,7 +85,7 @@ CREATE TABLE comment (
 
 CREATE TABLE business_items (
     business_id INTEGER NOT NULL REFERENCES "user"(user_id),
-    features VARCHAR(500) NOT NULL,
+    features VARCHAR(500),
     menu_title VARCHAR(20),
     menu_file VARCHAR(255),
     PRIMARY KEY (business_id)
