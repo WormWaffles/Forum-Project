@@ -11,7 +11,7 @@ class BusinessItem:
         '''Returns all ratings'''
         return BusinessItems.query.filter_by(business_id=user_id).scalar()
     
-    def get_all_menu_titles(self, user_id):
+    def get_menu_title(self, user_id):
         '''Returns all menu titles'''
         business_items = self.get_business_items_by_user_id(user_id)
         # menu_titles = [business_items.title_menu_1, business_items.title_menu_2, business_items.title_menu_3]
@@ -24,7 +24,7 @@ class BusinessItem:
         db.session.commit()
         return business_items
 
-    def get_all_menus(self, user_id):
+    def get_menu(self, user_id):
         '''Returns all menus'''
         business_items = self.get_business_items_by_user_id(user_id)
         return business_items.menu_file
