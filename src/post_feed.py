@@ -1,4 +1,4 @@
-from src.models import db, Post, User
+from src.models import db, Post, User, Rating
 from src.likes import likes
 from src.users import users
 from src.user_follow import follows
@@ -83,8 +83,22 @@ class PostFeed:
     def get_all_posts_by_event(self):
         '''Returns all posts that are events'''
         # get all posts that are events ordered by date
-        return Post.query.filter(Post.event==True).order_by(Post.post_date.desc()).limit(15).all()
+        return Post.query.filter(Post.event==True).order_by(Post.post_date.desc()).all()
     # ***
+
+    def get_all_events_by_businessID(self, user_id):
+        '''Returns all events by business'''
+        # get all posts that are events by a particular business
+        events = Post.query.filter(Post.user_id==user_id, Post.event==True).all()
+        return events
+    
+    def get_all_posts_by_check_in(self, user_id):
+        '''Returns all posts where user has checked in'''
+        # get all posts where user has checked in
+        # obtain post ID where all ratings are for given user ID
+        # filter posts by post ID 
+        post = Post.query.join(Rating).filter(Rating.post_id==Post.post_id, Rating.business_id==user_id).order_by(Post.post_date.desc()).all() 
+        return post
 
     def get_event(self, location):
         '''Return one post that is an event ordered by from_date and location'''
