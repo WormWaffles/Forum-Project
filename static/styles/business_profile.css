@@ -56,6 +56,13 @@
     text-align: center;
 }
 
+.title a{
+    font-family: Poppins, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+}
+
 .links {
     font-family: Poppins, sans-serif;
     color: #57A1BD;
@@ -117,6 +124,80 @@
     color: #57A1BD;
 }
 
+.description h2 {
+    font: normal normal 400 32px/48px Poppins;
+    text-align: center;
+    color:#7F7F7F;
+}
+
+/* REVIEWS */
+
+/* EVENTS */
+
+.posts li {
+    list-style-type: none;
+    margin-top: 2em;
+    margin-right: auto;
+    padding: 0;
+}
+
+.post-card {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* FEATURES */
+
+.features {
+    background-color: rgb(255, 255, 255);
+    border-radius:15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    padding: 2em;
+    margin-top: 2em;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Poppins;
+}
+
+/* MENU */
+
+.menu_links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 700px;
+    margin-left: auto;
+    margin-top: 1em;
+    font: normal normal 400 16px/24px Poppins;
+}
+
+.menu_links a:link {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.menu_links a:visited {
+    text-decoration: none;
+    color: #57A1BD;
+}
+
+.menu {
+    background-color: rgb(255, 255, 255);
+    border-radius:15px;
+    filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
+    padding: 2em;
+    margin-top: 2em;
+    max-width: 700px;
+    height: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Poppins;
+    text-align: center;
+}
+
+.menu h3 {
+    margin-bottom: 1em;
+}
 /*Followers Tab*/
 .follower-data {
     margin:0;
@@ -408,4 +489,10 @@ h2 {
 /*CSS for: if there are no post in feed.html*/
 a {
     text-decoration: none;
+}
+
+embed {
+    height:95%;
+    width:100%;
+    padding-bottom: 1.5em;
 }
