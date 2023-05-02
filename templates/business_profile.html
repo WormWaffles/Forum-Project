@@ -16,8 +16,8 @@
                     </div>
                     <div class="bottom">
                         <div class="links">
-                            <a href="/account">REVIEWS</a>
-                            <a href="/account">EVENTS</a>
+                            <a href="/user/{{g.user.user_id}}/reviews">REVIEWS</a>
+                            <a href="/user/{{g.user.user_id}}/events">EVENTS</a>
                             <span id="rating">
                                 {% for r in range(rating) %}
                                 <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
@@ -26,8 +26,9 @@
                                 <img src="/static/images/empty-star_blue.png" alt="star" width="25" height="25">
                                 {% endfor %}
                             </span>
-                            <a href="/user/{{user_id}}/features">FEATURES</a>
-                            <a href="/account">MENU</a>
+                            <!-- Needs a way for "account" - what if user is own self? -->
+                            <a href="/user/{{g.user.user_id}}/features">FEATURES</a>
+                            <a href="/user/{{g.user.user_id}}/menu">MENU</a>
                         </div>
                             <div class="title pt-3">
                                 <h1 class="title">
