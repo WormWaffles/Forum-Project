@@ -90,6 +90,9 @@ The application uses a PostgreSQL database with the following schema:
 - `follower` - Stores information about which users are following which other users
 - `comment` - Stores user comments on posts, including their content and associated image path
 
+## ERD Data Schema
+[PNG](static/images/ERD_PNG.png)
+
 ## Future Work
 
 Future development of this application could include the following features:
