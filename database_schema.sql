@@ -81,5 +81,17 @@ CREATE TABLE comment (
     post_date VARCHAR(30) NOT NULL,
     likes INTEGER NOT NULL
 );
+
+CREATE TABLE business_items (
+    business_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    features VARCHAR(500) NOT NULL,
+    title_menu_1 VARCHAR(20),
+    title_menu_2 VARCHAR(20),
+    title_menu_3 VARCHAR(20),
+    file_menu_1 VARCHAR(255),
+    file_menu_2 VARCHAR(255),
+    file_menu_3 VARCHAR(255),
+    PRIMARY KEY (business_id)
+);
 -- post has poster_id which connects to user, business, or admin
 -- rating has business_id which connects to user and post_id which connects to post and then to the author
