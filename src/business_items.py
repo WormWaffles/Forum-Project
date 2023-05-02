@@ -14,8 +14,8 @@ class BusinessItem:
     def get_all_menu_titles(self, user_id):
         '''Returns all menu titles'''
         business_items = self.get_business_items_by_user_id(user_id)
-        menu_titles = [business_items.title_menu_1, business_items.title_menu_2, business_items.title_menu_3]
-        return menu_titles
+        # menu_titles = [business_items.title_menu_1, business_items.title_menu_2, business_items.title_menu_3]
+        return business_items.menu_title
     
     def create_business_items(self, user_id):
         '''Creates business items'''
@@ -27,8 +27,7 @@ class BusinessItem:
     def get_all_menus(self, user_id):
         '''Returns all menus'''
         business_items = self.get_business_items_by_user_id(user_id)
-        menus = [business_items.file_menu_1, business_items.file_menu_2, business_items.file_menu_3]
-        return menus
+        return business_items.menu_file
     
     def ammend_features(self, user_id, features):
         '''Change or add features'''
@@ -37,8 +36,8 @@ class BusinessItem:
         db.session.commit()
         return  business_items.features
     
-    def add_menu():
-        '''Add menu'''
-        pass
+    # def add_menu():
+    #     '''Add menu'''
+    #     pass
 
 business_items = BusinessItem()
