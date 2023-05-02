@@ -8,6 +8,7 @@ from src.rating import rating
 from src.user_follow import Follows
 from src.models import db, User, Rating
 from src.comments import comments
+from src.business_items import business_items
 from dotenv import load_dotenv
 import os
 import re
@@ -625,6 +626,7 @@ def business():
         hashed_password = bcrypt.generate_password_hash(password).decode()
         new_user = users.create_user(username=business_name, email=business_email, password=hashed_password, is_business=True)
         session['user_id'] = new_user.user_id
+        business_items.create_business_items(new_user.user_id)
 
         return redirect(url_for('account'))
     
@@ -796,20 +798,39 @@ def googlelogin():
         return redirect('/error')
 # ********** GOOGLE LOGIN **********
 
+
 @app.get('/user/<user_id>/features')
 def view_business_features(user_id):
-    return render_template('features.html')
+    user = users.get_user_by_id(user_id)
+    business_stuff = business_items.get_business_items_by_user_id(user_id)
+    if user:
+        star = rating.get_rating_average(user_id)
+    return render_template('features.html', rating=star, user=user, user_id=user_id, features=business_stuff.features)
 
 
 @app.route('/user/<user_id>/events')
 def view_business_events(user_id):
-    return render_template('events.html')
+    user = users.get_user_by_id(user_id)
+    events = post_feed.get_all_events_by_businessID(user_id)
+    if user:
+        star = rating.get_rating_average(user_id)
+    return render_template('events.html', rating=star, user=user, user_id=user_id, events=events)
 
 
 @app.route('/user/<user_id>/reviews')
 def view_business_reviews(user_id):
-    return render_template('reviews.html')
+    user = users.get_user_by_id(user_id)
+    reviews = post_feed.get_all_posts_by_check_in(user_id)
+    if user:
+        star = rating.get_rating_average(user_id)
+    return render_template('reviews.html', rating=star, user=user, user_id=user_id, reviews=reviews, ratings=rating.get_all_ratings())
+
 
 @app.route('/user/<user_id>/menu')
 def view_business_menu(user_id):
-    return render_template('menu.html')
+    user = users.get_user_by_id(user_id)
+    menu_titles = business_items.get_all_menu_titles(user_id)
+    menus = business_items.get_all_menus(user_id)
+    if user:
+        star = rating.get_rating_average(user_id)
+    return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_titles=menu_titles, menus=menus)
