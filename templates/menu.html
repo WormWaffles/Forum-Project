@@ -39,23 +39,22 @@
                             <div class="description">
                                 <h2>Menu</h2>
                             </div>
-                            <div class="menu_links">
-                                {% for title in menu_titles %}
-                                    {% if title != None %}
-                                    <a href="{{title}}">{{title}}</a>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
                     </div>
                 </div>
+                {% if menu != None %}
                 <div class="menu">
-                    <h3>Title</h3>
+                    <h3>{{menu_title}}</h3>
                     <embed src="https://media.olivegarden.com/images/site/pdf/D-1-032023_PROOF.pdf#toolbar=0&navpanes=0&scrollbar=0"
                         type="application/pdf"
                         frameBorder="0"
                         scrolling="auto"
                     ></embed>
                 </div>
+                {% else %}
+                <div class="no_menu">
+                    <h3>Menu not available</h3>
+                </div>    
+                {% endif %}
             </div>
         </div>
     </section>
