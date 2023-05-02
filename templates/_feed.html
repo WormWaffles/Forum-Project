@@ -110,7 +110,7 @@
                         </div>
                         {% endif %}
                         <div class="post-card-container">
-                            {% if post.distance %}
+                            {% if post.distance or post.distance == 0 %}
                             {% set miles = post.distance %}
                             {% if (miles < 1) %} <div class="date">
                                 <p>{{ post.post_date.split(' ')[0] }} | <1 mile away</p>
