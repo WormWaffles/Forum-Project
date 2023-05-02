@@ -80,3 +80,14 @@ class Comment(db.Model):
     file = db.Column(db.String(255), nullable=True)
     post_date = db.Column(db.DateTime, nullable=False)
     likes = db.Column(db.Integer, nullable=False)
+
+class BusinessItems(db.Model):
+    business_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True, nullable=False)
+    business = db.relationship('User', backref='business_items', lazy=True)
+    features = db.Column(db.String(255), nullable=True)
+    title_menu_1 = db.Column(db.String(20), nullable=True)
+    title_menu_2 = db.Column(db.String(20), nullable=True)
+    title_menu_3 = db.Column(db.String(20), nullable=True)
+    file_menu_1 = db.Column(db.String(255), nullable=True)
+    file_menu_2 = db.Column(db.String(255), nullable=True)
+    file_menu_3 = db.Column(db.String(255), nullable=True)
