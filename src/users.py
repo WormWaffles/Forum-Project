@@ -79,14 +79,15 @@ class Users:
         db.session.commit()
         return user
 
-    def update_user(self, user_id, username, password, first_name, last_name, email, about_me, private, profile_pic, banner_pic, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
+    def update_user(self, user_id, username, password, email, about_me, private, profile_pic, banner_pic, first_name=None, last_name=None, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
         user.password = password
         user.first_name = first_name
         user.last_name = last_name
-        user.email = email.lower()
+        if email:
+            user.email = email.lower()
         user.about_me = about_me
         if private == '1':
             user.private = True

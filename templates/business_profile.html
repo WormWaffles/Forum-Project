@@ -43,6 +43,11 @@
                             <p>Nothings here...</p>
                             {% endif %}
                         </div>
+                        {% if g.user.address %}
+                        <div class="address">
+                            <p>{{ g.user.address }}, {{ g.user.city }}, {{ g.user.state }}</p>
+                        </div>
+                        {% endif %}
                         <div class="description">
                             {% if g.user.about_me %}
                             {{ g.user.about_me }}

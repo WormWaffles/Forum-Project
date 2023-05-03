@@ -37,6 +37,11 @@
                         <div class="subtitle">
                             <p>Nothing here...</p>
                         </div>
+                        {% if user.address %}
+                        <div class="address">
+                            <p>{{ user.address }}, {{ user.city }}, {{ user.state }}</p>
+                        </div>
+                        {% endif %}
                         <div class="description">
                             {% if user.about_me %}
                             {{ user.about_me }}
