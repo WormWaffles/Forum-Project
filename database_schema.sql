@@ -82,4 +82,4 @@ CREATE TABLE comment (
     likes INTEGER NOT NULL
 );
 -- post has poster_id which connects to user, business, or admin
--- rating has business_id which connects to user and post_id which connects to post and then to the author
+-- rating has business_id which connects to user and post_id which connects to post and then to the authorgit pu

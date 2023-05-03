@@ -844,3 +844,20 @@ def googlelogin():
         #redirect to error page
         return redirect('/error')
 # ********** GOOGLE LOGIN **********
+
+# delete user
+@app.route('/delete/<int:id>')
+def delete(id):
+    #get record of user based on id and set to variable
+    # user_to_delete = users.query.get_or_404(id)
+    user_to_delete = users.delete_user(id)
+
+    #delete user from database
+    db.session.delete(user_to_delete)
+    #commit delete
+    db.session.commit()
+    #afterward, return to home page
+
+    return redirect('/')
+    
+

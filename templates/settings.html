@@ -125,6 +125,12 @@
         <form action="/logout">
             <button class="button" id="logout" type="submit">Logout</button>
         </form>
+
+        <!-- Delete User -->
+        <form action="/delete/{{g.user.user_id}}" method="get"> 
+            <button type="submit" class="btn btn-danger" name="delete" value="delete">Delete</button>
+        </form>
+
     </div>
 </div>
 <script>
