@@ -1,5 +1,5 @@
 import pathlib
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
+from flask import Flask, flash, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -848,13 +848,21 @@ def googlelogin():
 # delete user
 @app.route('/delete/<int:id>')
 def delete(id):
-    #delete user based on id and assign to variable
-    user_to_delete = users.delete_user(id)
-    #delete user from database
-    db.session.delete(user_to_delete)
-    #commit delete
-    db.session.commit()
-    #afterward, return to home page
-    return redirect('/')
+    
+    try:
+        #delete user and user's post, rating, likes, comments
+        users.delete_user(id)
+        post_feed.delete_post(id)
+        rating.delete_rating_by_post_id(id)
+        likes.delete_likes_by_post_id(id)
+        comments.delete_comment(id)
+        
+        return redirect('/')
+
+    except:
+        #flash message
+        flash("Error! There was a problem deleting user, try again.")
+        return redirect('/account/edit')
+
     
 
