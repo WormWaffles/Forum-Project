@@ -860,9 +860,7 @@ def delete(id):
         return redirect('/')
 
     except:
-        #flash message
-        flash("Error! There was a problem deleting user, try again.")
-        return redirect('/account/edit')
+        return redirect('/acount/edit')
 
     
 
