@@ -27,6 +27,7 @@ CREATE TABLE "user" (
 
     -- business stuff
     is_business BOOLEAN NOT NULL,
+    bio VARCHAR(100),
     address VARCHAR(80),
     city VARCHAR(80),
     state VARCHAR(80),

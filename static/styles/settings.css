@@ -81,7 +81,8 @@
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     outline: none !important;
     border-color: #57A1BD;
 }
@@ -211,4 +212,17 @@ textarea:focus {
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
+}
+
+/* business specific css */
+.state {
+    width: 48%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 2px solid #A6CAD8;
+    background-color: #A6CAD84B;
+    font-size: 14px;
+    margin-right: 17px;
 }

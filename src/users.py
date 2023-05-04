@@ -79,7 +79,7 @@ class Users:
         db.session.commit()
         return user
 
-    def update_user(self, user_id, username, password, email, about_me, private, profile_pic, banner_pic, first_name=None, last_name=None, is_business=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
+    def update_user(self, user_id, username, password, email, about_me, private, profile_pic, banner_pic, first_name=None, last_name=None, is_business=None, bio=None, address=None, city=None, state=None, zip_code=None, phone=None, website=None):
         '''Updates a user'''
         user = self.get_user_by_id(user_id)
         user.username = username
@@ -99,6 +99,7 @@ class Users:
 
         # Business
         if is_business != None:
+            user.bio = bio
             user.address = address
             user.city = city
             user.state = state

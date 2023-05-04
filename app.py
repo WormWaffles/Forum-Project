@@ -181,6 +181,7 @@ def edit_account():
             email = request.form['email']
             password = request.form['password']
             confirm_password = request.form['confirm_password']
+            bio = request.form['bio']
             about_me = request.form['about_me']
             profile_pic = request.files['profile_pic']
             banner_pic = request.files['banner_pic']
@@ -263,7 +264,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
-        users.update_user(user_id=user_id, username=username, password=password, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state)
+        users.update_user(user_id=user_id, username=username, password=password, email=email, bio=bio, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state)
         return redirect(url_for('account'))
     try:
         # needs more error handling

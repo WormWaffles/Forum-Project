@@ -37,7 +37,11 @@
                             </h1>
                         </div>
                         <div class="subtitle">
+                            {% if not user.bio %}
                             <p>Nothing here...</p>
+                            {% else %}
+                            <p>{{ user.bio }}</p>
+                            {% endif %}
                         </div>
                         {% if user.address %}
                         <div class="address">

@@ -20,6 +20,7 @@ class User(db.Model):
 
     # Business
     is_business = db.Column(db.Boolean, nullable=False)
+    bio = db.Column(db.String(100), nullable=True)
     address = db.Column(db.String(80), nullable=True)
     city = db.Column(db.String(80), nullable=True)
     state = db.Column(db.String(80), nullable=True)
