@@ -846,7 +846,7 @@ def googlelogin():
 # ********** GOOGLE LOGIN **********
 
 # delete user
-@app.route('/delete/<int:id>')
+@app.route('/account/<int:id>/delete')
 def delete(id):
     
     try:
