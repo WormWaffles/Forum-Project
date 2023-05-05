@@ -5,6 +5,7 @@
 <!-- edit post title content or file -->
 <link rel="stylesheet" href="/static/styles/settings.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../static/javascript/address_autocomplete_func.js"></script>
 
 {% if message %}
 <p class="message" style="color: red;">Error: {{ message }}</p>
@@ -51,8 +52,6 @@
                             value="{% if g.user.email != None %}{{ g.user.email }}{% endif %}">
                     </div>
                 </div>
-                <!-- input for first name -->
-
                 <!-- input for password -->
                 <div class="section">
                     <div>
@@ -75,73 +74,30 @@
                 </div>
                 <!-- input for address and city -->
                 <div>
-                    <input class="first_label" type="text" name="address" placeholder="Address"
+                    <input id="business_address" class="first_label" type="text" name="address" placeholder="Address"
                         value="{% if g.user.address != None %}{{ g.user.address }}{% endif %}">
-                    <input type="text" name="city" placeholder="City"
+                    <input id="locality" type="text" name="city" placeholder="City"
                         value="{% if g.user.city != None %}{{ g.user.city }}{% endif %}">
                 </div>
             </div>
         </div>
-            
-                <div class="section">
-                    <div>
-                      <label class="first_label" for="state">State</label>
-                    </div>
-                    <div>
-                      <select class="first_label" name="state" id="state" style="overflow: scroll;">
-                        <option value="">{% if g.user.state != None %}{{ g.user.state }}{% endif %}</option>
-                        <option value="AL"{% if g.user.state == "AL" %} selected{% endif %}>AL</option>
-                        <option value="AK"{% if g.user.state == "AK" %} selected{% endif %}>AK</option>
-                        <option value="AZ"{% if g.user.state == "AZ" %} selected{% endif %}>AZ</option>
-                        <option value="AR"{% if g.user.state == "AR" %} selected{% endif %}>AR</option>
-                        <option value="CA"{% if g.user.state == "CA" %} selected{% endif %}>CA</option>
-                        <option value="CO"{% if g.user.state == "CO" %} selected{% endif %}>CO</option>
-                        <option value="CT"{% if g.user.state == "CT" %} selected{% endif %}>CT</option>
-                        <option value="DE"{% if g.user.state == "DE" %} selected{% endif %}>DE</option>
-                        <option value="FL"{% if g.user.state == "FL" %} selected{% endif %}>FL</option>
-                        <option value="GA"{% if g.user.state == "GA" %} selected{% endif %}>GA</option>
-                        <option value="HI"{% if g.user.state == "HI" %} selected{% endif %}>HI</option>
-                        <option value="ID"{% if g.user.state == "ID" %} selected{% endif %}>ID</option>
-                        <option value="IL"{% if g.user.state == "IL" %} selected{% endif %}>IL</option>
-                        <option value="IN"{% if g.user.state == "IN" %} selected{% endif %}>IN</option>
-                        <option value="IA"{% if g.user.state == "IA" %} selected{% endif %}>IA</option>
-                        <option value="KS"{% if g.user.state == "KS" %} selected{% endif %}>KS</option>
-                        <option value="KY"{% if g.user.state == "KY" %} selected{% endif %}>KY</option>
-                        <option value="LA"{% if g.user.state == "LA" %} selected{% endif %}>LA</option>
-                        <option value="ME"{% if g.user.state == "ME" %} selected{% endif %}>ME</option>
-                        <option value="MD"{% if g.user.state == "MD" %} selected{% endif %}>MD</option>
-                        <option value="MA"{% if g.user.state == "MA" %} selected{% endif %}>MA</option>
-                        <option value="MI"{% if g.user.state == "MI" %} selected{% endif %}>MI</option>
-                        <option value="MN"{% if g.user.state == "MN" %} selected{% endif %}>MN</option>
-                        <option value="MS"{% if g.user.state == "MS" %} selected{% endif %}>MS</option>
-                        <option value="MO"{% if g.user.state == "MO" %} selected{% endif %}>MO</option>
-                        <option value="MT"{% if g.user.state == "MT" %} selected{% endif %}>MT</option>
-                        <option value="NE"{% if g.user.state == "NE" %} selected{% endif %}>NE</option>
-                        <option value="NV"{% if g.user.state == "NV" %} selected{% endif %}>NV</option>
-                        <option value="NH"{% if g.user.state == "NH" %} selected{% endif %}>NH</option>
-                        <option value="NJ"{% if g.user.state == "NJ" %} selected{% endif %}>NJ</option>
-                        <option value="NM"{% if g.user.state == "NM" %} selected{% endif %}>NM</option>
-                        <option value="NY"{% if g.user.state == "NY" %} selected{% endif %}>NY</option>
-                        <option value="NC"{% if g.user.state == "NC" %} selected{% endif %}>NC</option>
-                        <option value="ND"{% if g.user.state == "ND" %} selected{% endif %}>ND</option>
-                        <option value="OH"{% if g.user.state == "OH" %} selected{% endif %}>OH</option>
-                        <option value="OK"{% if g.user.state == "OK" %} selected{% endif %}>OK</option>
-                        <option value="OR"{% if g.user.state == "OR" %} selected{% endif %}>OR</option>
-                        <option value="PA"{% if g.user.state == "PA" %} selected{% endif %}>PA</option>
-                        <option value="RI"{% if g.user.state == "RI" %} selected{% endif %}>RI</option>
-                        <option value="SC"{% if g.user.state == "SC" %} selected{% endif %}>SC</option>                            <option value="SD"{% if g.user.state == "SD" %} selected{% endif %}>SD</option>
-                        <option value="TN"{% if g.user.state == "TN" %} selected{% endif %}>TN</option>
-                        <option value="TX"{% if g.user.state == "TX" %} selected{% endif %}>TX</option>
-                        <option value="UT"{% if g.user.state == "UT" %} selected{% endif %}>UT</option>
-                        <option value="VT"{% if g.user.state == "VT" %} selected{% endif %}>VT</option>
-                        <option value="VA"{% if g.user.state == "VA" %} selected{% endif %}>VA</option>
-                        <option value="WA"{% if g.user.state == "WA" %} selected{% endif %}>WA</option>
-                        <option value="WV"{% if g.user.state == "WV" %} selected{% endif %}>WV</option>                            <option value="WI"{% if g.user.state == "WI" %} selected{% endif %}>WI</option>
-                        <option value="WY"{% if g.user.state == "WY" %} selected{% endif %}>WY</option>
-                      </select>
-                    </div>
-                  </div>
+
+        <div class="set_input">
+            <div class="section">
+                <div>
+                    <label class="first_label" for="address">State</label>
+                    <label for="city">Zip Code</label>
+                </div>
+                <!-- input for state and zip code -->
+                <div>
+                    <input id="state" class="first_label" type="text" name="state" placeholder="State"
+                        value="{% if g.user.state != None %}{{ g.user.state }}{% endif %}">
+                    <input id="zipcode" type="text" name="zip_code" placeholder="Zip Code"
+                        value="{% if g.user.zip_code != None %}{{ g.user.zip_code }}{% endif %}">
+                </div>
             </div>
+        </div>
+            
 
 
             <!-- text area for bio -->
@@ -222,5 +178,8 @@
         }
     });
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFoKhJXjpdutYp5APDID5ZVG4fi--9PDg&callback=initAutocomplete&libraries=places&v=weekly" defer
+></script>
 
 {% endblock %}

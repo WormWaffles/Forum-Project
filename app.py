@@ -188,6 +188,7 @@ def edit_account():
             city = request.form['city']
             address = request.form['address']
             state = request.form['state']
+            zip_code = request.form['zip_code']
         else:
             user_id = session['user_id']
             username = request.form['username']
@@ -253,7 +254,7 @@ def edit_account():
                 # needs more error handling
         if password != "":
             message = ""
-            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state)
+            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state, zip_code=zip_code)
             if password != confirm_password:
                 message = 'Passwords do not match.'
                 return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
@@ -263,7 +264,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
-        users.update_user(user_id=user_id, username=username, password=password, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state)
+        users.update_user(user_id=user_id, username=username, password=password, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state, zip_code=zip_code)
         return redirect(url_for('account'))
     try:
         # needs more error handling
