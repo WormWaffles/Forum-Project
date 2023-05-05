@@ -849,18 +849,9 @@ def googlelogin():
 @app.route('/account/<int:id>/delete')
 def delete(id):
     
-    try:
-        #delete user and user's post, rating, likes, comments
-        users.delete_user(id)
-        # post_feed.delete_post(id)
-        # rating.delete_rating_by_post_id(id)
-        # likes.delete_likes_by_post_id(id)
-        # comments.delete_comment(id)
-        
-        return redirect('/')
+    users.delete_user(id)
+    return redirect('/')
 
-    except:
-        return redirect('/account/edit')
 
     
 

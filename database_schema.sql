@@ -53,7 +53,7 @@ CREATE TABLE post (
 );
 
 CREATE TABLE user_likes (
-    user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    user_id INTEGER NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE,
     post_id INTEGER NOT NULL REFERENCES "post"(post_id),
     like_type INTEGER NOT NULL,
     PRIMARY KEY (user_id, post_id)
@@ -62,19 +62,19 @@ CREATE TABLE user_likes (
 CREATE TABLE rating (
     rating_id SERIAL NOT NULL PRIMARY KEY,
     rating SMALLINT NOT NULL,
-    business_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    business_id INTEGER NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE,
     business_name VARCHAR(80) NOT NULL,
     post_id INTEGER NOT NULL REFERENCES post(post_id)
 );
 
 CREATE TABLE follower (
-    follower_user_id INTEGER NOT NULL REFERENCES "user"(user_id),
-    followed_user_id INTEGER NOT NULL REFERENCES "user"(user_id)
+    follower_user_id INTEGER NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE,
+    followed_user_id INTEGER NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE comment (
     comment_id SERIAL NOT NULL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    user_id INTEGER NOT NULL REFERENCES "user"(user_id) ON DELETE CASCADE,
     post_id INTEGER NOT NULL REFERENCES post(post_id),
     content VARCHAR(500) NOT NULL,
     file VARCHAR(255),
