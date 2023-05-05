@@ -151,6 +151,8 @@
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
     /* margin-left: auto; */
     margin-bottom: 1rem;
+    position: relative;
+    z-index: -1;
 }
 
 .list {
@@ -315,6 +317,7 @@ p {
     border-radius: 5px;
     padding: 5px;
     display: none;
+    z-index: 10;
 }
 
 .settings-option {

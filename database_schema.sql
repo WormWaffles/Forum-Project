@@ -29,10 +29,8 @@ CREATE TABLE "user" (
     is_business BOOLEAN NOT NULL,
     address VARCHAR(80),
     city VARCHAR(80),
-    state VARCHAR(80),
+    state CHAR(2),
     zip_code INTEGER,
-    phone INTEGER,
-    website VARCHAR(80)
 );
 
 CREATE TABLE post (
