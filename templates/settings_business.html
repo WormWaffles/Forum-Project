@@ -90,9 +90,9 @@
                 </div>
                 <!-- input for state and zip code -->
                 <div>
-                    <input id="state" class="first_label" type="text" name="state" placeholder="State"
+                    <input id="state" class="first_label" type="text" name="state" placeholder="State" minlength="2" maxlength="2"
                         value="{% if g.user.state != None %}{{ g.user.state }}{% endif %}">
-                    <input id="zipcode" type="text" name="zip_code" placeholder="Zip Code"
+                    <input id="zipcode" type="text" name="zip_code" placeholder="Zip Code" minlength="5" maxlength="5"
                         value="{% if g.user.zip_code != None %}{{ g.user.zip_code }}{% endif %}">
                 </div>
             </div>
