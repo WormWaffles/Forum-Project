@@ -44,7 +44,8 @@
                     {% if not g.user.is_business %}
                     <div class="checkin">
                         <div class="form-checkin">
-                            <button class="checkin-btn" id="checkin" type="button" {% if not business %}disabled{% endif %}></button>
+                            <button class="checkin-btn" id="checkin" type="button" {% if not business %}disabled{% endif
+                                %}></button>
                             <label class="form-check-label" for="check_in">
                                 {% if business %}Check-Into: {{ business.username }}{% else %}Bar Not Found{% endif %}
                             </label>

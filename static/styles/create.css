@@ -83,7 +83,7 @@ label {
     background-color: white;
     background-image: url(/static/images/checkin_icon.png);
     background-size: cover;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .action-btn img {
@@ -118,7 +118,7 @@ label {
 }
 
 .checkin {
-    font: normal normal 900 18px/25px Poppins;
+    font: normal normal 900 15px/18px Poppins;
     color: #7F7F7F;
     margin-top: 25px;
 }
