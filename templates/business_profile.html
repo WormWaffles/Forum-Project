@@ -43,6 +43,11 @@
                             <p>Nothings here...</p>
                             {% endif %}
                         </div>
+                        {% if g.user.address %}
+                        <div class="address">
+                            <p>{{ g.user.address }}, {{ g.user.city }}, {{ g.user.state }}</p>
+                        </div>
+                        {% endif %}
                         <div class="description">
                             {% if g.user.about_me %}
                             {{ g.user.about_me }}
@@ -66,29 +71,31 @@
     </section>
 </body>
 {% if followerBool %}
-    <div class="follower-container">
-        {% if followers_num > 0 %}
-        <div class="title-icon">
+<div class="follower-container">
+    {% if followers_num > 0 %}
+    <div class="title-icon">
         <h>Followers</h>
-        </div>
-        {% for follower in followers %}
-                <div class="follower-data">
-                    <a href="/user/{{ follower.user_id }}"><img class='image-small'src="{% if follower.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"alt="profile_pic"></a>
-                    <a href="/user/{{ follower.user_id }}" p class="follower-name" id="user">{{ follower.username }}</a>
-                </div>
-            {% endfor %}
-        {% else %}
-        <div class="landing-msg">
-                <h1 class="congrats">No Followers Yet</h1>
-                <h2 class="text-center">
-                    This User Has No Followers Yet, You Can Be The First!
-                </h2>
-        </div>
+    </div>
+    {% for follower in followers %}
+    <div class="follower-data">
+        <a href="/user/{{ follower.user_id }}"><img class='image-small'
+                src="{% if follower.profile_pic %}{{ follower.profile_pic }}{% else %}{{url_for('static', filename='images/default_pfp.png')}}{% endif %}"
+                alt="profile_pic"></a>
+        <a href="/user/{{ follower.user_id }}" p class="follower-name" id="user">{{ follower.username }}</a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="landing-msg">
+        <h1 class="congrats">No Followers Yet</h1>
+        <h2 class="text-center">
+            This User Has No Followers Yet, You Can Be The First!
+        </h2>
     </div>
     {% endif %}
+</div>
 {% else %}
-    <!-- POST FEED GOES HERE -->
-    <div class="feed">
+<!-- POST FEED GOES HERE -->
+<div class="feed">
     {% if not posts %}
 
     <div class="landing-msg">
@@ -177,38 +184,28 @@
                 </div>
                 {% endif %}
                 <div class="post-card-container">
-                    {% if post.distance %}
-                    {% set miles = post.distance %}
-                    {% if (miles < 1) %} <div class="date">
-                        <p>{{ post.post_date.split(' ')[0] }} | <1 mile away</p>
-                </div>
-                {% else %}
-                <div class="date">
-                    <p>{{ post.post_date.split(' ')[0] }} | {{ miles|round }} miles away</p>
-                </div>
-                {% endif %}
-                {% else %}
-                <div class="date">
-                    <p>{{ post.post_date.split(' ')[0] }}</p>
-                </div>
-                {% endif %}
-                <!-- comments -->
-                <a href="/feed/{{ post.post_id }}">
-                    <div class="comments">
-                        <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
-                        <p class="comment">{{ post.comments }} comments</p>
+                    <div class="date">
+                        <p>{{ post.post_date.split(' ')[0] }}</p>
                     </div>
-                </a>
-                <!-- like button, dont even ask bruh -->
-                <div class="like">
-                    <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
-                    <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img" {% set
-                            like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for like in likes if
-                            like.post_id==post.post_id and like.user_id==g.user.user_id %} {% if like.like_type==1 %} {%
-                            set _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif
-                            like.like_type==-1 %} {% set
-                            _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif %} {%
-                            endfor %} {{ like_icon.src }}></a>
+                    <!-- comments -->
+                    <a href="/feed/{{ post.post_id }}">
+                        <div class="comments">
+                            <img class="comment_icon" src="/static/images/comment_icon.png" alt="comment">
+                            <p class="comment">{{ post.comments }} comments</p>
+                        </div>
+                    </a>
+                    <!-- like button, dont even ask bruh -->
+                    <div class="like">
+                        <p class="likes" id="{{ post.post_id }}t">{{ post.likes }} Likes</p>
+                        <a for="like" id="{{ post.post_id }}"><img class="like_icon" id="{{ post.post_id }}img" {% set
+                                like_icon={'src': 'src=/static/images/likeButton_default.png' } %} {% for like in likes
+                                if like.post_id==post.post_id and like.user_id==g.user.user_id %} {% if
+                                like.like_type==1 %} {% set
+                                _=like_icon.update({'src': 'src=/static/images/likeButton_red.png' }) %} {% elif
+                                like.like_type==-1 %} {% set
+                                _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif %} {%
+                                endfor %} {{ like_icon.src }}></a>
+                    </div>
                 </div>
             </div>
         </li>
@@ -217,6 +214,6 @@
     {% endif %}
 </div>
 
-{% endif %} 
 <script src="/static/javascript/feed_func.js"></script>
+{% endif %}
 {% endblock %}

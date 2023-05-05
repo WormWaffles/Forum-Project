@@ -54,6 +54,7 @@ footer {
         "copy copy copy copy";
     grid-gap: 1rem;
     margin: 3em auto;
+    text-align: left;
 }
 
 .contact {
