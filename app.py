@@ -48,7 +48,7 @@ bcrypt = Bcrypt(app)
 # Google Auth
 url = os.getenv('URL')
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # comment out for production ***
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secret_file,
@@ -79,8 +79,10 @@ def logged_in():
 def before_request():
     '''Checks if user is logged in'''
     # comments.clear()
-    # post_feed.clear()
     # likes.clear()
+    # rating.clear()
+    # Follows.clear()
+    # post_feed.clear()
     # users.clear()
     g.user = None
     if 'user_id' in session:
@@ -261,7 +263,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
-        users.update_user(user_id, username, password, email, private, profile_pic_path, banner_pic_path, city, address, state)
+        users.update_user(user_id=user_id, username=username, password=password, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state)
         return redirect(url_for('account'))
     try:
         # needs more error handling
@@ -546,7 +548,7 @@ def edit(post_id):
             event = None
             from_date = None
             to_date = None
-        file_path = None
+        file_path = post_feed.get_post_by_id(post_id).file or None
         if file:
             try:
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
