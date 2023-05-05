@@ -125,7 +125,10 @@ class Users:
     def delete_user(self, user_id):
         '''Deletes a user'''
         user = self.get_user_by_id(user_id)
-        db.session.delete(user)
+        user.email = "deleted"
+        user.profile_pic = None
+        user.banner_pic = None
+        user.password = None
         db.session.commit()
         return user
     

@@ -122,13 +122,8 @@
         <form action="/account">
             <button class="button" type="submit">Back</button>
         </form>
-        <form action="/logout">
-            <button class="button" id="logout" type="submit">Logout</button>
-        </form>
-
-        <!-- Delete User -->
-        <form action="/account/{{g.user.user_id}}/delete" method="get"> 
-            <button type="submit" class="btn btn-danger" name="delete" value="delete">Delete</button>
+        <form action="/account/{{ g.user.user_id }}/delete">
+            <button class="button" id="logout" type="submit">Delete Acct</button>
         </form>
 
     </div>

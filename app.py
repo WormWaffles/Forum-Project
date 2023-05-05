@@ -848,8 +848,8 @@ def googlelogin():
 # delete user
 @app.route('/account/<int:id>/delete')
 def delete(id):
-    
     users.delete_user(id)
+    session.clear()
     return redirect('/')
 
 
