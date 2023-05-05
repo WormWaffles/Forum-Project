@@ -280,7 +280,7 @@ def edit_account():
         else:
             password = g.user.password
         print(profile_pic_path)
-        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
+        users.update_user(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
         print(e)
@@ -578,7 +578,7 @@ def edit(post_id):
             else:
                 rating.add_rating(stars, post_id)
         return redirect('/feed')
-
+    
 
 #  view post
 @app.get('/feed/<post_id>')
@@ -848,6 +848,12 @@ def googlelogin():
 # delete user
 @app.route('/account/<int:id>/delete')
 def delete(id):
+    # delete their pfp and banner from s3
+    user = users.get_user_by_id(id)
+    if user.profile_pic:
+        s3.Object(bucket_name, user.profile_pic.split('/')[-1]).delete()
+    if user.banner_pic:
+        s3.Object(bucket_name, user.banner_pic.split('/')[-1]).delete()
     users.delete_user(id)
     session.clear()
     return redirect('/')

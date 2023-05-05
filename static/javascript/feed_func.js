@@ -10,6 +10,8 @@ for (let settingsIcon of document.querySelectorAll('img[alt="Settings"]')) {
     let the_id = settingsIcon.getAttribute('id')
     const settingsOptions = document.querySelector('div[for="so' + the_id + '"]');
 
+    settingsOptions.style.zIndex = 9999;
+
     settingsIcon.addEventListener('click', function () {
         settingsOptions.style.display = 'block';
     });

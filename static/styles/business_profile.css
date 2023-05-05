@@ -101,6 +101,7 @@
 }
 
 .setting_button {
+    margin-left: 95%;
     text-align: right;
 }
 
@@ -126,14 +127,13 @@
 
 /*Followers Tab*/
 .follower-data {
-    margin:0;
+    margin: 0;
     padding: 3% 11%;
-    width:49%;
-    display:inline-block;
+    width: 49%;
+    display: inline-block;
 }
 
-.follower-container
-{
+.follower-container {
     margin-top: 1.5rem;
     margin-left: 20%;
     margin-right: 20%;
@@ -146,16 +146,15 @@
     /* margin-left: auto; */
     margin-bottom: 1rem;
 }
-.image-small
-{
-    border-radius:50% 50% 50% 50%;
-    width:60px;
-    height:60px;
+
+.image-small {
+    border-radius: 50% 50% 50% 50%;
+    width: 60px;
+    height: 60px;
 
 }
 
-.follower-name
-{
+.follower-name {
     font: normal normal 700 18px/30px Poppins;
     color: #57A1BD;
     /* color: #535353; */
@@ -167,11 +166,11 @@
     color: #535353;
 }
 
-.title-icon{
-    margin:0;
+.title-icon {
+    margin: 0;
     padding: 1% 10%;
-    width:100%;
-    display:inline-block;
+    width: 100%;
+    display: inline-block;
     text-align: center;
     font: normal normal 800 24px/36px Poppins;
     color: #555555;
@@ -389,7 +388,7 @@ p {
 }
 
 /*CSS for: if there are no post in feed.html*/
-.congrats{
+.congrats {
     font-size: 5rem;
     font-weight: bold;
     text-align: center;
@@ -413,4 +412,8 @@ h2 {
 /*CSS for: if there are no post in feed.html*/
 a {
     text-decoration: none;
+}
+
+.setting_button {
+    cursor: pointer;
 }
