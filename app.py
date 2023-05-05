@@ -216,7 +216,6 @@ def edit_account():
                 # remove old profile pic from s3
                 user = users.get_user_by_id(user_id)
                 if user.profile_pic != None:
-                    print(g.user.profile_pic.split('/')[-1])
                     s3.Object(bucket_name, g.user.profile_pic.split('/')[-1]).delete()
 
                 # upload new profile pic to s3
@@ -236,7 +235,6 @@ def edit_account():
                 # remove old banner pic from s3
                 user = users.get_user_by_id(user_id)
                 if user.banner_pic != None:
-                    print(g.user.banner_pic.split('/')[-1])
                     s3.Object(bucket_name, g.user.banner_pic.split('/')[-1]).delete()
 
                 # upload new banner pic to s3
