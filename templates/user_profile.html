@@ -33,8 +33,13 @@
                             {% endif %}
                         </div>
                         <div class="setting_button">
-                            <a href="/account/edit"><img src="{{url_for('static', filename='images/setting-gear.png')}}"
-                                    height="25" width="25"></a>
+                            <!-- options to edit or delete -->
+                            <img src="/static/images/setting-gear.png" id="{{ g.user.user_id }}" for="settings"
+                                alt="Settings" class="settings-icon" width="25" height="25">
+                            <div class="settings-options" for="so{{ g.user.user_id }}">
+                                <a href="/account/edit" class="settings-option">Settings</a>
+                                <a href="/logout" class="settings-option">Logout</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,6 +182,7 @@
                                 _=like_icon.update({'src': 'src=/static/images/likeButton_grey.png' }) %} {% endif %} {%
                                 endfor %} {{ like_icon.src }}></a>
                     </div>
+
                 </div>
             </div>
         </li>

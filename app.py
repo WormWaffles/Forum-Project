@@ -1,5 +1,5 @@
 import pathlib
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
+from flask import Flask, flash, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -844,3 +844,14 @@ def googlelogin():
         #redirect to error page
         return redirect('/error')
 # ********** GOOGLE LOGIN **********
+
+# delete user
+@app.route('/account/<int:id>/delete')
+def delete(id):
+    users.delete_user(id)
+    session.clear()
+    return redirect('/')
+
+
+    
+
