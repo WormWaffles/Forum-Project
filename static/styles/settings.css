@@ -11,7 +11,7 @@
 
 .username {
     color: #57A1BD;
-    font: normal normal 900 24px/33px Avenir;
+    font: normal normal 900 24px/33px Poppins;
     padding-top: 10px;
 }
 
@@ -36,7 +36,7 @@
 .set_input {
     display: grid;
     color: #7F7F7F;
-    font: normal normal 900 14px/19px Avenir;
+    font: normal normal 900 14px/19px Poppins;
 }
 
 .set_input input {
@@ -53,7 +53,7 @@
 .section {
     display: grid;
     color: #7F7F7F;
-    font: normal normal 900 14px/19px Avenir;
+    font: normal normal 900 14px/19px Poppins;
 }
 
 .section label {
@@ -67,7 +67,7 @@
 .input_bio {
     display: grid;
     color: #7F7F7F;
-    font: normal normal 900 14px/19px Avenir;
+    font: normal normal 900 14px/19px Poppins;
 }
 
 .input_bio textarea {
@@ -120,7 +120,7 @@ textarea:focus {
     margin-left: 10px;
     font-size: 16px;
     color: #7F7F7F;
-    font: normal normal 900 14px/19px Avenir;
+    font: normal normal 900 14px/19px Poppins;
 }
 
 .buttons {
@@ -155,7 +155,7 @@ textarea:focus {
     padding: 10px 0px;
     height: 45px;
     color: #7F7F7F;
-    font: normal normal 900 20px/25px Avenir;
+    font: normal normal 900 20px/25px Poppins;
     width: 45%;
 }
 
