@@ -281,7 +281,7 @@ def edit_account():
         else:
             password = g.user.password
         print(profile_pic_path)
-        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
+        users.update_user(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
         print(e)
@@ -852,7 +852,3 @@ def delete(id):
     users.delete_user(id)
     session.clear()
     return redirect('/')
-
-
-    
-
