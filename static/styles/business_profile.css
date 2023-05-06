@@ -512,3 +512,20 @@ embed {
     width:100%;
     padding-bottom: 1.5em;
 }
+
+.heading {
+    width: auto;
+    font: normal normal 500 40px/46px Poppins;
+    color: #535353;
+    padding-top: 5px;
+    text-align: center;
+}
+
+.heading a{
+    text-decoration: none;
+    color: #535353;
+}
+
+.heading a:hover {
+    color: #57A1BD;
+}
