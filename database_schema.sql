@@ -30,7 +30,9 @@ CREATE TABLE "user" (
     address VARCHAR(80),
     city VARCHAR(80),
     state CHAR(2),
-    zip_code INTEGER,
+    zip_code INTEGER, 
+    phone INTEGER,
+    website VARCHAR(80)
 );
 
 CREATE TABLE post (
@@ -79,5 +81,3 @@ CREATE TABLE comment (
     post_date VARCHAR(30) NOT NULL,
     likes INTEGER NOT NULL
 );
--- post has poster_id which connects to user, business, or admin
--- rating has business_id which connects to user and post_id which connects to post and then to the authorgit pu
