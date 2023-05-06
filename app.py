@@ -876,4 +876,4 @@ def view_business_menu(user_id):
     menu = business_items.get_menu(user_id)
     if user:
         star = rating.get_rating_average(user_id)
-    return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_title=menu_title, menus=menu)
+    return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_title=menu_title, menu=menu)
