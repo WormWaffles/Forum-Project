@@ -14,7 +14,6 @@ class BusinessItem:
     def get_menu_title(self, user_id):
         '''Returns all menu titles'''
         business_items = self.get_business_items_by_user_id(user_id)
-        # menu_titles = [business_items.title_menu_1, business_items.title_menu_2, business_items.title_menu_3]
         return business_items.menu_title
     
     def create_business_items(self, user_id):
