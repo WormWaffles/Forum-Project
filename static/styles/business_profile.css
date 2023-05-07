@@ -109,7 +109,9 @@
 }
 
 .setting_button {
+    margin-left: 95%;
     text-align: right;
+    cursor: pointer;
 }
 
 .profile-links a:link {
