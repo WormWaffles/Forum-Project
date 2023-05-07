@@ -252,7 +252,15 @@ def edit_account():
             print(f"Error uploading files to s3: " + str(e))
 
     if g.user.is_business:
-                # needs more error handling
+        # address handling
+        if city == "":
+            city = None
+        if address == "":
+            address = None
+        if state == "":
+            state = None
+        if zip_code == "":
+            zip_code = None
         if password != "":
             message = ""
             unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state, zip_code=zip_code)

@@ -37,16 +37,9 @@
                                 {{ g.user.username }}
                             </h1>
                         </div>
-                        <div class="subtitle">
-                            {% if g.user.subtitle %}
-                            {{ g.user.subtitle }}
-                            {% else %}
-                            <p>Nothing here...</p>
-                            {% endif %}
-                        </div>
                         {% if g.user.address %}
                         <div class="address">
-                            <p>{{ g.user.address }}, {{ g.user.city }}, {{ g.user.state }}</p>
+                            <p>{{ g.user.address }}{% if g.user.city %}, {{ g.user.city }}{% endif %}{% if g.user.state %}, {{ g.user.state }}{% endif %}</p>
                         </div>
                         {% endif %}
                         <div class="description">
