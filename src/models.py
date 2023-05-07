@@ -27,6 +27,9 @@ class User(db.Model):
     phone = db.Column(db.String(80), nullable=True)
     website = db.Column(db.String(80), nullable=True)
 
+    # admin
+    admin = db.Column(db.Boolean, nullable=False)
+
 # Post Model
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)

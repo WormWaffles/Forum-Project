@@ -122,9 +122,10 @@
         <form action="/account">
             <button class="button" type="submit">Back</button>
         </form>
-        <form action="/logout">
-            <button class="button" id="logout" type="submit">Logout</button>
+        <form action="/account/{{ g.user.user_id }}/delete">
+            <button class="button" id="logout" type="submit">Delete Acct</button>
         </form>
+
     </div>
 </div>
 <script>

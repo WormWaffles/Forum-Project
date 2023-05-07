@@ -59,7 +59,10 @@ class PostFeed:
         for post in posts:
             post_object = Post(post_id=post[0], user_id=post[1], title=post[2], content=post[3], file=post[4], post_date=post[5], likes=post[6], event=post[7], from_date=post[8], to_date=post[9], location=post[10], comments=post[11], check_in=post[12], user=User(user_id=post[13], username=post[14], password=post[15], first_name=post[16], last_name=post[17], email=post[18], about_me=post[19], location=post[20], private=post[21], profile_pic=post[22], banner_pic=post[23], is_business=post[24], address=post[25], city=post[26], state=post[27], zip_code=post[28], phone=post[29], website=post[30]))
             post_object.distance = post[31]
+            print(post_object.distance)
             post_objects.append(post_object)
+        if not post_objects:
+            return None
         return post_objects
     
     def get_all_following_posts(self, user_id):
@@ -125,11 +128,12 @@ class PostFeed:
             ) AS subquery
             ON p.location = subquery.location
             JOIN "user" u ON p.user_id = u.user_id
-            WHERE subquery.distance < 25
+            WHERE subquery.distance < 25 AND p.event = True
             ORDER BY subquery.distance;
         """))
+        date = str(datetime.datetime.now()).split(' ')[0]
         for post in posts:
-            if post.event:
+            if post.from_date <= str(date) and post.to_date >= str(date):
                 return post
         return None
 
@@ -150,7 +154,30 @@ class PostFeed:
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
         if user.location and check_in:
-            location = user.location
+            location = user.location.split(',')
+            startlat = float(location[0])
+            startlng = float(location[1])
+            posts = db.session.execute(text(f"""
+                SELECT
+                    u.*,
+                    distance
+                FROM "user" u
+                JOIN (
+                    SELECT
+                        location,
+                        SQRT(
+                            POW(69.1 * (CAST(split_part(location, ',', 1) AS double precision) - {startlat}), 2) +
+                            POW(69.1 * ({startlng} - CAST(split_part(location, ',', 2) AS double precision)) * COS(CAST(split_part(location, ',', 1) AS double precision) / 57.3), 2)
+                        ) AS distance
+                    FROM "user"
+                ) AS subquery
+                ON u.location = subquery.location
+                WHERE subquery.distance < 25 AND u.is_business = True
+                ORDER BY subquery.distance;
+            """))
+            for post in posts:
+                location = post[7]
+                break
         else:
             location = None
         post = Post(post_id=id, user_id=user_id, title=title, content=content, file=file, post_date=date, likes=likes, event=event, from_date=from_date, to_date=to_date, location=location, comments=0, check_in=check_in)

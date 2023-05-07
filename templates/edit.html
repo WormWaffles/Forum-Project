@@ -20,12 +20,12 @@
                 <!-- input for title of post -->
                 <div class="title-div">
                     <label>Title your post</label>
-                    <input class="create_title" type="text" name="title" value="{{ post.title }}" required>
+                    <input class="create_title" type="text" name="title" maxlength="60" value="{{ post.title }}" required>
                 </div>
                 <!-- input for post content -->
                 <div class="content-div">
                     <label>Write something...</label>
-                    <textarea class="content" name="content" rows="4">{{ post.content }}</textarea>
+                    <textarea class="content" name="content" rows="4" maxlength="450">{{ post.content }}</textarea>
                 </div>
                 <!-- input for single file attachment -->
                 <div class="upload">
