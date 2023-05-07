@@ -432,8 +432,9 @@ def create():
 def delete_post(post_id):
     if not g.user:
         return redirect(url_for('login'))
-    if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
-        return redirect('/error')
+    if not g.user.admin:
+        if g.user.user_id != post_feed.get_post_by_id(post_id).user_id:
+            return redirect('/error')
     post = post_feed.get_post_by_id(post_id)
     # delete all comments with post id
     post_comments = comments.get_comments_by_post_id(post_id)

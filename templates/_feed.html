@@ -76,7 +76,7 @@
                                     </span>
                                 </div>
                             </div>
-                            {% if post.user_id == g.user.user_id %}
+                            {% if post.user_id == g.user.user_id or g.user.admin %}
                             <div class="settings-container">
                                 <!-- options to edit or delete -->
                                 <img src="/static/images/setting_icon.png" id="{{ post.post_id }}" for="settings"
