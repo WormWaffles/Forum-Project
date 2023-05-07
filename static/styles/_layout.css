@@ -187,3 +187,7 @@ input.transparent-input::placeholder {
 .btn-outline-light {
     border-width: 1px 1px 1px 0px !important;
 }
+
+.copyright {
+    text-align: center;
+}
