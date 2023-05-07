@@ -153,7 +153,7 @@ class PostFeed:
         # get current date
         date = datetime.datetime.now()
         user = users.get_user_by_id(user_id)
-        if user.location and check_in:
+        if (user.location and check_in) or (user.location and event):
             location = user.location.split(',')
             startlat = float(location[0])
             startlng = float(location[1])
