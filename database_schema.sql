@@ -33,7 +33,10 @@ CREATE TABLE "user" (
     state CHAR(2),
     zip_code INTEGER, 
     phone INTEGER,
-    website VARCHAR(80)
+    website VARCHAR(80),
+
+    -- admin stuff
+    admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE post (
