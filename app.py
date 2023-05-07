@@ -1,5 +1,5 @@
-from flask import Flask, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import pathlib
+from flask import Flask, flash, abort, render_template, redirect, request, session, g, url_for, send_from_directory
 import requests
 from src.post_feed import post_feed
 from src.users import users
@@ -49,7 +49,7 @@ bcrypt = Bcrypt(app)
 # Google Auth
 url = os.getenv('URL')
 GOOGLE_CLIENT_ID = '402126507734-2knh1agkn688s2atb55a5oeu062j89f8.apps.googleusercontent.com'
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # comment out for production ***
 client_secret_file = os.path.join(pathlib.Path(__file__).parent, 'client_secret.json')
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secret_file,
@@ -80,8 +80,10 @@ def logged_in():
 def before_request():
     '''Checks if user is logged in'''
     # comments.clear()
-    # post_feed.clear()
     # likes.clear()
+    # rating.clear()
+    # Follows.clear()
+    # post_feed.clear()
     # users.clear()
     g.user = None
     if 'user_id' in session:
@@ -187,6 +189,7 @@ def edit_account():
             city = request.form['city']
             address = request.form['address']
             state = request.form['state']
+            zip_code = request.form['zip_code']
         else:
             user_id = session['user_id']
             username = request.form['username']
@@ -252,7 +255,7 @@ def edit_account():
                 # needs more error handling
         if password != "":
             message = ""
-            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state)
+            unsaved_user = User(user_id=user_id, username=username, password=password, email=email, private=private, city=city, address=address, state=state, zip_code=zip_code)
             if password != confirm_password:
                 message = 'Passwords do not match.'
                 return render_template('settings.html', user=unsaved_user, message=message, logged_in=logged_in(), account="active")
@@ -262,7 +265,7 @@ def edit_account():
             password = bcrypt.generate_password_hash(password).decode()
         else:
             password = g.user.password
-        users.update_user(user_id, username, password, email, private, profile_pic_path, banner_pic_path, city, address, state)
+        users.update_user(user_id=user_id, username=username, password=password, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path, is_business=True, city=city, address=address, state=state, zip_code=zip_code)
         return redirect(url_for('account'))
     try:
         # needs more error handling
@@ -279,7 +282,7 @@ def edit_account():
         else:
             password = g.user.password
         print(profile_pic_path)
-        users.update_user(user_id, username, password, first_name, last_name, email, about_me, private, profile_pic_path, banner_pic_path)
+        users.update_user(user_id=user_id, username=username, password=password, first_name=first_name, last_name=last_name, email=email, about_me=about_me, private=private, profile_pic=profile_pic_path, banner_pic=banner_pic_path)
         return redirect(url_for('account'))
     except Exception as e: 
         print(e)
@@ -299,7 +302,7 @@ def login():
         if password is None:
             abort(400)
         user = users.get_user_by_email(email)
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and user.password is not None and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.user_id
             return redirect(url_for('account'))
         else:
@@ -369,6 +372,8 @@ def create():
     else:
         title = request.form.get('title')
         content = request.form.get('content')
+        if len(title) > 80 or len(content) > 500:
+            abort(400)
         file = request.files['file']
         check_in = bool(request.form.get('rating'))
         if check_in:
@@ -518,6 +523,8 @@ def edit(post_id):
             return redirect('/error')
         title = request.form.get('title')
         content = request.form.get('content')
+        if len(title) > 80 or len(content) > 500:
+            abort(400)
         file = request.files['file']
         check_in = bool(request.form.get('rating'))
         if check_in:
@@ -543,7 +550,7 @@ def edit(post_id):
             event = None
             from_date = None
             to_date = None
-        file_path = None
+        file_path = post_feed.get_post_by_id(post_id).file or None
         if file:
             try:
                 if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
@@ -877,3 +884,13 @@ def view_business_menu(user_id):
     if user:
         star = rating.get_rating_average(user_id)
     return render_template('menu.html', rating=star, user=user, user_id=user_id, menu_title=menu_title, menu=menu)
+
+
+# delete user
+@app.route('/account/<int:id>/delete')
+def delete(id):
+    users.delete_user(id)
+    session.clear()
+    return redirect('/')
+
+

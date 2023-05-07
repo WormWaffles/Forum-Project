@@ -60,6 +60,8 @@
 
 .container {
     max-width: 1000px;
+    position: relative;
+    z-index: 2;
 }
 
 .mid-container {
@@ -385,19 +387,17 @@ a {
 
 .follower-container
 {
-    background-color: white;
-    max-width: 976px;
+    margin-top: 1.5rem;
+    margin-left: 20%;
+    margin-right: 20%;
+    min-width: 400px;
     height: auto;
-    margin: auto;
-    margin-top: 1rem;
-    margin-bottom: 5rem;
+    padding: 25px 40px;
+    background-color: rgb(255, 255, 255);
     border-radius: 15px;
     filter: drop-shadow(1px 3px 3px rgb(177, 177, 177));
-    padding-left:0;
-    padding-right:0;
-    padding-top: 2rem;
-    padding-bottom: 5rem;
-    overflow: hidden;
+    /* margin-left: auto; */
+    margin-bottom: 1rem;
 }
 .image-small
 {

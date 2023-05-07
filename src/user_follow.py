@@ -46,4 +46,8 @@ class Follows:
     def get_user_by_follower_id(self,follower_user_id):
         return User.query.get(follower_user_id)
     
+    def clear():
+        Follower.query.delete()
+        db.session.commit()
+    
 follows = Follows()

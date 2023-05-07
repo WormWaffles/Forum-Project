@@ -20,12 +20,12 @@
                 <!-- input for title of post -->
                 <div class="title-div">
                     <label>Title your post</label>
-                    <input class="create_title" type="text" name="title" required>
+                    <input class="create_title" type="text" name="title" maxlength="60" required>
                 </div>
                 <!-- input for post content -->
                 <div class="content-div">
                     <label>Write something...</label>
-                    <textarea class="content" name="content" rows="4"></textarea>
+                    <textarea class="content" name="content" rows="4" maxlength="450"></textarea>
                 </div>
                 <!-- input for single file attachment -->
                 <div class="upload">
@@ -44,9 +44,9 @@
                     {% if not g.user.is_business %}
                     <div class="checkin">
                         <div class="form-checkin">
-                            <button class="checkin-btn" id="checkin" type="button"></button>
+                            <button class="checkin-btn" id="checkin" type="button" {% if not business %}disabled{% endif %}></button>
                             <label class="form-check-label" for="check_in">
-                                Check-Into: {{ business.username }}
+                                {% if business %}Check-Into: {{ business.username }}{% else %}Bar Not Found{% endif %}
                             </label>
                             <input name="business" value="{{ business.user_id }}" hidden>
                         </div>
