@@ -125,6 +125,28 @@
                 </div>
             </div>
 
+            <!-- input for menu -->
+            <div class="menu">
+                 <div class="set_input">
+                    <label class="first_label" for="menu">Menu Title</label>
+                    <input class="set_input" type="text" name="menu" placeholder="Title"value="">
+                </div>
+                <div class="file-div">
+                    <input name="menu_pdf" type="file" id="myFileInput3" accept="image/*,.pdf"
+                            style="display: none;">
+                    <button class="file-btn"
+                        onclick="document.getElementById('myFileInput3').click(); return false;">
+                        <img class="upload-img" src="/static/images/upload_img_icon.png" alt="upload">
+                    </button>
+                    <span class="file-upload-label">Upload Menu</span>
+                </div>    
+            </div>
+
+            <!-- input for features -->
+            <div class="input_bio">
+                <label for="about_me">Features</label>
+                <textarea name="about_me">{% if g.user.about_me != None %}{{ g.user.about_me }}{% endif %}</textarea>
+            </div>
 
             <!-- button for post -->
             <div class="buttons">
@@ -135,13 +157,8 @@
         <form action="/account">
             <button class="button" type="submit">Back</button>
         </form>
-        <form action="/logout">
-            <button class="button" id="logout" type="submit">Logout</button>
-        </form>
-
-        <!-- Delete User -->
-        <form action="/account/{{g.user.user_id}}/delete" method="get"> 
-            <button type="submit" class="btn btn-danger" name="delete" value="delete">Delete</button>
+        <form action="/account/{{ g.user.user_id }}/delete">
+            <button class="button" id="logout" type="submit">Delete Acct</button>
         </form>
 
     </div>
@@ -175,6 +192,21 @@
             }
             reader.readAsDataURL(file);
             $("myFileInput2").after(img);
+        }
+    });
+    $("#myFileInput3").change(function (e) {
+
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            var img = document.getElementById("bnrimg");
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+            $("myFileInput3").after(img);
         }
     });
 </script>

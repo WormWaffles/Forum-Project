@@ -18,8 +18,8 @@
                     </div>
                     <div class="bottom">
                         <div class="links">
-                            <a href="/account">REVIEWS</a>
-                            <a href="/account">EVENTS</a>
+                            <a href="/user/{{g.user.user_id}}/reviews">REVIEWS</a>
+                            <a href="/user/{{g.user.user_id}}/events">EVENTS</a>
                             <span id="rating">
                                 {% for r in range(rating) %}
                                 <img src="/static/images/filled-star_blue.png" alt="star" width="25" height="25">
@@ -28,31 +28,25 @@
                                 <img src="/static/images/empty-star_blue.png" alt="star" width="25" height="25">
                                 {% endfor %}
                             </span>
-                            <a href="/account">FEATURES</a>
-                            <a href="/account">MENU</a>
+                            <!-- Needs a way for "account" - what if user is own self? -->
+                            <a href="/user/{{g.user.user_id}}/features">FEATURES</a>
+                            <a href="/user/{{g.user.user_id}}/menu">MENU</a>
                         </div>
-                        <div class="title pt-3">
-                            <h1 class="title">
+                        <div class="heading pt-3">
+                            <h1 class="heading">
                                 {{ g.user.username }}
                             </h1>
                         </div>
-                        <div class="subtitle">
-                            {% if g.user.subtitle %}
-                            {{ g.user.subtitle }}
-                            {% else %}
-                            <p>Nothings here...</p>
-                            {% endif %}
-                        </div>
                         {% if g.user.address %}
                         <div class="address">
-                            <p>{{ g.user.address }}, {{ g.user.city }}, {{ g.user.state }}</p>
+                            <p>{{ g.user.address }}{% if g.user.city %}, {{ g.user.city }}{% endif %}{% if g.user.state %}, {{ g.user.state }}{% endif %}</p>
                         </div>
                         {% endif %}
                         <div class="description">
                             {% if g.user.about_me %}
                             {{ g.user.about_me }}
                             {% else %}
-                            <p>Nothings here...</p>
+                            <p>Nothing here...</p>
                             {% endif %}
                         </div>
                         <div class="follow">
@@ -61,8 +55,13 @@
                             </div>
                         </div>
                         <div class="setting_button">
-                            <a href="/account/edit"><img src="/static/images/setting-gear.png" height="25"
-                                    width="25"></a>
+                            <!-- options to edit or delete -->
+                            <img src="/static/images/setting-gear.png" id="{{ g.user.user_id }}" for="settings"
+                                alt="Settings" class="settings-icon" width="25" height="25">
+                            <div class="settings-options" for="so{{ g.user.user_id }}">
+                                <a href="/account/edit" class="settings-option">Settings</a>
+                                <a href="/logout" class="settings-option">Logout</a>
+                            </div>
                         </div>
                     </div>
                 </div>

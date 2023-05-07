@@ -1,12 +1,13 @@
 CREATE DATABASE barhive;
 
 -- DROP TABLES IF THEY EXIST TO PREVENT ERRORS
-DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS post CASCADE;
 DROP TABLE IF EXISTS user_likes;
 DROP TABLE IF EXISTS rating;
 DROP TABLE IF EXISTS follower;
 DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS business_items;
+DROP TABLE IF EXISTS "user" CASCADE;
 
 -- WAIT TO ADD TABLES UNTIL AFTER THE DATABASE IS CREATED
 
@@ -32,7 +33,10 @@ CREATE TABLE "user" (
     state CHAR(2),
     zip_code INTEGER, 
     phone INTEGER,
-    website VARCHAR(80)
+    website VARCHAR(80),
+
+    -- admin stuff
+    admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE post (
@@ -81,3 +85,13 @@ CREATE TABLE comment (
     post_date VARCHAR(30) NOT NULL,
     likes INTEGER NOT NULL
 );
+
+CREATE TABLE business_items (
+    business_id INTEGER NOT NULL REFERENCES "user"(user_id),
+    features VARCHAR(500),
+    menu_title VARCHAR(20),
+    menu_file VARCHAR(255),
+    PRIMARY KEY (business_id)
+);
+-- post has poster_id which connects to user, business, or admin
+-- rating has business_id which connects to user and post_id which connects to post and then to the author

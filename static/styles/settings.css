@@ -31,6 +31,7 @@
     width: 300px;
     height: 100px;
     border-radius: 8px;
+    margin-bottom: 1em;
 }
 
 .set_input {
@@ -126,6 +127,7 @@ textarea:focus {
 .buttons {
     display: flex;
     justify-content: space-between;
+    margin-top: 2em;
 }
 
 .button {
@@ -211,4 +213,18 @@ textarea:focus {
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+}
+
+.menu input {
+    width: 100%;
+}
+
+.menu button {
+    margin-top: 2em;
 }
