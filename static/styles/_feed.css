@@ -57,7 +57,6 @@
 
 .post-card {
     /*work with width*/
-    max-width: 700px;
     height: auto;
     padding: 25px 40px;
     background-color: rgb(255, 255, 255);
