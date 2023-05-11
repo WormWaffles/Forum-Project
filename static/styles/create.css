@@ -97,7 +97,7 @@ label {
 
 .upload {
     display: grid;
-    grid-template-columns: .9fr 1.2fr 1.9fr;
+    grid-template-columns: .8fr 1.2fr 2fr;
 }
 
 .form-checkin {
@@ -168,3 +168,7 @@ span {
 .post-btn:hover {
     background-color: #5592a8;
 } 
+
+.form-check-label {
+    font-size: 15px;
+}
