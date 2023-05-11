@@ -35,9 +35,9 @@ class Follows:
         follow_list = User.query.join(Follower, User.user_id==Follower.follower_user_id).add_columns(User.user_id,User.username,User.profile_pic).filter_by(followed_user_id=self).all()
         return follow_list
 
-    def get_all_following(self,follower_user_id):
-        return Follower.query.filter_by(follower_user_id=follower_user_id).all()
-    
+    def get_all_following(self):
+        following_list = User.query.join(Follower, User.user_id==Follower.follower_user_id).add_columns(User.user_id).filter_by(follower_user_id=self).all()
+        return following_list
     def get_followers_num(self,followed_user_id):
         
         num_followers = Follower.query.filter_by(followed_user_id=followed_user_id).count()

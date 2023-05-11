@@ -1,7 +1,7 @@
 from src.models import db, Post, User, Rating
 from src.likes import likes
 from src.users import users
-from src.user_follow import follows
+from src.user_follow import Follows
 from src.comments import comments
 import uuid
 import datetime
@@ -67,12 +67,12 @@ class PostFeed:
     def get_all_following_posts(self, user_id):
         '''Returns all posts by users that the user is following ordered by date'''
         user = users.get_user_by_id(user_id)
-        following = follows.get_all_following(user_id)
+        following_list = Follows.get_all_following(user_id)
         following_posts = []
-        for user in following:
+        for user_id in following_list:
             posts = self.get_posts_by_user_id(user.user_id)
             following_posts += posts
-            if following_posts > 15:
+            if len(following_posts) > 15:
                 break
         following_posts.sort(key=lambda x: x.post_date, reverse=True)
         return following_posts
