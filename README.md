@@ -1,8 +1,28 @@
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="public/images/logo.png" alt="Logo" width="300px" height="">
+  </a>
+
+  <h3 align="center">Barhive</h3>
+
+  <p align="center">
+    An Node/Express project!
+    <br />
+    <br />
+    <br />
+  </p>
+</div>
+
 # Project Name
 
 BarHive - A social network application for bars and nightlife enthusiasts
 
 ## Project Description
+
+<div align="center">
+    <img src="static/images/screenshot.png" alt="Product Name Screenshot" width="600">
+</div>
+
 
 BarHive is a social networking platform for bars and people who love nightlife. It allows users to create profiles, connect with other users, and share posts related to their favorite bars and events. The application provides features such as creating posts, commenting, and liking posts. Users can also follow other users and view their profiles. The application also supports business profiles, which allows bar owners to create profiles for their bars and showcase their business.
 
@@ -101,3 +121,4 @@ Future development of this application could include the following features:
 - Integration with third-party APIs to provide more information about bars and events
 - Chat functionality to allow users to communicate with each other directly
 - Integration with a payment system to allow users to purchase tickets or make reservations for events.
+
