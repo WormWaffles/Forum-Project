@@ -4,6 +4,11 @@ BarHive - A social network application for bars and nightlife enthusiasts
 
 ## Project Description
 
+<div align="center">
+    <img src="static/images/screenshot.png" alt="Product Name Screenshot" width="600">
+</div>
+
+
 BarHive is a social networking platform for bars and people who love nightlife. It allows users to create profiles, connect with other users, and share posts related to their favorite bars and events. The application provides features such as creating posts, commenting, and liking posts. Users can also follow other users and view their profiles. The application also supports business profiles, which allows bar owners to create profiles for their bars and showcase their business.
 
 ## Technologies Used
