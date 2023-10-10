@@ -1,17 +1,7 @@
-<div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="public/images/logo.png" alt="Logo" width="300px" height="">
-  </a>
-
+<!-- <div align="center">
+  <img src="logo.png" alt="Logo" width="300px" height="">
   <h3 align="center">Barhive</h3>
-
-  <p align="center">
-    An Node/Express project!
-    <br />
-    <br />
-    <br />
-  </p>
-</div>
+</div> -->
 
 # Project Name
 
