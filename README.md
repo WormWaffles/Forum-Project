@@ -1,8 +1,3 @@
-<!-- <div align="center">
-  <img src="logo.png" alt="Logo" width="300px" height="">
-  <h3 align="center">Barhive</h3>
-</div> -->
-
 # Project Name
 
 BarHive - A social network application for bars and nightlife enthusiasts
@@ -111,4 +106,3 @@ Future development of this application could include the following features:
 - Integration with third-party APIs to provide more information about bars and events
 - Chat functionality to allow users to communicate with each other directly
 - Integration with a payment system to allow users to purchase tickets or make reservations for events.
-
