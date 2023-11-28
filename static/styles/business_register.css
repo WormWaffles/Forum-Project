@@ -15,14 +15,14 @@ h2 {
     font: normal normal 900 45px/68px Poppins;
 }
 
-form {
+.login form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 
-input {
+.login input {
     width: 70%;
     padding: 10px;
     margin-top: 10px;
